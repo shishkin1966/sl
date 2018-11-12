@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:sl/sl/SL.dart';
 
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
+  var sl = new SL();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
