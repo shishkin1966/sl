@@ -1,0 +1,34 @@
+import 'package:sl/sl/MessagerSubscriber.dart';
+import 'package:sl/sl/Subscriber.dart';
+
+abstract class Message extends Subscriber {
+  void read(MessagerSubscriber subscriber);
+
+  bool contains(String address);
+
+  int getId();
+
+  Message setId(int id);
+
+  Message copy();
+
+  List<String> getCopyTo();
+
+  Message setCopyTo(List<String> copyTo);
+
+  String getAddress();
+
+  Message setAddress(String address);
+
+  bool isCheckDublicate();
+
+  String getSender();
+
+  Message setSender(String sender);
+
+  bool isSticky();
+
+  int getEndTime();
+
+  Message setEndTime(int keepAliveTime);
+}

@@ -1,3 +1,5 @@
 abstract class Stateable {
-  int state;
+  int getState();
+
+  void setState(int state);
 }

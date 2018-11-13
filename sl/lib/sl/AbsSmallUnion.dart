@@ -7,12 +7,11 @@ import 'package:sl/sl/state/State.dart';
 import 'package:sl/sl/state/Stateable.dart';
 import 'package:sl/sl/util/StringUtils.dart';
 
-abstract class AbsSmallUnion<T extends SpecialistSubscriber>
-    extends AbsSpecialist implements SmallUnion<T> {
-  var secretary;
+abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpecialist implements SmallUnion<T> {
+  var _secretary;
 
   AbsSmallUnion() {
-    secretary = createSecretary();
+    _secretary = createSecretary();
   }
 
   @override
@@ -33,21 +32,21 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber>
   T getSubscriber<T extends SpecialistSubscriber>(String name) {
     if (StringUtils.isNullOrEmpty(name)) return null;
 
-    if (!secretary.containsKey(name)) {
+    if (!_secretary.containsKey(name)) {
       return null;
     }
 
-    return secretary.get(name);
+    return _secretary.get(name);
   }
 
   @override
   bool hasSubscriber(String name) {
-    return secretary.containsKey(name);
+    return _secretary.containsKey(name);
   }
 
   @override
   bool hasSubscribers() {
-    return (!secretary.isEmpty());
+    return (!_secretary.isEmpty());
   }
 
   @override
@@ -57,7 +56,7 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber>
       if (subscriber != null && subscriber.validate()) {
         if (subscriber is Stateable) {
           final Stateable stateable = subscriber as Stateable;
-          if (stateable.state == State.STATE_READY) {
+          if (stateable.getState() == State.STATE_READY) {
             subscribers.add(subscriber);
           }
         }
@@ -79,7 +78,7 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber>
 
   @override
   List<T> getSubscribers<T extends SpecialistSubscriber>() {
-    return secretary.values();
+    return _secretary.values();
   }
 
   @override
@@ -95,14 +94,14 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber>
       return;
     }
 
-    final int cnt = secretary.size();
-    if (secretary.containsKey(subscriber.name)) {
-      if (subscriber == secretary.get(subscriber.name)) {
-        secretary.remove(subscriber.name);
+    final int cnt = _secretary.size();
+    if (_secretary.containsKey(subscriber.name)) {
+      if (subscriber == _secretary.get(subscriber.name)) {
+        _secretary.remove(subscriber.name);
       }
     }
 
-    if (cnt == 1 && secretary.size() == 0) {
+    if (cnt == 1 && _secretary.size() == 0) {
       onUnRegisterLastSubscriber();
     }
   }
@@ -125,11 +124,11 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber>
       return false;
     }
 
-    final int cnt = secretary.size();
+    final int cnt = _secretary.size();
 
-    secretary.put(subscriber.name, subscriber);
+    _secretary.put(subscriber.name, subscriber);
 
-    if (cnt == 0 && secretary.size() == 1) {
+    if (cnt == 0 && _secretary.size() == 1) {
       onRegisterFirstSubscriber();
     }
     onAddSubscriber(subscriber);
@@ -138,7 +137,6 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber>
 
   @override
   bool checkSubscriber<T extends SpecialistSubscriber>(T subscriber) {
-    return !StringUtils.isNullOrEmpty(subscriber.pasport) &&
-        !StringUtils.isNullOrEmpty(subscriber.name);
+    return !StringUtils.isNullOrEmpty(subscriber.pasport) && !StringUtils.isNullOrEmpty(subscriber.name);
   }
 }
