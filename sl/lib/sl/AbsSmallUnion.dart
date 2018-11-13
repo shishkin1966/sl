@@ -95,9 +95,9 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
     }
 
     final int cnt = _secretary.size();
-    if (_secretary.containsKey(subscriber.name)) {
-      if (subscriber == _secretary.get(subscriber.name)) {
-        _secretary.remove(subscriber.name);
+    if (_secretary.containsKey(subscriber.getName())) {
+      if (subscriber == _secretary.get(subscriber.getName())) {
+        _secretary.remove(subscriber.getName());
       }
     }
 
@@ -126,7 +126,7 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
 
     final int cnt = _secretary.size();
 
-    _secretary.put(subscriber.name, subscriber);
+    _secretary.put(subscriber.getName(), subscriber);
 
     if (cnt == 0 && _secretary.size() == 1) {
       onRegisterFirstSubscriber();
@@ -137,6 +137,6 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
 
   @override
   bool checkSubscriber<T extends SpecialistSubscriber>(T subscriber) {
-    return !StringUtils.isNullOrEmpty(subscriber.pasport) && !StringUtils.isNullOrEmpty(subscriber.name);
+    return !StringUtils.isNullOrEmpty(subscriber.getPasport()) && !StringUtils.isNullOrEmpty(subscriber.getName());
   }
 }

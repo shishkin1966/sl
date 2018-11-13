@@ -1,5 +1,5 @@
-import 'package:sl/sl/MessagerSubscriber.dart';
 import 'package:sl/sl/Subscriber.dart';
+import 'package:sl/sl/specialist/messager/MessagerSubscriber.dart';
 
 abstract class Message extends Subscriber {
   void read(MessagerSubscriber subscriber);

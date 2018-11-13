@@ -6,15 +6,11 @@ class SL extends AbsServiceLocator {
   static const String NAME = "SL";
   var _specialistFactory;
 
-  SL() {
+  static final SL _sl = new SL._internal();
+  SL._internal() {
     _specialistFactory = new ServiceLocatorSpecialistFactory();
   }
-
-  @override
-  String name = NAME;
-
-  @override
-  String pasport = NAME;
+  static SL get instance => _sl;
 
   @override
   void onStart() {}
@@ -25,5 +21,15 @@ class SL extends AbsServiceLocator {
   @override
   SpecialistFactory getSpecialistFactory() {
     return _specialistFactory;
+  }
+
+  @override
+  String getName() {
+    return NAME;
+  }
+
+  @override
+  String getPasport() {
+    return getName();
   }
 }

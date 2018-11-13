@@ -1,6 +1,6 @@
 abstract class Subscriber {
-  String name; // имя подписчика
+  String getName(); // имя подписчика
 
-  String pasport; // паспорт подписчика
+  String getPasport(); // паспорт подписчика
 
 }

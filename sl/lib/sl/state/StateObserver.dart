@@ -6,6 +6,10 @@ class StateObserver implements Stateable {
   int _state = State.STATE_CREATE;
   StateListener _listener;
 
+  StateObserver(StateListener listener) {
+    _listener = listener;
+  }
+
   @override
   int getState() {
     return _state;

@@ -3,7 +3,7 @@ import 'package:sl/sl/SpecialistSubscriber.dart';
 import 'package:sl/sl/Union.dart';
 
 abstract class AbsUnion<T extends SpecialistSubscriber> extends AbsSmallUnion<T> implements Union<T> {
-  var _currentSubscriber;
+  SpecialistSubscriber _currentSubscriber;
 
   @override
   bool registerSubscriber<T extends SpecialistSubscriber>(T subscriber) {
@@ -11,7 +11,7 @@ abstract class AbsUnion<T extends SpecialistSubscriber> extends AbsSmallUnion<T>
 
     if (super.registerSubscriber(subscriber)) {
       if (_currentSubscriber != null) {
-        if (subscriber.name == _currentSubscriber.name) {
+        if (subscriber.getName() == _currentSubscriber.getName()) {
           _currentSubscriber = subscriber;
         }
       }
@@ -27,7 +27,7 @@ abstract class AbsUnion<T extends SpecialistSubscriber> extends AbsSmallUnion<T>
     super.unregisterSubscriber(subscriber);
 
     if (_currentSubscriber != null) {
-      if (subscriber.name == _currentSubscriber.name) {
+      if (subscriber.getName() == _currentSubscriber.getName()) {
         if (_currentSubscriber == subscriber) {
           _currentSubscriber = null;
         }

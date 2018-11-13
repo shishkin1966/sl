@@ -20,7 +20,7 @@ abstract class AbsSpecialist implements Specialist {
 
   @override
   bool validate() {
-    return validateExt().data;
+    return validateExt().getData();
   }
 
   @override
@@ -28,6 +28,6 @@ abstract class AbsSpecialist implements Specialist {
 
   @override
   String getPasport() {
-    return this.name;
+    return this.getName();
   }
 }

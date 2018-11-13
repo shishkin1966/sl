@@ -4,7 +4,7 @@ import 'package:sl/sl/SL.dart';
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
-  var sl = new SL();
+  var sl = SL.instance;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

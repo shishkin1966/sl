@@ -34,14 +34,14 @@ abstract class AbsServiceLocator implements ServiceLocator {
 
   @override
   bool registerSpecialist(final Specialist specialist) {
-    if (specialist != null && !StringUtils.isNullOrEmpty(specialist.name)) {
-      if (_secretary.containsKey(specialist.name)) {
-        if (!unregisterSpecialist(specialist.name)) {
+    if (specialist != null && !StringUtils.isNullOrEmpty(specialist.getName())) {
+      if (_secretary.containsKey(specialist.getName())) {
+        if (!unregisterSpecialist(specialist.getName())) {
           return false;
         }
       }
 
-      _secretary.put(specialist.name, specialist);
+      _secretary.put(specialist.getName(), specialist);
       specialist.onRegister();
     }
     return true;
@@ -82,7 +82,7 @@ abstract class AbsServiceLocator implements ServiceLocator {
 
   @override
   bool registerSubscriber(final SpecialistSubscriber subscriber) {
-    if (subscriber != null && !StringUtils.isNullOrEmpty(subscriber.name)) {
+    if (subscriber != null && !StringUtils.isNullOrEmpty(subscriber.getName())) {
       final List<String> types = subscriber.getSpecialistSubscription();
       if (types != null) {
         // регистрируемся subscriber у специалистов
@@ -112,7 +112,7 @@ abstract class AbsServiceLocator implements ServiceLocator {
       if (types != null) {
         for (Specialist specialist in _secretary.values()) {
           if (specialist is SmallUnion) {
-            final String specialistName = specialist.name;
+            final String specialistName = specialist.getName();
             if (!StringUtils.isNullOrEmpty(specialistName) && types.contains(specialistName)) {
               specialist.unregisterSubscriber(subscriber);
             }
@@ -130,7 +130,7 @@ abstract class AbsServiceLocator implements ServiceLocator {
       if (types != null) {
         for (Specialist specialist in _secretary.values()) {
           if (specialist is Union) {
-            final String specialistName = specialist.name;
+            final String specialistName = specialist.getName();
             if (!StringUtils.isNullOrEmpty(specialistName)) {
               if (types.contains(specialistName)) {
                 specialist.setCurrentSubscriber(subscriber);
