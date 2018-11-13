@@ -2,7 +2,6 @@ import 'package:sl/sl/SL.dart';
 import 'package:sl/sl/data/Result.dart';
 import 'package:sl/sl/message/Message.dart';
 import 'package:sl/sl/model/Model.dart';
-import 'package:sl/sl/order/BaseOrder.dart';
 import 'package:sl/sl/order/Order.dart';
 import 'package:sl/sl/presenter/Presenter.dart';
 import 'package:sl/sl/state/StateObserver.dart';
@@ -22,7 +21,7 @@ abstract class AbsPresenter<M extends Model> implements Presenter<M> {
 
   @override
   void doOrder2(String order, List<Object> objects) {
-    doOrder(new BaseOrder.value(order, objects));
+    doOrder(new Order.value(order, objects));
   }
 
   @override
