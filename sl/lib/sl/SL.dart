@@ -3,17 +3,14 @@ import 'package:sl/sl/ServiceLocatorSpecialistFactory.dart';
 import 'package:sl/sl/SpecialistFactory.dart';
 
 class SL extends AbsServiceLocator {
-  var specialistFactory;
+  static const String NAME = "SL";
+  var _specialistFactory;
 
-  SL() {
-    specialistFactory = new ServiceLocatorSpecialistFactory();
+  static final SL _sl = new SL._internal();
+  SL._internal() {
+    _specialistFactory = new ServiceLocatorSpecialistFactory();
   }
-
-  @override
-  String name = "SL";
-
-  @override
-  String pasport = "SL";
+  static SL get instance => _sl;
 
   @override
   void onStart() {}
@@ -23,6 +20,16 @@ class SL extends AbsServiceLocator {
 
   @override
   SpecialistFactory getSpecialistFactory() {
-    return specialistFactory;
+    return _specialistFactory;
+  }
+
+  @override
+  String getName() {
+    return NAME;
+  }
+
+  @override
+  String getPasport() {
+    return getName();
   }
 }

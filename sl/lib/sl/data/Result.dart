@@ -4,19 +4,23 @@ class Result<T> {
   static const NOT_SEND = -1;
   static const LAST = -2;
 
-  T data;
+  T _data;
   ExtError extError;
   int order = NOT_SEND;
   String name;
   int id = 0;
 
   Result(T data) {
-    this.data = data;
+    _data = data;
   }
 
   Result setData(final T data) {
-    this.data = data;
+    _data = data;
     return this;
+  }
+
+  T getData() {
+    return _data;
   }
 
   Result setError(final ExtError extError) {
@@ -50,7 +54,7 @@ class Result<T> {
   }
 
   bool isEmpty() {
-    return (data == null);
+    return (_data == null);
   }
 
   bool hasError() {
