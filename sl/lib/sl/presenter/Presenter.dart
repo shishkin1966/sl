@@ -1,12 +1,10 @@
-import 'package:sl/sl/model/Model.dart';
 import 'package:sl/sl/order/Order.dart';
 import 'package:sl/sl/specialist/messager/MessagerSubscriber.dart';
 import 'package:sl/sl/state/StateListener.dart';
+import 'package:sl/ui/LifecycleState.dart';
 
-abstract class Presenter<M extends Model> implements StateListener, MessagerSubscriber {
-  void setModel<M>(M model);
-
-  M getModel<M>();
+abstract class Presenter<M extends LifecycleState> implements StateListener, MessagerSubscriber {
+  M getLifecycleState<M>();
 
   void onOrder(Order order);
 

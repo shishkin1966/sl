@@ -1,19 +1,23 @@
 import 'package:sl/sl/SL.dart';
 import 'package:sl/sl/data/Result.dart';
 import 'package:sl/sl/message/Message.dart';
-import 'package:sl/sl/model/Model.dart';
 import 'package:sl/sl/order/Order.dart';
 import 'package:sl/sl/presenter/Presenter.dart';
 import 'package:sl/sl/state/StateObserver.dart';
 import 'package:sl/sl/state/States.dart';
+import 'package:sl/ui/LifecycleState.dart';
 
-abstract class AbsPresenter<M extends Model> implements Presenter<M> {
-  var _model;
+abstract class AbsPresenter<M extends LifecycleState> implements Presenter<M> {
   StateObserver _lifecycle;
+  var _lifecycleState;
 
-  AbsPresenter(M model) {
-    _model = model;
+  AbsPresenter(M lifecycleState) {
+    _lifecycleState = lifecycleState;
     _lifecycle = new StateObserver(this);
+  }
+
+  M getLifecycleState<M>() {
+    return _lifecycleState;
   }
 
   @override
@@ -42,16 +46,6 @@ abstract class AbsPresenter<M extends Model> implements Presenter<M> {
 
   @override
   void read(Message message) {}
-
-  @override
-  void setModel<M>(final M model) {
-    _model = model;
-  }
-
-  @override
-  M getModel<M>() {
-    return _model;
-  }
 
   @override
   String getPasport() {

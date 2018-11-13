@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:sl/sl/action/Action.dart';
+import 'package:sl/sl/presenter/Presenter.dart';
 import 'package:sl/sl/state/StateObservable.dart';
 import 'package:sl/sl/state/Stateable.dart';
 import 'package:sl/sl/state/States.dart';
@@ -7,6 +8,16 @@ import 'package:sl/sl/state/States.dart';
 class LifecycleState<T extends StatefulWidget> extends State<T> with WidgetsBindingObserver {
   StateObservable _lifecycle;
   List<Action> _actions = new List<Action>();
+  Presenter _presenter;
+
+  LifecycleState(Presenter presenter) {
+    _presenter = presenter;
+    addObserver(presenter);
+  }
+
+  Presenter getPresenter() {
+    return _presenter;
+  }
 
   void addObserver(Stateable stateable) {
     _lifecycle.addObserver(stateable);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sl/sl/action/Action.dart';
+import 'package:sl/sl/presenter/Presenter.dart';
 import 'package:sl/sl/state/States.dart';
 import 'package:sl/ui/Application.dart';
 import 'package:sl/ui/LifecycleState.dart';
@@ -32,6 +33,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends LifecycleState<MyHomePage> {
   int _counter = 0;
   String _title = States.StateCreate;
+
+  _MyHomePageState(Presenter<LifecycleState<StatefulWidget>> presenter) : super(presenter);
 
   @override
   void doAction(final Action action) {
