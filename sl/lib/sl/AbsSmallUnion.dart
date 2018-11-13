@@ -3,8 +3,8 @@ import 'package:sl/sl/Secretary.dart';
 import 'package:sl/sl/SecretaryImpl.dart';
 import 'package:sl/sl/SmallUnion.dart';
 import 'package:sl/sl/SpecialistSubscriber.dart';
-import 'package:sl/sl/state/State.dart';
 import 'package:sl/sl/state/Stateable.dart';
+import 'package:sl/sl/state/States.dart';
 import 'package:sl/sl/util/StringUtils.dart';
 
 abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpecialist implements SmallUnion<T> {
@@ -56,7 +56,7 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
       if (subscriber != null && subscriber.validate()) {
         if (subscriber is Stateable) {
           final Stateable stateable = subscriber as Stateable;
-          if (stateable.getState() == State.STATE_READY) {
+          if (stateable.getState() == States.StateReady) {
             subscribers.add(subscriber);
           }
         }

@@ -56,12 +56,12 @@ abstract class AbsModel implements Model, Stateable {
   }
 
   @override
-  int getState() {
+  String getState() {
     return _lifecycle.getState();
   }
 
   @override
-  void setState(int state) {
+  void setState(String state) {
     _lifecycle.setState(state);
   }
 }

@@ -1,9 +1,9 @@
-import 'package:sl/sl/state/State.dart';
 import 'package:sl/sl/state/StateListener.dart';
 import 'package:sl/sl/state/Stateable.dart';
+import 'package:sl/sl/state/States.dart';
 
 class StateObserver implements Stateable {
-  int _state = State.STATE_CREATE;
+  String _state = States.StateCreate;
   StateListener _listener;
 
   StateObserver(StateListener listener) {
@@ -11,24 +11,24 @@ class StateObserver implements Stateable {
   }
 
   @override
-  int getState() {
+  String getState() {
     return _state;
   }
 
   @override
-  void setState(int state) {
+  void setState(String state) {
     _state = state;
 
     switch (_state) {
-      case State.STATE_CREATE:
+      case States.StateCreate:
         onCreate();
         break;
 
-      case State.STATE_READY:
+      case States.StateReady:
         onReady();
         break;
 
-      case State.STATE_DESTROY:
+      case States.StateDestroy:
         onDestroy();
         break;
 

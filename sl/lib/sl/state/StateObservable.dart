@@ -1,17 +1,17 @@
-import 'package:sl/sl/state/State.dart';
 import 'package:sl/sl/state/Stateable.dart';
+import 'package:sl/sl/state/States.dart';
 
 class StateObservable implements Stateable {
-  int _state = State.STATE_CREATE;
+  String _state = States.StateCreate;
   List<Stateable> _list = new List<Stateable>();
 
   @override
-  int getState() {
+  String getState() {
     return _state;
   }
 
   @override
-  void setState(final int state) {
+  void setState(final String state) {
     _state = state;
     for (Stateable stateable in _list) {
       if (stateable != null) {

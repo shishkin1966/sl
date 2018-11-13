@@ -5,8 +5,8 @@ import 'package:sl/sl/model/Model.dart';
 import 'package:sl/sl/order/BaseOrder.dart';
 import 'package:sl/sl/order/Order.dart';
 import 'package:sl/sl/presenter/Presenter.dart';
-import 'package:sl/sl/state/State.dart';
 import 'package:sl/sl/state/StateObserver.dart';
+import 'package:sl/sl/state/States.dart';
 
 abstract class AbsPresenter<M extends Model> implements Presenter<M> {
   var _model;
@@ -65,12 +65,12 @@ abstract class AbsPresenter<M extends Model> implements Presenter<M> {
   }
 
   @override
-  int getState() {
+  String getState() {
     return _lifecycle.getState();
   }
 
   @override
-  void setState(int state) {
+  void setState(String state) {
     _lifecycle.setState(state);
   }
 
@@ -81,6 +81,6 @@ abstract class AbsPresenter<M extends Model> implements Presenter<M> {
 
   @override
   Result<bool> validateExt() {
-    return new Result<bool>(_lifecycle.getState() != State.STATE_DESTROY);
+    return new Result<bool>(_lifecycle.getState() != States.StateDestroy);
   }
 }

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sl/sl/SL.dart';
+import 'package:sl/sl/state/States.dart';
+import 'package:sl/ui/LifecycleState.dart';
 
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
   var sl = SL.instance;
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -44,8 +47,9 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => new _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends LifecycleState<MyHomePage> {
   int _counter = 0;
+  String _title = States.StateCreate;
 
   void _incrementCounter() {
     setState(() {
@@ -55,6 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
+
+      _title = getState();
     });
   }
 
@@ -70,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: new AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: new Text(widget.title),
+        title: new Text(_title),
       ),
       body: new Center(
         // Center is a layout widget. It takes a single child and positions it

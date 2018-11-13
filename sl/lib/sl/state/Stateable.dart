@@ -1,5 +1,5 @@
 abstract class Stateable {
-  int getState();
+  String getState();
 
-  void setState(int state);
+  void setState(String state);
 }
