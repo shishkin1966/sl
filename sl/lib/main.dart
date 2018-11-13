@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sl/sl/action/Action.dart';
 import 'package:sl/sl/state/States.dart';
 import 'package:sl/ui/Application.dart';
 import 'package:sl/ui/LifecycleState.dart';
@@ -32,17 +33,14 @@ class _MyHomePageState extends LifecycleState<MyHomePage> {
   int _counter = 0;
   String _title = States.StateCreate;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-
-      _title = getState();
-    });
+  @override
+  void doAction(final Action action) {
+    switch (action.getName()) {
+      case "increment":
+        _counter++;
+        _title = getState();
+        break;
+    }
   }
 
   @override
@@ -89,7 +87,9 @@ class _MyHomePageState extends LifecycleState<MyHomePage> {
         ),
       ),
       floatingActionButton: new FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: (() {
+          addAction(new Action.name("increment"));
+        }),
         tooltip: 'Increment',
         child: new Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
