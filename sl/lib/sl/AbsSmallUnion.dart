@@ -20,7 +20,7 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
   }
 
   @override
-  void onAddSubscriber<T extends SpecialistSubscriber>(T subscriber) {}
+  void onAddSubscriber(T subscriber) {}
 
   @override
   void onUnRegisterLastSubscriber() {}
@@ -131,7 +131,7 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
     if (cnt == 0 && _secretary.size() == 1) {
       onRegisterFirstSubscriber();
     }
-    onAddSubscriber(subscriber);
+    onAddSubscriber(subscriber as SpecialistSubscriber);
     return true;
   }
 
