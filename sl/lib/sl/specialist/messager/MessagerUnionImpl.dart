@@ -35,7 +35,7 @@ class MessagerUnionImpl extends AbsSmallUnion<MessagerSubscriber> implements Mes
   void readMessages(final MessagerSubscriber subscriber) {
     if (subscriber == null) return;
 
-    final List<Message> list = getMessage(subscriber);
+    final List<Message> list = getMessages(subscriber);
     for (Message message in list) {
       final String state = subscriber.getState();
       if (state == States.StateReady) {
@@ -46,7 +46,7 @@ class MessagerUnionImpl extends AbsSmallUnion<MessagerSubscriber> implements Mes
   }
 
   @override
-  List<Message> getMessage(final MessagerSubscriber subscriber) {
+  List<Message> getMessages(final MessagerSubscriber subscriber) {
     if (subscriber != null) {
       if (_messages.isEmpty) {
         return new List();
@@ -87,7 +87,7 @@ class MessagerUnionImpl extends AbsSmallUnion<MessagerSubscriber> implements Mes
   }
 
   @override
-  void clearMail(final MessagerSubscriber subscriber) {
+  void clearMessages(final MessagerSubscriber subscriber) {
     if (subscriber == null) return;
     if (_messages.isEmpty) return;
 
@@ -101,7 +101,7 @@ class MessagerUnionImpl extends AbsSmallUnion<MessagerSubscriber> implements Mes
   }
 
   @override
-  void addMailingList(final String name, final List<String> addresses) {
+  void addMessagingList(final String name, final List<String> addresses) {
     if (StringUtils.isNullOrEmpty(name) || addresses == null) return;
     if (addresses.isEmpty) return;
 
@@ -109,20 +109,60 @@ class MessagerUnionImpl extends AbsSmallUnion<MessagerSubscriber> implements Mes
   }
 
   @override
-  void removeMailingList(final String name) {
+  void removeMessagingList(final String name) {
     if (StringUtils.isNullOrEmpty(name)) return;
 
     _messagingList.remove(name);
   }
 
   @override
-  List<String> getMailingList(final String name) {
+  List<String> getMessagingList(final String name) {
     if (StringUtils.isNullOrEmpty(name)) return null;
 
     if (_messagingList.containsKey(name)) {
       return _messagingList.get(name);
     } else {
       return null;
+    }
+  }
+
+  List<String> _getAddresses(final String address) {
+    final List<String> addresses = new List();
+    if (_messagingList.containsKey(address)) {
+      for (String adr in _messagingList.get(address)) {
+        addresses.addAll(_getAddresses(adr));
+      }
+    } else {
+      addresses.add(address);
+    }
+    return addresses;
+  }
+
+  @override
+  void addMessage(final Message message) {
+    if (message != null) {
+      List<String> list = message.getCopyTo();
+      list.add(message.getAddress());
+      List<String> addresses = new List();
+      for (String address in list) {
+        addresses.addAll(_getAddresses(address));
+      }
+      for (String address in addresses) {
+        _id++;
+        final Message newMessage = message.copy();
+        newMessage.setId(_id);
+        newMessage.setAddress(address);
+        newMessage.setCopyTo(new List());
+
+        if (!message.isCheckDublicate()) {
+          _messages[_id] = newMessage;
+        } else {
+          removeDublicate(newMessage);
+          _messages[_id] = newMessage;
+        }
+
+        checkAddMailSubscriber(address);
+      }
     }
   }
 }

@@ -5,15 +5,17 @@ import 'package:sl/sl/specialist/messager/MessagerSubscriber.dart';
 abstract class MessagerUnion extends SmallUnion<MessagerSubscriber> {
   readMessages(MessagerSubscriber subscriber);
 
-  List<Message> getMessage(MessagerSubscriber subscriber);
+  List<Message> getMessages(MessagerSubscriber subscriber);
 
   void removeMessage(Message message);
 
-  void clearMail(MessagerSubscriber subscriber);
+  void clearMessages(MessagerSubscriber subscriber);
 
-  addMailingList(String name, List<String> addresses);
+  addMessagingList(String name, List<String> addresses);
 
-  void removeMailingList(String name);
+  void removeMessagingList(String name);
 
-  List<String> getMailingList(String name);
+  List<String> getMessagingList(String name);
+
+  void addMessage(Message message);
 }
