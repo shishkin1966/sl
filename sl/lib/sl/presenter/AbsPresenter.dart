@@ -1,4 +1,3 @@
-import 'package:sl/sl/SL.dart';
 import 'package:sl/sl/data/Result.dart';
 import 'package:sl/sl/message/Message.dart';
 import 'package:sl/sl/order/Order.dart';
@@ -9,23 +8,25 @@ import 'package:sl/ui/LifecycleState.dart';
 
 abstract class AbsPresenter<M extends LifecycleState> implements Presenter<M> {
   StateObserver _lifecycle;
-  var _lifecycleState;
+  LifecycleState _lifecycleState;
 
   AbsPresenter(M lifecycleState) {
     _lifecycleState = lifecycleState;
     _lifecycle = new StateObserver(this);
   }
 
-  M getLifecycleState<M>() {
+  LifecycleState getLifecycleState() {
     return _lifecycleState;
   }
 
   @override
-  void doOrder(Order order) {}
+  void addAction(String action, List<Object> objects) {
+    _lifecycleState.addAction(action, objects);
+  }
 
   @override
-  void doOrder2(String order, List<Object> objects) {
-    doOrder(new Order.value(order, objects));
+  void doOrder(String order, List<Object> objects) {
+    onOrder(new Order.value(order, objects));
   }
 
   @override
@@ -33,7 +34,7 @@ abstract class AbsPresenter<M extends LifecycleState> implements Presenter<M> {
 
   @override
   void onDestroy() {
-    SL.instance.unregisterSubscriber(this);
+    //SL.instance.unregisterSubscriber(this);
   }
 
   @override
@@ -41,7 +42,7 @@ abstract class AbsPresenter<M extends LifecycleState> implements Presenter<M> {
 
   @override
   void onReady() {
-    SL.instance.registerSubscriber(this);
+    //SL.instance.registerSubscriber(this);
   }
 
   @override

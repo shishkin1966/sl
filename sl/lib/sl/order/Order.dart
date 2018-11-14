@@ -7,8 +7,7 @@ class Order {
   }
 
   Order.value(String name, List<Object> value) {
-    Order.name(name);
-
+    _name = name;
     _value = value;
   }
 
@@ -22,7 +21,7 @@ class Order {
     return _value[0];
   }
 
-  Object getValue2(int pos) {
+  Object getValueByPos(int pos) {
     if (_value == null) return null;
     if (_value.isEmpty) return null;
     if (pos >= _value.length) return null;
