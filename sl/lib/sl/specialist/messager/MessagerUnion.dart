@@ -18,4 +18,6 @@ abstract class MessagerUnion extends SmallUnion<MessagerSubscriber> {
   List<String> getMessagingList(String name);
 
   void addMessage(Message message);
+
+  void addNotMandatoryMessage(Message message);
 }

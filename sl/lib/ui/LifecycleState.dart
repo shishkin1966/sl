@@ -53,7 +53,7 @@ abstract class LifecycleState<T extends StatefulWidget> extends State<T> with Wi
         break;
 
       case AppLifecycleState.inactive:
-        //_lifecycle.setState(States.StateNotReady);
+        _lifecycle.setState(States.StateNotReady);
         break;
 
       case AppLifecycleState.paused:

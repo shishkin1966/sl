@@ -157,12 +157,73 @@ class MessagerUnionImpl extends AbsSmallUnion<MessagerSubscriber> implements Mes
         if (!message.isCheckDublicate()) {
           _messages[_id] = newMessage;
         } else {
-          removeDublicate(newMessage);
+          _removeDublicate(newMessage);
           _messages[_id] = newMessage;
         }
 
-        checkAddMailSubscriber(address);
+        _checkAndAddMessage(address);
       }
     }
+  }
+
+  void _removeDublicate(final Message message) {
+    if (message != null &&
+        !StringUtils.isNullOrEmpty(message.getName()) &&
+        !StringUtils.isNullOrEmpty(message.getAddress())) {
+      for (Message tmpMail in _messages.values) {
+        if (tmpMail != null) {
+          if (message.getName() == (tmpMail.getName()) && message.getAddress() == (tmpMail.getAddress())) {
+            removeMessage(tmpMail);
+          }
+        }
+      }
+    }
+  }
+
+  void _checkAndAddMessage(final String address) {
+    if (StringUtils.isNullOrEmpty(address)) {
+      return;
+    }
+
+    final MessagerSubscriber subscriber = getSubscriber(address);
+    if (subscriber != null) {
+      final String state = subscriber.getState();
+      if (state == States.StateReady) {
+        readMessages(subscriber);
+      }
+    }
+  }
+
+  @override
+  void addNotMandatoryMessage(final Message message) {
+    if (message != null) {
+      List<String> list = message.getCopyTo();
+      list.add(message.getAddress());
+      List<String> addresses = new List();
+      for (String address in list) {
+        addresses.addAll(_getAddresses(address));
+      }
+      for (String address in addresses) {
+        final MessagerSubscriber subscriber = _checkSubscriber(address);
+        if (subscriber != null) {
+          message.read(subscriber);
+        }
+      }
+    }
+  }
+
+  MessagerSubscriber _checkSubscriber(final String address) {
+    if (StringUtils.isNullOrEmpty(address)) {
+      return null;
+    }
+
+    final MessagerSubscriber subscriber = getSubscriber(address);
+    if (subscriber != null) {
+      final String state = subscriber.getState();
+      if (state == States.StateReady) {
+        return subscriber;
+      }
+    }
+    return null;
   }
 }
