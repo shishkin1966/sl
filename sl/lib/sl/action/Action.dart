@@ -7,7 +7,7 @@ class Action {
   }
 
   Action.value(String name, List<Object> value) {
-    Action.name(name);
+    _name = name;
     _value = value;
   }
 

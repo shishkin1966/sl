@@ -1,12 +1,25 @@
 import 'package:flutter/widgets.dart';
 import 'package:sl/sl/action/Action.dart';
+import 'package:sl/sl/presenter/Presenter.dart';
 import 'package:sl/sl/state/StateObservable.dart';
 import 'package:sl/sl/state/Stateable.dart';
 import 'package:sl/sl/state/States.dart';
 
-class LifecycleState<T extends StatefulWidget> extends State<T> with WidgetsBindingObserver {
-  StateObservable _lifecycle;
+abstract class LifecycleState<T extends StatefulWidget> extends State<T> with WidgetsBindingObserver {
+  StateObservable _lifecycle = new StateObservable();
   List<Action> _actions = new List<Action>();
+  Presenter _presenter;
+
+  LifecycleState() {
+    _presenter = createPresenter();
+    addObserver(_presenter);
+  }
+
+  Presenter<LifecycleState<StatefulWidget>> createPresenter();
+
+  Presenter getPresenter() {
+    return _presenter;
+  }
 
   void addObserver(Stateable stateable) {
     _lifecycle.addObserver(stateable);
@@ -20,7 +33,6 @@ class LifecycleState<T extends StatefulWidget> extends State<T> with WidgetsBind
   void initState() {
     super.initState();
 
-    _lifecycle = new StateObservable();
     _lifecycle.setState(States.StateReady);
     WidgetsBinding.instance.addObserver(this);
   }
@@ -54,7 +66,7 @@ class LifecycleState<T extends StatefulWidget> extends State<T> with WidgetsBind
     }
   }
 
-  void addAction(final Action action) {
+  void _addAction(final Action action) {
     if (action == null) return;
 
     final String state = getState();
@@ -74,8 +86,8 @@ class LifecycleState<T extends StatefulWidget> extends State<T> with WidgetsBind
     }
   }
 
-  void addAction2(final String name, final List<Object> objects) {
-    _actions.add(new Action.value(name, objects));
+  void addAction(final String name, final List<Object> objects) {
+    _addAction(new Action.value(name, objects));
   }
 
   void _doActions() {
@@ -84,7 +96,7 @@ class LifecycleState<T extends StatefulWidget> extends State<T> with WidgetsBind
       if (getState() != States.StateReady) {
         break;
       }
-      doAction(_actions[i]);
+      onAction(_actions[i]);
       setState(() {});
       deleted.add(_actions[i]);
     }
@@ -93,7 +105,7 @@ class LifecycleState<T extends StatefulWidget> extends State<T> with WidgetsBind
     }
   }
 
-  void doAction(final Action action) {}
+  void onAction(final Action action) {}
 
   @override
   Widget build(BuildContext context) {}
