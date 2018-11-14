@@ -34,8 +34,10 @@ abstract class LifecycleState<T extends StatefulWidget> extends State<T> with Wi
   void initState() {
     super.initState();
 
-    _lifecycle.setState(States.StateReady);
+    _lifecycle.setState(States.StateCreate);
+
     WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _lifecycle.setState(States.StateReady));
   }
 
   @override
@@ -50,7 +52,6 @@ abstract class LifecycleState<T extends StatefulWidget> extends State<T> with Wi
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
-        _lifecycle.setState(States.StateReady);
         break;
 
       case AppLifecycleState.inactive:

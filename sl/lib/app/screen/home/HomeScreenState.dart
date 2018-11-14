@@ -19,7 +19,10 @@ class HomeScreenState extends LifecycleState<HomeScreen> {
     switch (action.getName()) {
       case HomeScreenPresenenter.Increment:
         _data.counter += (action.getValue() as HomeViewData).counter;
-        _title = getState();
+        break;
+
+      case HomeScreenPresenenter.Response:
+        _title = (action.getValue() as HomeViewData).title;
         break;
     }
   }
