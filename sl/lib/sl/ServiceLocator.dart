@@ -20,10 +20,6 @@ abstract class ServiceLocator implements Subscriber {
 
   bool setCurrentSubscriber(SpecialistSubscriber subscriber);
 
-  void onStop();
-
-  void onStart();
-
   SpecialistFactory getSpecialistFactory();
 
   List<Specialist> getSpecialists();

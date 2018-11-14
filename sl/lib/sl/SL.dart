@@ -1,22 +1,21 @@
 import 'package:sl/sl/AbsServiceLocator.dart';
 import 'package:sl/sl/ServiceLocatorSpecialistFactory.dart';
 import 'package:sl/sl/SpecialistFactory.dart';
+import 'package:sl/sl/specialist/presenter/PresenterUnionImpl.dart';
 
 class SL extends AbsServiceLocator {
   static const String NAME = "SL";
-  var _specialistFactory;
+  SpecialistFactory _specialistFactory;
 
   static final SL _sl = new SL._internal();
+
   SL._internal() {
     _specialistFactory = new ServiceLocatorSpecialistFactory();
+
+    registerSpecialistByName(PresenterUnionImpl.NAME);
   }
+
   static SL get instance => _sl;
-
-  @override
-  void onStart() {}
-
-  @override
-  void onStop() {}
 
   @override
   SpecialistFactory getSpecialistFactory() {
