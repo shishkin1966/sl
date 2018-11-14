@@ -1,7 +1,9 @@
+import 'package:sl/sl/SL.dart';
 import 'package:sl/sl/data/Result.dart';
 import 'package:sl/sl/message/Message.dart';
 import 'package:sl/sl/order/Order.dart';
 import 'package:sl/sl/presenter/Presenter.dart';
+import 'package:sl/sl/specialist/presenter/PresenterUnionImpl.dart';
 import 'package:sl/sl/state/StateObserver.dart';
 import 'package:sl/sl/state/States.dart';
 import 'package:sl/ui/LifecycleState.dart';
@@ -34,7 +36,7 @@ abstract class AbsPresenter<M extends LifecycleState> implements Presenter<M> {
 
   @override
   void onDestroy() {
-    //SL.instance.unregisterSubscriber(this);
+    SL.instance.unregisterSubscriber(this);
   }
 
   @override
@@ -42,7 +44,7 @@ abstract class AbsPresenter<M extends LifecycleState> implements Presenter<M> {
 
   @override
   void onReady() {
-    //SL.instance.registerSubscriber(this);
+    SL.instance.registerSubscriber(this);
   }
 
   @override
@@ -55,7 +57,7 @@ abstract class AbsPresenter<M extends LifecycleState> implements Presenter<M> {
 
   @override
   List<String> getSpecialistSubscription() {
-    // TODO: implement getSpecialistSubscription
+    return [PresenterUnionImpl.NAME];
   }
 
   @override
