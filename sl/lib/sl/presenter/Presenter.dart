@@ -8,7 +8,7 @@ abstract class Presenter<M extends LifecycleState> implements StateListener, Mes
 
   void onOrder(Order order);
 
-  void doOrder(String order, List<Object> objects);
+  void doOrder(String order, List<dynamic> args);
 
-  void addAction(String action, List<Object> objects);
+  void addAction(String action, List<dynamic> args);
 }

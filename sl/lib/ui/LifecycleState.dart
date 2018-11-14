@@ -86,8 +86,8 @@ abstract class LifecycleState<T extends StatefulWidget> extends State<T> with Wi
     }
   }
 
-  void addAction(final String name, final List<Object> objects) {
-    _addAction(new Action.value(name, objects));
+  void addAction(final String name, final List<dynamic> args) {
+    _addAction(new Action.value(name, args));
   }
 
   void _doActions() {

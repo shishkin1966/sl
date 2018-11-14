@@ -1,30 +1,30 @@
 class Action {
   String _name;
-  List<Object> _value;
+  List<dynamic> _args;
 
   Action.name(String name) {
     _name = name;
   }
 
-  Action.value(String name, List<Object> value) {
+  Action.value(String name, List<dynamic> args) {
     _name = name;
-    _value = value;
+    _args = args;
   }
 
   String getName() {
     return _name;
   }
 
-  Object getValue() {
-    if (_value == null) return null;
+  dynamic getValue() {
+    if (_args == null) return null;
 
     return getValueByPos(0);
   }
 
-  Object getValueByPos(int position) {
-    if (_value == null) return null;
-    if (position >= _value.length) return null;
+  dynamic getValueByPos(int pos) {
+    if (_args == null) return null;
+    if (pos >= _args.length) return null;
 
-    return _value[position];
+    return _args[pos];
   }
 }

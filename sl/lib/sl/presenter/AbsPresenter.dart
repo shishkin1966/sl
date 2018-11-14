@@ -23,13 +23,13 @@ abstract class AbsPresenter<M extends LifecycleState> implements Presenter<M> {
   }
 
   @override
-  void addAction(String action, List<Object> objects) {
-    _lifecycleState.addAction(action, objects);
+  void addAction(String action, List<dynamic> args) {
+    _lifecycleState.addAction(action, args);
   }
 
   @override
-  void doOrder(String order, List<Object> objects) {
-    onOrder(new Order.value(order, objects));
+  void doOrder(String order, List<dynamic> args) {
+    onOrder(new Order.value(order, args));
   }
 
   @override
