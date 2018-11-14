@@ -7,6 +7,7 @@ import 'package:sl/sl/specialist/messager/MessagerUnionImpl.dart';
 import 'package:sl/sl/specialist/presenter/PresenterUnionImpl.dart';
 import 'package:sl/sl/state/StateObserver.dart';
 import 'package:sl/sl/state/States.dart';
+import 'package:sl/sl/viewdata/ViewData.dart';
 import 'package:sl/ui/LifecycleState.dart';
 
 abstract class AbsPresenter<M extends LifecycleState> implements Presenter<M> {
@@ -23,13 +24,13 @@ abstract class AbsPresenter<M extends LifecycleState> implements Presenter<M> {
   }
 
   @override
-  void addAction(String action, List<dynamic> args) {
-    _lifecycleState.addAction(action, args);
+  void addAction(String action, ViewData arg) {
+    _lifecycleState.addAction(action, arg);
   }
 
   @override
-  void doOrder(String order, List<dynamic> args) {
-    onOrder(new Order.value(order, args));
+  void doOrder(String order, ViewData arg) {
+    onOrder(new Order.value(order, arg));
   }
 
   @override

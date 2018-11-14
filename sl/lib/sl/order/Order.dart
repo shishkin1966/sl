@@ -1,30 +1,23 @@
+import 'package:sl/sl/viewdata/ViewData.dart';
+
 class Order {
   String _name;
-  List<dynamic> _args = new List();
+  ViewData _args;
 
   Order.name(String name) {
     _name = name;
   }
 
-  Order.value(String name, List<dynamic> args) {
+  Order.value(String name, ViewData arg) {
     _name = name;
-    _args = args;
+    _args = arg;
   }
 
   String getName() {
     return _name;
   }
 
-  dynamic getValue() {
-    if (_args == null) return null;
-    if (_args.isEmpty) return null;
-    return _args[0];
-  }
-
-  dynamic getValueByPos(int pos) {
-    if (_args == null) return null;
-    if (pos >= _args.length) return null;
-
-    return _args[pos];
+  ViewData getValue() {
+    return _args;
   }
 }

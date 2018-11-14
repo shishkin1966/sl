@@ -1,30 +1,23 @@
+import 'package:sl/sl/viewdata/ViewData.dart';
+
 class Action {
   String _name;
-  List<dynamic> _args;
+  ViewData _arg;
 
   Action.name(String name) {
     _name = name;
   }
 
-  Action.value(String name, List<dynamic> args) {
+  Action.value(String name, ViewData arg) {
     _name = name;
-    _args = args;
+    _arg = arg;
   }
 
   String getName() {
     return _name;
   }
 
-  dynamic getValue() {
-    if (_args == null) return null;
-
-    return getValueByPos(0);
-  }
-
-  dynamic getValueByPos(int pos) {
-    if (_args == null) return null;
-    if (pos >= _args.length) return null;
-
-    return _args[pos];
+  ViewData getValue() {
+    return _arg;
   }
 }

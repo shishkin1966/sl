@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:sl/app/screen/home/HomeScreenPresenter.dart';
+import 'package:sl/app/screen/home/HomeViewData.dart';
 import 'package:sl/sl/SL.dart';
 import 'package:sl/sl/action/Actions.dart';
 import 'package:sl/sl/order/Order.dart';
@@ -26,7 +27,9 @@ class SecondScreenPresenenter<HomeScreenState extends LifecycleState> extends Ab
       case HomeScreenPresenenter.Increment:
         final Presenter presenter =
             (SL.instance.get(PresenterUnionImpl.NAME) as PresenterUnion).getSubscriber(HomeScreenPresenenter.NAME);
-        presenter.doOrder(HomeScreenPresenenter.Increment, ["4"]);
+        HomeViewData viewData = new HomeViewData();
+        viewData.counter = 4;
+        presenter.doOrder(HomeScreenPresenenter.Increment, viewData);
         break;
 
       case Actions.OnPressed:

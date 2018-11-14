@@ -18,7 +18,7 @@ class HomeScreenState extends LifecycleState<HomeScreen> {
   void onAction(final Action action) {
     switch (action.getName()) {
       case HomeScreenPresenenter.Increment:
-        _data.counter += int.parse(action.getValue());
+        _data.counter += (action.getValue() as HomeViewData).counter;
         _title = getState();
         break;
     }
@@ -60,7 +60,9 @@ class HomeScreenState extends LifecycleState<HomeScreen> {
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: (() {
-          getPresenter().doOrder(HomeScreenPresenenter.Increment, ["1"]);
+          HomeViewData viewData = new HomeViewData();
+          viewData.counter = 2;
+          getPresenter().doOrder(HomeScreenPresenenter.Increment, viewData);
         }),
         tooltip: 'Increment',
         child: new Icon(Icons.add),

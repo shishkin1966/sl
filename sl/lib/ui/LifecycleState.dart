@@ -4,6 +4,7 @@ import 'package:sl/sl/presenter/Presenter.dart';
 import 'package:sl/sl/state/StateObservable.dart';
 import 'package:sl/sl/state/Stateable.dart';
 import 'package:sl/sl/state/States.dart';
+import 'package:sl/sl/viewdata/ViewData.dart';
 
 abstract class LifecycleState<T extends StatefulWidget> extends State<T> with WidgetsBindingObserver {
   StateObservable _lifecycle = new StateObservable();
@@ -86,8 +87,8 @@ abstract class LifecycleState<T extends StatefulWidget> extends State<T> with Wi
     }
   }
 
-  void addAction(final String name, final List<dynamic> args) {
-    _addAction(new Action.value(name, args));
+  void addAction(final String name, final ViewData arg) {
+    _addAction(new Action.value(name, arg));
   }
 
   void _doActions() {
