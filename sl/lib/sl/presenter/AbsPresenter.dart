@@ -3,6 +3,7 @@ import 'package:sl/sl/data/Result.dart';
 import 'package:sl/sl/message/Message.dart';
 import 'package:sl/sl/order/Order.dart';
 import 'package:sl/sl/presenter/Presenter.dart';
+import 'package:sl/sl/specialist/messager/MessagerUnionImpl.dart';
 import 'package:sl/sl/specialist/presenter/PresenterUnionImpl.dart';
 import 'package:sl/sl/state/StateObserver.dart';
 import 'package:sl/sl/state/States.dart';
@@ -57,7 +58,7 @@ abstract class AbsPresenter<M extends LifecycleState> implements Presenter<M> {
 
   @override
   List<String> getSpecialistSubscription() {
-    return [PresenterUnionImpl.NAME];
+    return [PresenterUnionImpl.NAME, MessagerUnionImpl.NAME];
   }
 
   @override
