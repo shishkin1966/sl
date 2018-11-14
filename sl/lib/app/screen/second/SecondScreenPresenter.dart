@@ -3,7 +3,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:sl/app/screen/home/HomeScreenPresenter.dart';
 import 'package:sl/app/screen/home/HomeViewData.dart';
 import 'package:sl/sl/SL.dart';
+import 'package:sl/sl/SLUtil.dart';
 import 'package:sl/sl/action/Actions.dart';
+import 'package:sl/sl/data/Result.dart';
+import 'package:sl/sl/message/ResultMessage.dart';
 import 'package:sl/sl/order/Order.dart';
 import 'package:sl/sl/presenter/AbsPresenter.dart';
 import 'package:sl/sl/presenter/Presenter.dart';
@@ -36,5 +39,13 @@ class SecondScreenPresenenter<HomeScreenState extends LifecycleState> extends Ab
         Navigator.pop(getLifecycleState().context);
         break;
     }
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+
+    final Result result = new Result<String>("Это пришло письмо");
+    SLUtil.getMessagerUnion().addMessage(new ResultMessage.result(HomeScreenPresenenter.NAME, result));
   }
 }

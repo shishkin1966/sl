@@ -26,8 +26,6 @@ abstract class Message extends Subscriber {
 
   Message setSender(String sender);
 
-  bool isSticky();
-
   int getEndTime();
 
   Message setEndTime(int keepAliveTime);
