@@ -3,6 +3,7 @@ import 'package:sl/app/screen/home/HomeScreen.dart';
 import 'package:sl/app/screen/home/HomeScreenPresenter.dart';
 import 'package:sl/app/screen/home/HomeViewData.dart';
 import 'package:sl/sl/action/Action.dart';
+import 'package:sl/sl/action/Actions.dart';
 import 'package:sl/sl/presenter/Presenter.dart';
 import 'package:sl/sl/state/States.dart';
 import 'package:sl/ui/LifecycleState.dart';
@@ -17,7 +18,7 @@ class HomeScreenState extends LifecycleState<HomeScreen> {
   void onAction(final Action action) {
     switch (action.getName()) {
       case HomeScreenPresenenter.Increment:
-        _data.counter = action.getValue();
+        _data.counter += (action.getValue() as HomeViewData).counter;
         _title = getState();
         break;
     }
@@ -43,9 +44,25 @@ class HomeScreenState extends LifecycleState<HomeScreen> {
           ],
         ),
       ),
+      bottomSheet: new Container(
+        width: double.infinity,
+        height: 56,
+        color: Colors.deepOrange,
+        child: MaterialButton(
+          onPressed: () {
+            getPresenter().doOrder(Actions.OnPressed, null);
+          },
+          child: new Text(
+            "Вперед",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+        ),
+      ),
       floatingActionButton: new FloatingActionButton(
         onPressed: (() {
-          getPresenter().doOrder(HomeScreenPresenenter.Increment, null);
+          HomeViewData viewData = new HomeViewData();
+          viewData.counter = 2;
+          getPresenter().doOrder(HomeScreenPresenenter.Increment, viewData);
         }),
         tooltip: 'Increment',
         child: new Icon(Icons.add),

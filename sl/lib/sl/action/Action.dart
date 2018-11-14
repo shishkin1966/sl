@@ -1,30 +1,23 @@
+import 'package:sl/sl/viewdata/ViewData.dart';
+
 class Action {
   String _name;
-  List<Object> _value;
+  ViewData _arg;
 
   Action.name(String name) {
     _name = name;
   }
 
-  Action.value(String name, List<Object> value) {
+  Action.value(String name, ViewData arg) {
     _name = name;
-    _value = value;
+    _arg = arg;
   }
 
   String getName() {
     return _name;
   }
 
-  Object getValue() {
-    if (_value == null) return null;
-
-    return getValueByPos(0);
-  }
-
-  Object getValueByPos(int position) {
-    if (_value == null) return null;
-    if (position >= _value.length) return null;
-
-    return _value[position];
+  ViewData getValue() {
+    return _arg;
   }
 }

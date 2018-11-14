@@ -2,8 +2,7 @@ import 'package:sl/sl/Secretary.dart';
 import 'package:sl/sl/Specialist.dart';
 import 'package:sl/sl/SpecialistSubscriber.dart';
 
-abstract class SmallUnion<T extends SpecialistSubscriber>
-    implements Specialist {
+abstract class SmallUnion<T extends SpecialistSubscriber> implements Specialist {
   Secretary<T> createSecretary<T extends SpecialistSubscriber>();
 
   bool checkSubscriber<T extends SpecialistSubscriber>(T subscriber);
@@ -30,5 +29,5 @@ abstract class SmallUnion<T extends SpecialistSubscriber>
 
   void onUnRegisterLastSubscriber();
 
-  void onAddSubscriber<T extends SpecialistSubscriber>(T subscriber);
+  void onAddSubscriber(T subscriber);
 }

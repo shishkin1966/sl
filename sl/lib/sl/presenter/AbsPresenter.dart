@@ -3,9 +3,11 @@ import 'package:sl/sl/data/Result.dart';
 import 'package:sl/sl/message/Message.dart';
 import 'package:sl/sl/order/Order.dart';
 import 'package:sl/sl/presenter/Presenter.dart';
+import 'package:sl/sl/specialist/messager/MessagerUnionImpl.dart';
 import 'package:sl/sl/specialist/presenter/PresenterUnionImpl.dart';
 import 'package:sl/sl/state/StateObserver.dart';
 import 'package:sl/sl/state/States.dart';
+import 'package:sl/sl/viewdata/ViewData.dart';
 import 'package:sl/ui/LifecycleState.dart';
 
 abstract class AbsPresenter<M extends LifecycleState> implements Presenter<M> {
@@ -22,13 +24,13 @@ abstract class AbsPresenter<M extends LifecycleState> implements Presenter<M> {
   }
 
   @override
-  void addAction(String action, List<Object> objects) {
-    _lifecycleState.addAction(action, objects);
+  void addAction(String action, ViewData arg) {
+    _lifecycleState.addAction(action, arg);
   }
 
   @override
-  void doOrder(String order, List<Object> objects) {
-    onOrder(new Order.value(order, objects));
+  void doOrder(String order, ViewData arg) {
+    onOrder(new Order.value(order, arg));
   }
 
   @override
@@ -57,7 +59,7 @@ abstract class AbsPresenter<M extends LifecycleState> implements Presenter<M> {
 
   @override
   List<String> getSpecialistSubscription() {
-    return [PresenterUnionImpl.NAME];
+    return [PresenterUnionImpl.NAME, MessagerUnionImpl.NAME];
   }
 
   @override
