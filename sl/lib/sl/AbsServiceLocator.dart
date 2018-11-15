@@ -1,10 +1,10 @@
+import 'package:sl/common/StringUtils.dart';
 import 'package:sl/sl/SecretaryImpl.dart';
 import 'package:sl/sl/ServiceLocator.dart';
 import 'package:sl/sl/SmallUnion.dart';
 import 'package:sl/sl/Specialist.dart';
 import 'package:sl/sl/SpecialistSubscriber.dart';
 import 'package:sl/sl/Union.dart';
-import 'package:sl/sl/util/StringUtils.dart';
 
 abstract class AbsServiceLocator implements ServiceLocator {
   var _secretary = new SecretaryImpl<Specialist>();

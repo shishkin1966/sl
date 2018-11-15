@@ -2,7 +2,7 @@ import 'package:sl/sl/data/Result.dart';
 import 'package:sl/sl/message/AbsMessage.dart';
 import 'package:sl/sl/message/Message.dart';
 import 'package:sl/sl/request/ResponseListener.dart';
-import 'package:sl/sl/specialist/messager/MessagerSubscriber.dart';
+import 'package:sl/sl/specialist/messager/MessengerSubscriber.dart';
 
 class ResultMessage extends AbsMessage {
   static const String NAME = "ResultMessage";
@@ -27,7 +27,7 @@ class ResultMessage extends AbsMessage {
   }
 
   @override
-  void read(MessagerSubscriber subscriber) {
+  void read(MessengerSubscriber subscriber) {
     if (subscriber is ResponseListener) {
       (subscriber as ResponseListener).response(this._result);
     }

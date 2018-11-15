@@ -1,8 +1,8 @@
 import 'package:sl/sl/Subscriber.dart';
-import 'package:sl/sl/specialist/messager/MessagerSubscriber.dart';
+import 'package:sl/sl/specialist/messager/MessengerSubscriber.dart';
 
 abstract class Message extends Subscriber {
-  void read(MessagerSubscriber subscriber);
+  void read(MessengerSubscriber subscriber);
 
   bool contains(String address);
 

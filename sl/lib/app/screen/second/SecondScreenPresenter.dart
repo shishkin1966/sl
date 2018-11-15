@@ -46,6 +46,6 @@ class SecondScreenPresenenter<HomeScreenState extends LifecycleState> extends Ab
     super.onReady();
 
     final Result result = new Result<String>("Это пришло письмо");
-    SLUtil.getMessagerUnion().addMessage(new ResultMessage.result(HomeScreenPresenenter.NAME, result));
+    SLUtil.getMessengerUnion().addMessage(new ResultMessage.result(HomeScreenPresenenter.NAME, result));
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:core';
 
+import 'package:sl/common/StringUtils.dart';
 import 'package:sl/sl/message/Message.dart';
-import 'package:sl/sl/util/StringUtils.dart';
 
 abstract class AbsMessage extends Message {
   String _address;

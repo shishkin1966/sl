@@ -1,3 +1,4 @@
+import 'package:sl/common/StringUtils.dart';
 import 'package:sl/sl/AbsSpecialist.dart';
 import 'package:sl/sl/Secretary.dart';
 import 'package:sl/sl/SecretaryImpl.dart';
@@ -5,7 +6,6 @@ import 'package:sl/sl/SmallUnion.dart';
 import 'package:sl/sl/SpecialistSubscriber.dart';
 import 'package:sl/sl/state/Stateable.dart';
 import 'package:sl/sl/state/States.dart';
-import 'package:sl/sl/util/StringUtils.dart';
 
 abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpecialist implements SmallUnion<T> {
   var _secretary;

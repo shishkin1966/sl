@@ -1,15 +1,15 @@
 import 'package:sl/sl/SmallUnion.dart';
 import 'package:sl/sl/message/Message.dart';
-import 'package:sl/sl/specialist/messager/MessagerSubscriber.dart';
+import 'package:sl/sl/specialist/messager/MessengerSubscriber.dart';
 
-abstract class MessagerUnion extends SmallUnion<MessagerSubscriber> {
-  readMessages(MessagerSubscriber subscriber);
+abstract class MessengerUnion extends SmallUnion<MessengerSubscriber> {
+  readMessages(MessengerSubscriber subscriber);
 
-  List<Message> getMessages(MessagerSubscriber subscriber);
+  List<Message> getMessages(MessengerSubscriber subscriber);
 
   void removeMessage(Message message);
 
-  void clearMessages(MessagerSubscriber subscriber);
+  void clearMessages(MessengerSubscriber subscriber);
 
   addMessagingList(String name, List<String> addresses);
 

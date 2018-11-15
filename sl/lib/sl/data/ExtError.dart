@@ -1,4 +1,4 @@
-import 'package:sl/sl/util/StringUtils.dart';
+import 'package:sl/common/StringUtils.dart';
 
 class ExtError {
   final StringBuffer buffer = StringBuffer();
