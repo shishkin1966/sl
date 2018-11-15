@@ -1,20 +1,20 @@
 import 'package:sl/common/InterruptByTime.dart';
 import 'package:sl/common/InterruptListener.dart';
 import 'package:sl/common/StringUtils.dart';
-import 'package:sl/sl/SLUtil.dart';
+import 'package:sl/sl/SL.dart';
 import 'package:sl/sl/Secretary.dart';
 import 'package:sl/sl/SecretaryImpl.dart';
 import 'package:sl/sl/observe/AbsObservable.dart';
 import 'package:sl/sl/observe/ObjectObservableSubscriber.dart';
 import 'package:sl/sl/specialist/observable/ObservableSubscriber.dart';
 import 'package:sl/sl/specialist/observable/ObservableUnion.dart';
+import 'package:sl/sl/specialist/observable/ObservableUnionImpl.dart';
 
-class ObjectObservable extends AbsObservable<String, ObjectObservableSubscriber> implements InterruptListener {
+class ObjectObservable extends AbsObservable<ObjectObservableSubscriber> implements InterruptListener {
   static const String NAME = "ObjectObservable";
 
   Secretary<List<String>> _objects = new SecretaryImpl();
   Secretary<InterruptByTime> _timers = new SecretaryImpl();
-  final ObservableUnion _union = SLUtil.getObservableUnion();
 
   @override
   String getName() {
@@ -60,26 +60,38 @@ class ObjectObservable extends AbsObservable<String, ObjectObservableSubscriber>
           observers.remove(subscriber.getName());
         }
       }
+      for (String object in _objects.keys()) {
+        if (_objects.get(object).isEmpty) {
+          _objects.remove(object);
+          _timers.get(object).cancel();
+          _timers.remove(object);
+        }
+      }
     }
   }
 
   @override
   void onChange<T>(T object) {
     if (object == null) return;
+    String name = object as String;
+    if (StringUtils.isNullOrEmpty(name)) return;
 
-    final String objectName = object as String;
-    if (StringUtils.isNullOrEmpty(objectName)) return;
-
-    _timers.get(objectName).up();
+    final InterruptByTime interruptByTime = _timers.get(name);
+    if (interruptByTime != null) {
+      interruptByTime.up();
+    }
   }
 
   void onChangeAll() {
     for (String object in _objects.keys()) {
       final List<String> subscribers = _objects.get(object);
-      for (String name in subscribers) {
-        final ObservableSubscriber observableSubscriber = _union.getSubscriber(name);
-        if (observableSubscriber != null && observableSubscriber.validate()) {
-          observableSubscriber.onChange(object);
+      final ObservableUnion _union = SL.instance.get(ObservableUnionImpl.NAME);
+      if (_union != null) {
+        for (String name in subscribers) {
+          final ObservableSubscriber observableSubscriber = _union.getSubscriber(name);
+          if (observableSubscriber != null && observableSubscriber.validate()) {
+            observableSubscriber.onChange(object);
+          }
         }
       }
     }
@@ -88,10 +100,13 @@ class ObjectObservable extends AbsObservable<String, ObjectObservableSubscriber>
   @override
   void onInterrupt(String listenObject) {
     final List<String> listSubscibers = _objects.get(listenObject);
-    for (String name in listSubscibers) {
-      final ObservableSubscriber subscriber = _union.getSubscriber(name);
-      if (subscriber != null && subscriber.validate()) {
-        subscriber.onChange(listenObject);
+    final ObservableUnion _union = SL.instance.get(ObservableUnionImpl.NAME);
+    if (_union != null) {
+      for (String name in listSubscibers) {
+        final ObservableSubscriber subscriber = _union.getSubscriber(name);
+        if (subscriber != null && subscriber.validate()) {
+          subscriber.onChange(listenObject);
+        }
       }
     }
   }

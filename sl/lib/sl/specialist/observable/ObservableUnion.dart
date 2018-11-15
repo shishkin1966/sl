@@ -7,7 +7,7 @@ abstract class ObservableUnion extends AbsSmallUnion<ObservableSubscriber> {
 
   void unregisterObservable(String name);
 
-  Observable getObservable(final String name);
+  C getObservable<C>(final String name);
 
   List<Observable> getObservables();
 }

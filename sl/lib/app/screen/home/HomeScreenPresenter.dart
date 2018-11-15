@@ -12,6 +12,7 @@ import 'package:sl/sl/observe/ObjectObservableSubscriber.dart';
 import 'package:sl/sl/order/Order.dart';
 import 'package:sl/sl/presenter/AbsPresenter.dart';
 import 'package:sl/sl/request/ResponseListener.dart';
+import 'package:sl/sl/specialist/observable/ObservableUnionImpl.dart';
 import 'package:sl/ui/LifecycleState.dart';
 
 class HomeScreenPresenter<HomeScreenState extends LifecycleState> extends AbsPresenter<HomeScreenState>
@@ -74,7 +75,14 @@ class HomeScreenPresenter<HomeScreenState extends LifecycleState> extends AbsPre
 
     for (int i = 0; i < 3; i++) {
       sleep(Duration(milliseconds: 500));
-      SLUtil.onChange("Test $i");
+      SLUtil.onChange("Test 0");
     }
+  }
+
+  @override
+  List<String> getSpecialistSubscription() {
+    final List<String> list = super.getSpecialistSubscription();
+    list.add(ObservableUnionImpl.NAME);
+    return list;
   }
 }

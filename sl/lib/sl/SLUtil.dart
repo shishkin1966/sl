@@ -21,6 +21,9 @@ class SLUtil {
   }
 
   static void onChange(String object) {
-    getObservableUnion().getObservable(ObjectObservable.NAME).onChange(object);
+    final ObjectObservable observable = getObservableUnion().getObservable(ObjectObservable.NAME);
+    if (observable != null) {
+      observable.onChange(object);
+    }
   }
 }

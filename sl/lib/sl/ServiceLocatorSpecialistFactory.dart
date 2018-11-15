@@ -1,6 +1,7 @@
 import 'package:sl/sl/Specialist.dart';
 import 'package:sl/sl/SpecialistFactory.dart';
 import 'package:sl/sl/specialist/messager/MessengerUnionImpl.dart';
+import 'package:sl/sl/specialist/observable/ObservableUnionImpl.dart';
 import 'package:sl/sl/specialist/presenter/PresenterUnionImpl.dart';
 
 class ServiceLocatorSpecialistFactory implements SpecialistFactory {
@@ -9,8 +10,12 @@ class ServiceLocatorSpecialistFactory implements SpecialistFactory {
     switch (name) {
       case PresenterUnionImpl.NAME:
         return new PresenterUnionImpl();
+
       case MessengerUnionImpl.NAME:
         return new MessengerUnionImpl();
+
+      case ObservableUnionImpl.NAME:
+        return new ObservableUnionImpl();
     }
     return null;
   }

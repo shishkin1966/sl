@@ -25,12 +25,12 @@ class InterruptByTime {
 
   void up() {
     if (!_isInterrupt) {
-      _timer = new Timer(_duration, down);
       _isInterrupt = true;
       _cnt = 0;
       if (_listener != null) {
         _listener.onInterrupt(_sender);
       }
+      _timer = new Timer(_duration, down);
     } else {
       _cnt = 1;
     }
@@ -40,6 +40,13 @@ class InterruptByTime {
     _isInterrupt = false;
     if (_cnt > 0) {
       up();
+    }
+  }
+
+  void cancel() {
+    if (_timer != null) {
+      _timer.cancel();
+      _timer = null;
     }
   }
 }

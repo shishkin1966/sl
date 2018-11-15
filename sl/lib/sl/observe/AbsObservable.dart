@@ -3,7 +3,7 @@ import 'package:sl/sl/SecretaryImpl.dart';
 import 'package:sl/sl/observe/Observable.dart';
 import 'package:sl/sl/specialist/observable/ObservableSubscriber.dart';
 
-abstract class AbsObservable<T, K extends ObservableSubscriber> implements Observable<T, K> {
+abstract class AbsObservable<K extends ObservableSubscriber> implements Observable<K> {
   Secretary _secretary = new SecretaryImpl();
 
   @override

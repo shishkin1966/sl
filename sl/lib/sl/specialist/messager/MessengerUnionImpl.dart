@@ -27,8 +27,8 @@ class MessengerUnionImpl extends AbsSmallUnion<MessengerSubscriber> implements M
   }
 
   @override
-  void onAddSubscriber(final MessengerSubscriber subscriber) {
-    readMessages(subscriber);
+  void onAddSubscriber<T>(T subscriber) {
+    readMessages(subscriber as MessengerSubscriber);
   }
 
   @override
