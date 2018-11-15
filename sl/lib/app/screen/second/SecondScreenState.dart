@@ -17,7 +17,7 @@ class SecondScreenState extends LifecycleState<SecondScreen> {
       ),
       floatingActionButton: new FloatingActionButton(
           onPressed: (() {
-            getPresenter().doOrder(HomeScreenPresenenter.Increment, null);
+            getPresenter().doOrder(HomeScreenPresenter.Increment, null);
           }),
           child: new Icon(Icons.add)),
       bottomSheet: new Container(

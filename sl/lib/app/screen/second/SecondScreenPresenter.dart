@@ -27,12 +27,12 @@ class SecondScreenPresenenter<HomeScreenState extends LifecycleState> extends Ab
   @override
   void onOrder(Order order) {
     switch (order.getName()) {
-      case HomeScreenPresenenter.Increment:
+      case HomeScreenPresenter.Increment:
         final Presenter presenter =
-            (SL.instance.get(PresenterUnionImpl.NAME) as PresenterUnion).getSubscriber(HomeScreenPresenenter.NAME);
+            (SL.instance.get(PresenterUnionImpl.NAME) as PresenterUnion).getSubscriber(HomeScreenPresenter.NAME);
         HomeViewData viewData = new HomeViewData();
         viewData.counter = 4;
-        presenter.doOrder(HomeScreenPresenenter.Increment, viewData);
+        presenter.doOrder(HomeScreenPresenter.Increment, viewData);
         break;
 
       case Actions.OnPressed:
@@ -46,6 +46,6 @@ class SecondScreenPresenenter<HomeScreenState extends LifecycleState> extends Ab
     super.onReady();
 
     final Result result = new Result<String>("Это пришло письмо");
-    SLUtil.getMessengerUnion().addMessage(new ResultMessage.result(HomeScreenPresenenter.NAME, result));
+    SLUtil.getMessengerUnion().addMessage(new ResultMessage.result(HomeScreenPresenter.NAME, result));
   }
 }
