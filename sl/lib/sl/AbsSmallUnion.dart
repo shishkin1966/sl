@@ -1,3 +1,4 @@
+import 'package:sl/common/StringUtils.dart';
 import 'package:sl/sl/AbsSpecialist.dart';
 import 'package:sl/sl/Secretary.dart';
 import 'package:sl/sl/SecretaryImpl.dart';
@@ -5,22 +6,21 @@ import 'package:sl/sl/SmallUnion.dart';
 import 'package:sl/sl/SpecialistSubscriber.dart';
 import 'package:sl/sl/state/Stateable.dart';
 import 'package:sl/sl/state/States.dart';
-import 'package:sl/sl/util/StringUtils.dart';
 
 abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpecialist implements SmallUnion<T> {
-  var _secretary;
+  Secretary _secretary;
 
   AbsSmallUnion() {
     _secretary = createSecretary();
   }
 
   @override
-  Secretary<T> createSecretary<T extends SpecialistSubscriber>() {
+  Secretary<T> createSecretary<T>() {
     return new SecretaryImpl<T>();
   }
 
   @override
-  void onAddSubscriber(T subscriber) {}
+  void onAddSubscriber<T>(T subscriber) {}
 
   @override
   void onUnRegisterLastSubscriber() {}
@@ -29,7 +29,7 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
   void onRegisterFirstSubscriber() {}
 
   @override
-  T getSubscriber<T extends SpecialistSubscriber>(String name) {
+  T getSubscriber<T>(String name) {
     if (StringUtils.isNullOrEmpty(name)) return null;
 
     if (!_secretary.containsKey(name)) {
@@ -50,10 +50,10 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
   }
 
   @override
-  List<T> getReadySubscribers<T extends SpecialistSubscriber>() {
+  List<T> getReadySubscribers<T>() {
     final List<T> subscribers = new List<T>();
     for (T subscriber in getSubscribers()) {
-      if (subscriber != null && subscriber.validate()) {
+      if (subscriber != null && (subscriber as SpecialistSubscriber).validate()) {
         if (subscriber is Stateable) {
           final Stateable stateable = subscriber as Stateable;
           if (stateable.getState() == States.StateReady) {
@@ -66,10 +66,10 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
   }
 
   @override
-  List<T> getValidatedSubscribers<T extends SpecialistSubscriber>() {
+  List<T> getValidatedSubscribers<T>() {
     final List<T> subscribers = new List<T>();
     for (T subscriber in getSubscribers()) {
-      if (subscriber != null && subscriber.validate()) {
+      if (subscriber != null && (subscriber as SpecialistSubscriber).validate()) {
         subscribers.add(subscriber);
       }
     }
@@ -77,7 +77,7 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
   }
 
   @override
-  List<T> getSubscribers<T extends SpecialistSubscriber>() {
+  List<T> getSubscribers<T>() {
     return _secretary.values();
   }
 
@@ -89,15 +89,15 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
   }
 
   @override
-  void unregisterSubscriber<T extends SpecialistSubscriber>(T subscriber) {
+  void unregisterSubscriber<T>(T subscriber) {
     if (subscriber == null) {
       return;
     }
 
     final int cnt = _secretary.size();
-    if (_secretary.containsKey(subscriber.getName())) {
-      if (subscriber == _secretary.get(subscriber.getName())) {
-        _secretary.remove(subscriber.getName());
+    if (_secretary.containsKey((subscriber as SpecialistSubscriber).getName())) {
+      if (subscriber == _secretary.get((subscriber as SpecialistSubscriber).getName())) {
+        _secretary.remove((subscriber as SpecialistSubscriber).getName());
       }
     }
 
@@ -107,7 +107,7 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
   }
 
   @override
-  bool registerSubscriber<T extends SpecialistSubscriber>(T subscriber) {
+  bool registerSubscriber<T>(T subscriber) {
     if (subscriber == null) {
       return false;
     }
@@ -118,7 +118,7 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
       return false;
     }
 
-    if (!subscriber.validate()) {
+    if (!(subscriber as SpecialistSubscriber).validate()) {
       //ErrorSpecialistImpl.getInstance().onError(NAME,
       //    "Registration not valid subscriber: " + subscriber.toString(), true);
       return false;
@@ -126,7 +126,7 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
 
     final int cnt = _secretary.size();
 
-    _secretary.put(subscriber.getName(), subscriber);
+    _secretary.put((subscriber as SpecialistSubscriber).getName(), subscriber);
 
     if (cnt == 0 && _secretary.size() == 1) {
       onRegisterFirstSubscriber();
@@ -136,7 +136,8 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
   }
 
   @override
-  bool checkSubscriber<T extends SpecialistSubscriber>(T subscriber) {
-    return !StringUtils.isNullOrEmpty(subscriber.getPasport()) && !StringUtils.isNullOrEmpty(subscriber.getName());
+  bool checkSubscriber<T>(T subscriber) {
+    return !StringUtils.isNullOrEmpty((subscriber as SpecialistSubscriber).getPasport()) &&
+        !StringUtils.isNullOrEmpty((subscriber as SpecialistSubscriber).getName());
   }
 }

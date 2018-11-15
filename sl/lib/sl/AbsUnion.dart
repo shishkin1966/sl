@@ -6,13 +6,13 @@ abstract class AbsUnion<T extends SpecialistSubscriber> extends AbsSmallUnion<T>
   SpecialistSubscriber _currentSubscriber;
 
   @override
-  bool registerSubscriber<T extends SpecialistSubscriber>(T subscriber) {
+  bool registerSubscriber<T>(T subscriber) {
     if (subscriber == null) return false;
 
     if (super.registerSubscriber(subscriber)) {
       if (_currentSubscriber != null) {
-        if (subscriber.getName() == _currentSubscriber.getName()) {
-          _currentSubscriber = subscriber;
+        if ((subscriber as SpecialistSubscriber).getName() == _currentSubscriber.getName()) {
+          _currentSubscriber = subscriber as SpecialistSubscriber;
         }
       }
       return true;
@@ -21,13 +21,13 @@ abstract class AbsUnion<T extends SpecialistSubscriber> extends AbsSmallUnion<T>
   }
 
   @override
-  void unregisterSubscriber<T extends SpecialistSubscriber>(T subscriber) {
+  void unregisterSubscriber<T>(T subscriber) {
     if (subscriber == null) return;
 
     super.unregisterSubscriber(subscriber);
 
     if (_currentSubscriber != null) {
-      if (subscriber.getName() == _currentSubscriber.getName()) {
+      if ((subscriber as SpecialistSubscriber).getName() == _currentSubscriber.getName()) {
         if (_currentSubscriber == subscriber) {
           _currentSubscriber = null;
         }
@@ -36,11 +36,11 @@ abstract class AbsUnion<T extends SpecialistSubscriber> extends AbsSmallUnion<T>
   }
 
   @override
-  void setCurrentSubscriber<T extends SpecialistSubscriber>(T subscriber) {
+  void setCurrentSubscriber<T>(T subscriber) {
     if (subscriber == null) return;
 
     if (!checkSubscriber(subscriber)) return;
 
-    _currentSubscriber = subscriber;
+    _currentSubscriber = subscriber as SpecialistSubscriber;
   }
 }

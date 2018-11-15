@@ -1,7 +1,7 @@
 import 'dart:collection';
 
+import 'package:sl/common/StringUtils.dart';
 import 'package:sl/sl/Secretary.dart';
-import 'package:sl/sl/util/StringUtils.dart';
 
 class SecretaryImpl<T> implements Secretary<T> {
   final HashMap<String, T> _subscribers = new HashMap<String, T>();

@@ -1,7 +1,10 @@
 import 'package:sl/sl/AbsServiceLocator.dart';
 import 'package:sl/sl/ServiceLocatorSpecialistFactory.dart';
 import 'package:sl/sl/SpecialistFactory.dart';
-import 'package:sl/sl/specialist/messager/MessagerUnionImpl.dart';
+import 'package:sl/sl/observe/ObjectObservable.dart';
+import 'package:sl/sl/specialist/messager/MessengerUnionImpl.dart';
+import 'package:sl/sl/specialist/observable/ObservableUnion.dart';
+import 'package:sl/sl/specialist/observable/ObservableUnionImpl.dart';
 import 'package:sl/sl/specialist/presenter/PresenterUnionImpl.dart';
 
 class SL extends AbsServiceLocator {
@@ -13,8 +16,11 @@ class SL extends AbsServiceLocator {
   SL._internal() {
     _specialistFactory = new ServiceLocatorSpecialistFactory();
 
-    registerSpecialistByName(MessagerUnionImpl.NAME);
+    registerSpecialistByName(MessengerUnionImpl.NAME);
     registerSpecialistByName(PresenterUnionImpl.NAME);
+    registerSpecialistByName(ObservableUnionImpl.NAME);
+
+    (get(ObservableUnionImpl.NAME) as ObservableUnion).registerObservable(new ObjectObservable());
   }
 
   static SL get instance => _sl;

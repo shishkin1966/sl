@@ -1,14 +1,14 @@
 import 'package:rxdart/rxdart.dart';
+import 'package:sl/common/StringUtils.dart';
 import 'package:sl/sl/AbsSmallUnion.dart';
 import 'package:sl/sl/Secretary.dart';
 import 'package:sl/sl/SecretaryImpl.dart';
 import 'package:sl/sl/message/Message.dart';
-import 'package:sl/sl/specialist/messager/MessagerSubscriber.dart';
-import 'package:sl/sl/specialist/messager/MessagerUnion.dart';
+import 'package:sl/sl/specialist/messager/MessengerSubscriber.dart';
+import 'package:sl/sl/specialist/messager/MessengerUnion.dart';
 import 'package:sl/sl/state/States.dart';
-import 'package:sl/sl/util/StringUtils.dart';
 
-class MessagerUnionImpl extends AbsSmallUnion<MessagerSubscriber> implements MessagerUnion {
+class MessengerUnionImpl extends AbsSmallUnion<MessengerSubscriber> implements MessengerUnion {
   static const String NAME = "MessagerUnionImpl";
 
   Observable myObservable;
@@ -18,7 +18,7 @@ class MessagerUnionImpl extends AbsSmallUnion<MessagerSubscriber> implements Mes
 
   @override
   int compareTo(other) {
-    return (other is MessagerUnion) ? 0 : 1;
+    return (other is MessengerUnion) ? 0 : 1;
   }
 
   @override
@@ -27,12 +27,12 @@ class MessagerUnionImpl extends AbsSmallUnion<MessagerSubscriber> implements Mes
   }
 
   @override
-  void onAddSubscriber(final MessagerSubscriber subscriber) {
-    readMessages(subscriber);
+  void onAddSubscriber<T>(T subscriber) {
+    readMessages(subscriber as MessengerSubscriber);
   }
 
   @override
-  void readMessages(final MessagerSubscriber subscriber) {
+  void readMessages(final MessengerSubscriber subscriber) {
     if (subscriber == null) return;
 
     final List<Message> list = getMessages(subscriber);
@@ -46,7 +46,7 @@ class MessagerUnionImpl extends AbsSmallUnion<MessagerSubscriber> implements Mes
   }
 
   @override
-  List<Message> getMessages(final MessagerSubscriber subscriber) {
+  List<Message> getMessages(final MessengerSubscriber subscriber) {
     if (subscriber != null) {
       if (_messages.isEmpty) {
         return new List();
@@ -87,7 +87,7 @@ class MessagerUnionImpl extends AbsSmallUnion<MessagerSubscriber> implements Mes
   }
 
   @override
-  void clearMessages(final MessagerSubscriber subscriber) {
+  void clearMessages(final MessengerSubscriber subscriber) {
     if (subscriber == null) return;
     if (_messages.isEmpty) return;
 
@@ -185,7 +185,7 @@ class MessagerUnionImpl extends AbsSmallUnion<MessagerSubscriber> implements Mes
       return;
     }
 
-    final MessagerSubscriber subscriber = getSubscriber(address);
+    final MessengerSubscriber subscriber = getSubscriber(address);
     if (subscriber != null) {
       final String state = subscriber.getState();
       if (state == States.StateReady) {
@@ -204,7 +204,7 @@ class MessagerUnionImpl extends AbsSmallUnion<MessagerSubscriber> implements Mes
         addresses.addAll(_getAddresses(address));
       }
       for (String address in addresses) {
-        final MessagerSubscriber subscriber = _checkSubscriber(address);
+        final MessengerSubscriber subscriber = _checkSubscriber(address);
         if (subscriber != null) {
           message.read(subscriber);
         }
@@ -212,12 +212,12 @@ class MessagerUnionImpl extends AbsSmallUnion<MessagerSubscriber> implements Mes
     }
   }
 
-  MessagerSubscriber _checkSubscriber(final String address) {
+  MessengerSubscriber _checkSubscriber(final String address) {
     if (StringUtils.isNullOrEmpty(address)) {
       return null;
     }
 
-    final MessagerSubscriber subscriber = getSubscriber(address);
+    final MessengerSubscriber subscriber = getSubscriber(address);
     if (subscriber != null) {
       final String state = subscriber.getState();
       if (state == States.StateReady) {

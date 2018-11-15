@@ -17,11 +17,12 @@ class HomeScreenState extends LifecycleState<HomeScreen> {
   @override
   void onAction(final Action action) {
     switch (action.getName()) {
-      case HomeScreenPresenenter.Increment:
+      case HomeScreenPresenter.Increment:
         _data.counter += (action.getValue() as HomeViewData).counter;
         break;
 
-      case HomeScreenPresenenter.Response:
+      case HomeScreenPresenter.OnChangeObject:
+      case HomeScreenPresenter.Response:
         _title = (action.getValue() as HomeViewData).title;
         break;
     }
@@ -65,7 +66,7 @@ class HomeScreenState extends LifecycleState<HomeScreen> {
         onPressed: (() {
           HomeViewData viewData = new HomeViewData();
           viewData.counter = 2;
-          getPresenter().doOrder(HomeScreenPresenenter.Increment, viewData);
+          getPresenter().doOrder(HomeScreenPresenter.Increment, viewData);
         }),
         tooltip: 'Increment',
         child: new Icon(Icons.add),
@@ -75,6 +76,6 @@ class HomeScreenState extends LifecycleState<HomeScreen> {
 
   @override
   Presenter<LifecycleState<StatefulWidget>> createPresenter() {
-    return new HomeScreenPresenenter(this);
+    return new HomeScreenPresenter(this);
   }
 }
