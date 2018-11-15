@@ -12,9 +12,11 @@ import 'package:sl/sl/specialist/observable/ObservableUnionImpl.dart';
 
 class ObjectObservable extends AbsObservable<ObjectObservableSubscriber> implements InterruptListener {
   static const String NAME = "ObjectObservable";
+  static const int DURATION = 5000;
 
   Secretary<List<String>> _objects = new SecretaryImpl();
   Secretary<InterruptByTime> _timers = new SecretaryImpl();
+  Secretary<int> _durations = new SecretaryImpl();
 
   @override
   String getName() {
@@ -35,14 +37,20 @@ class ObjectObservable extends AbsObservable<ObjectObservableSubscriber> impleme
 
     if (subscriber is ObjectObservableSubscriber) {
       final List<String> list = subscriber.getListenObjects();
+      final String name = subscriber.getName();
+      int duration = DURATION;
 
       for (String listenObject in list) {
         if (!_objects.containsKey(listenObject)) {
+          if (_durations.containsKey(listenObject)) {
+            duration = _durations.get(listenObject);
+          }
+
           _objects.put(listenObject, new List());
-          _timers.put(listenObject, new InterruptByTime(this, listenObject));
+          _timers.put(listenObject, new InterruptByTime(this, listenObject, duration));
         }
-        if (!_objects.get(listenObject).contains(subscriber.getName())) {
-          _objects.get(listenObject).add(subscriber.getName());
+        if (!_objects.get(listenObject).contains(name)) {
+          _objects.get(listenObject).add(name);
         }
       }
     }

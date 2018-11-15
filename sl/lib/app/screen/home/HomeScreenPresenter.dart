@@ -85,4 +85,9 @@ class HomeScreenPresenter<HomeScreenState extends LifecycleState> extends AbsPre
     list.add(ObservableUnionImpl.NAME);
     return list;
   }
+
+  @override
+  int getObjectObservableDuration() {
+    return 5000;
+  }
 }
