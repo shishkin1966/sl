@@ -73,13 +73,10 @@ class ObjectObservable extends AbsObservable<ObjectObservableSubscriber> impleme
   @override
   void onChange<T>(T object) {
     if (object == null) return;
-    String name = object as String;
+    final String name = object as String;
     if (StringUtils.isNullOrEmpty(name)) return;
 
-    final InterruptByTime interruptByTime = _timers.get(name);
-    if (interruptByTime != null) {
-      interruptByTime.up();
-    }
+    _timers.get(name).up();
   }
 
   void onChangeAll() {
