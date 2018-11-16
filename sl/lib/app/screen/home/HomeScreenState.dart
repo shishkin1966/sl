@@ -6,9 +6,9 @@ import 'package:sl/sl/action/Action.dart';
 import 'package:sl/sl/action/Actions.dart';
 import 'package:sl/sl/presenter/Presenter.dart';
 import 'package:sl/sl/state/States.dart';
-import 'package:sl/ui/LifecycleState.dart';
+import 'package:sl/ui/LifecycleWidgetState.dart';
 
-class HomeScreenState extends LifecycleState<HomeScreen> {
+class HomeScreenState extends LifecycleWidgetState<HomeScreen> {
   String _title = States.StateCreate;
   HomeViewData _data = new HomeViewData();
 
@@ -75,7 +75,7 @@ class HomeScreenState extends LifecycleState<HomeScreen> {
   }
 
   @override
-  Presenter<LifecycleState<StatefulWidget>> createPresenter() {
+  Presenter<LifecycleWidgetState<StatefulWidget>> createPresenter() {
     return new HomeScreenPresenter(this);
   }
 }

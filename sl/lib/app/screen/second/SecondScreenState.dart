@@ -4,9 +4,9 @@ import 'package:sl/app/screen/second/SecondScreen.dart';
 import 'package:sl/app/screen/second/SecondScreenPresenter.dart';
 import 'package:sl/sl/action/Actions.dart';
 import 'package:sl/sl/presenter/Presenter.dart';
-import 'package:sl/ui/LifecycleState.dart';
+import 'package:sl/ui/LifecycleWidgetState.dart';
 
-class SecondScreenState extends LifecycleState<SecondScreen> {
+class SecondScreenState extends LifecycleWidgetState<SecondScreen> {
   SecondScreenState() : super();
 
   @override
@@ -38,7 +38,7 @@ class SecondScreenState extends LifecycleState<SecondScreen> {
   }
 
   @override
-  Presenter<LifecycleState<StatefulWidget>> createPresenter() {
+  Presenter<LifecycleWidgetState<StatefulWidget>> createPresenter() {
     return new SecondScreenPresenenter(this);
   }
 }

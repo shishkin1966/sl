@@ -13,16 +13,16 @@ import 'package:sl/sl/order/Order.dart';
 import 'package:sl/sl/presenter/AbsPresenter.dart';
 import 'package:sl/sl/request/ResponseListener.dart';
 import 'package:sl/sl/specialist/observable/ObservableUnionImpl.dart';
-import 'package:sl/ui/LifecycleState.dart';
+import 'package:sl/ui/LifecycleWidgetState.dart';
 
-class HomeScreenPresenter<HomeScreenState extends LifecycleState> extends AbsPresenter<HomeScreenState>
+class HomeScreenPresenter<HomeScreenState extends LifecycleWidgetState> extends AbsPresenter<HomeScreenState>
     implements ResponseListener, ObjectObservableSubscriber {
   static const String NAME = "HomeScreenPresenenter";
   static const String Increment = "Increment";
   static const String Response = "Response";
   static const String OnChangeObject = "OnChangeObject";
 
-  HomeScreenPresenter(LifecycleState<StatefulWidget> lifecycleState) : super(lifecycleState);
+  HomeScreenPresenter(LifecycleWidgetState<StatefulWidget> lifecycleState) : super(lifecycleState);
 
   @override
   String getName() {

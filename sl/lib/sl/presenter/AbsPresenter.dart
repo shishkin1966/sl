@@ -7,29 +7,29 @@ import 'package:sl/sl/specialist/messager/MessengerUnionImpl.dart';
 import 'package:sl/sl/specialist/presenter/PresenterUnionImpl.dart';
 import 'package:sl/sl/state/StateObserver.dart';
 import 'package:sl/sl/state/States.dart';
-import 'package:sl/sl/viewdata/ViewData.dart';
-import 'package:sl/ui/LifecycleState.dart';
+import 'package:sl/sl/statechange/StateChange.dart';
+import 'package:sl/ui/LifecycleWidgetState.dart';
 
-abstract class AbsPresenter<M extends LifecycleState> implements Presenter<M> {
+abstract class AbsPresenter<M extends LifecycleWidgetState> implements Presenter<M> {
   StateObserver _lifecycle;
-  LifecycleState _lifecycleState;
+  LifecycleWidgetState _lifecycleState;
 
   AbsPresenter(M lifecycleState) {
     _lifecycleState = lifecycleState;
     _lifecycle = new StateObserver(this);
   }
 
-  LifecycleState getLifecycleState() {
+  LifecycleWidgetState getLifecycleState() {
     return _lifecycleState;
   }
 
   @override
-  void addAction(String action, ViewData arg) {
+  void addAction(String action, StateChange arg) {
     _lifecycleState.addAction(action, arg);
   }
 
   @override
-  void doOrder(String order, ViewData arg) {
+  void doOrder(String order, StateChange arg) {
     onOrder(new Order.value(order, arg));
   }
 

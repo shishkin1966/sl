@@ -4,19 +4,19 @@ import 'package:sl/sl/presenter/Presenter.dart';
 import 'package:sl/sl/state/StateObservable.dart';
 import 'package:sl/sl/state/Stateable.dart';
 import 'package:sl/sl/state/States.dart';
-import 'package:sl/sl/viewdata/ViewData.dart';
+import 'package:sl/sl/statechange/StateChange.dart';
 
-abstract class LifecycleState<T extends StatefulWidget> extends State<T> with WidgetsBindingObserver {
+abstract class LifecycleWidgetState<T extends StatefulWidget> extends State<T> with WidgetsBindingObserver {
   StateObservable _lifecycle = new StateObservable();
   List<Action> _actions = new List<Action>();
   Presenter _presenter;
 
-  LifecycleState() {
+  LifecycleWidgetState() {
     _presenter = createPresenter();
     addObserver(_presenter);
   }
 
-  Presenter<LifecycleState<StatefulWidget>> createPresenter();
+  Presenter<LifecycleWidgetState<StatefulWidget>> createPresenter();
 
   Presenter getPresenter() {
     return _presenter;
@@ -88,7 +88,7 @@ abstract class LifecycleState<T extends StatefulWidget> extends State<T> with Wi
     }
   }
 
-  void addAction(final String name, final ViewData arg) {
+  void addAction(final String name, final StateChange arg) {
     _addAction(new Action.value(name, arg));
   }
 

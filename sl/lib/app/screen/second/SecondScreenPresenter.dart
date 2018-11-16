@@ -12,12 +12,12 @@ import 'package:sl/sl/presenter/AbsPresenter.dart';
 import 'package:sl/sl/presenter/Presenter.dart';
 import 'package:sl/sl/specialist/presenter/PresenterUnion.dart';
 import 'package:sl/sl/specialist/presenter/PresenterUnionImpl.dart';
-import 'package:sl/ui/LifecycleState.dart';
+import 'package:sl/ui/LifecycleWidgetState.dart';
 
-class SecondScreenPresenenter<HomeScreenState extends LifecycleState> extends AbsPresenter<HomeScreenState> {
+class SecondScreenPresenenter<HomeScreenState extends LifecycleWidgetState> extends AbsPresenter<HomeScreenState> {
   static const String NAME = "SecondScreenPresenenter";
 
-  SecondScreenPresenenter(LifecycleState<StatefulWidget> lifecycleState) : super(lifecycleState);
+  SecondScreenPresenenter(LifecycleWidgetState<StatefulWidget> lifecycleState) : super(lifecycleState);
 
   @override
   String getName() {

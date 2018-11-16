@@ -1,6 +1,6 @@
-import 'package:sl/sl/viewdata/ViewData.dart';
+import 'package:sl/sl/statechange/StateChange.dart';
 
-class HomeViewData extends ViewData {
+class HomeViewData extends StateChange {
   int counter = 0;
   String title;
 }
