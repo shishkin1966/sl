@@ -4,10 +4,13 @@ import 'package:sl/sl/Secretary.dart';
 import 'package:sl/sl/SecretaryImpl.dart';
 import 'package:sl/sl/SmallUnion.dart';
 import 'package:sl/sl/SpecialistSubscriber.dart';
+import 'package:sl/sl/specialist/error/ErrorSpecialistImpl.dart';
 import 'package:sl/sl/state/Stateable.dart';
 import 'package:sl/sl/state/States.dart';
 
 abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpecialist implements SmallUnion<T> {
+  static const String NAME = "AbsSmallUnion";
+
   Secretary _secretary;
 
   AbsSmallUnion() {
@@ -55,8 +58,7 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
     for (T subscriber in getSubscribers()) {
       if (subscriber != null && (subscriber as SpecialistSubscriber).validate()) {
         if (subscriber is Stateable) {
-          final Stateable stateable = subscriber as Stateable;
-          if (stateable.getState() == States.StateReady) {
+          if (subscriber.getState() == States.StateReady) {
             subscribers.add(subscriber);
           }
         }
@@ -113,14 +115,12 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
     }
 
     if (!checkSubscriber(subscriber)) {
-      //ErrorSpecialistImpl.getInstance().onError(NAME,
-      //    "Suscriber is not authenticated : " + subscriber.toString(), true);
+      ErrorSpecialistImpl.instance.onErrorMessage(NAME, "Suscriber is not authenticated : " + subscriber.toString());
       return false;
     }
 
     if (!(subscriber as SpecialistSubscriber).validate()) {
-      //ErrorSpecialistImpl.getInstance().onError(NAME,
-      //    "Registration not valid subscriber: " + subscriber.toString(), true);
+      ErrorSpecialistImpl.instance.onErrorMessage(NAME, "Registration not valid subscriber: " + subscriber.toString());
       return false;
     }
 
