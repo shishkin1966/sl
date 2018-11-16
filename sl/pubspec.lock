@@ -39,6 +39,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  logging:
+    dependency: "direct main"
+    description:
+      name: logging
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.11.3+2"
   matcher:
     dependency: transitive
     description:
@@ -67,15 +74,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  rxdart:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "438514098d26f9471d7718d94d0a23dbf58e8729"
-      url: "https://github.com/ReactiveX/rxdart.git"
-    source: git
-    version: "0.19.0"
   sky_engine:
     dependency: transitive
     description: flutter
