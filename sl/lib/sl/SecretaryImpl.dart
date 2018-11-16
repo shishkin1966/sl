@@ -35,7 +35,13 @@ class SecretaryImpl<T> implements Secretary<T> {
 
   @override
   List<String> keys() {
-    return _subscribers.keys;
+    if (_subscribers.isEmpty) return new List();
+
+    List<String> keys = new List();
+    for (MapEntry entry in _subscribers.entries) {
+      keys.add(entry.key as String);
+    }
+    return keys;
   }
 
   @override
@@ -63,6 +69,8 @@ class SecretaryImpl<T> implements Secretary<T> {
 
   @override
   List<T> values() {
+    if (_subscribers.isEmpty) return new List();
+
     List<T> list = new List<T>();
     list.addAll(_subscribers.values);
     return list;

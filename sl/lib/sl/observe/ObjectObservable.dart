@@ -29,6 +29,12 @@ class ObjectObservable extends AbsObservable<ObjectObservableSubscriber> impleme
   @override
   void unregister() {}
 
+  void setDuration(final String object, final int duration) {
+    if (StringUtils.isNullOrEmpty(object)) return;
+
+    _durations.put(object, duration);
+  }
+
   @override
   void addObserver<T extends ObservableSubscriber>(T subscriber) {
     if (subscriber == null) return;
@@ -60,22 +66,28 @@ class ObjectObservable extends AbsObservable<ObjectObservableSubscriber> impleme
   void removeObserver<T extends ObservableSubscriber>(T subscriber) {
     if (subscriber == null) return;
 
-    super.removeObserver(subscriber);
-
     if (subscriber is ObjectObservableSubscriber) {
       for (List<String> observers in _objects.values()) {
         if (observers.contains(subscriber.getName())) {
           observers.remove(subscriber.getName());
         }
       }
+      final List<String> deleted = new List();
       for (String object in _objects.keys()) {
         if (_objects.get(object).isEmpty) {
-          _objects.remove(object);
+          deleted.add(object);
           _timers.get(object).cancel();
           _timers.remove(object);
         }
       }
+      for (String object in deleted) {
+        if (_objects.containsKey(object)) {
+          _objects.remove(object);
+        }
+      }
     }
+
+    super.removeObserver(subscriber);
   }
 
   @override
