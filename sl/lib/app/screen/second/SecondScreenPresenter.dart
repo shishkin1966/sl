@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -52,12 +52,15 @@ class SecondScreenPresenter<HomeScreenState extends LifecycleWidgetState> extend
   void onReady() {
     super.onReady();
 
+    test();
+  }
+
+  void test() async {
     final Result result = new Result<String>("Это пришло письмо");
     SLUtil.getMessengerUnion().addMessage(new ResultMessage.result(HomeScreenPresenter.NAME, result));
 
     for (int i = 0; i < 3; i++) {
-      sleep(Duration(milliseconds: 500));
-      SLUtil.onChange("Test 0");
+      new Timer(const Duration(seconds: 1), () => SLUtil.onChange("Test 0"));
     }
   }
 
