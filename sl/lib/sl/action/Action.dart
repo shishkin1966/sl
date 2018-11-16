@@ -1,14 +1,14 @@
-import 'package:sl/sl/viewdata/ViewData.dart';
+import 'package:sl/sl/statechange/StateChange.dart';
 
 class Action {
   String _name;
-  ViewData _arg;
+  StateChange _arg;
 
   Action.name(String name) {
     _name = name;
   }
 
-  Action.value(String name, ViewData arg) {
+  Action.value(String name, StateChange arg) {
     _name = name;
     _arg = arg;
   }
@@ -17,7 +17,7 @@ class Action {
     return _name;
   }
 
-  ViewData getValue() {
+  StateChange getValue() {
     return _arg;
   }
 }

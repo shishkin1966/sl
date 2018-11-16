@@ -5,21 +5,16 @@ import 'package:sl/common/InterruptListener.dart';
 class InterruptByTime {
   InterruptListener _listener;
   int _cnt = 0;
-  Duration _duration = Duration(seconds: 5);
+  Duration _duration;
   bool _isInterrupt = false;
   Timer _timer;
   String _sender;
 
-  InterruptByTime(final InterruptListener listener, final String sender) {
+  InterruptByTime(final InterruptListener listener, final String sender, int duration) {
     _listener = listener;
     _sender = sender;
-  }
-
-  InterruptByTime.delay(final InterruptListener listener, final String sender, final int delay) {
-    InterruptByTime(listener, sender);
-
-    if (delay > 0) {
-      _duration = Duration(seconds: delay);
+    if (duration > 0) {
+      _duration = Duration(milliseconds: duration);
     }
   }
 
@@ -30,7 +25,11 @@ class InterruptByTime {
       if (_listener != null) {
         _listener.onInterrupt(_sender);
       }
-      _timer = new Timer(_duration, down);
+      if (_duration != null) {
+        _timer = new Timer(_duration, down);
+      } else {
+        down();
+      }
     } else {
       _cnt = 1;
     }

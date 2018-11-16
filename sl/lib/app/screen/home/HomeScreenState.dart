@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:sl/app/screen/home/HomeChangeState.dart';
 import 'package:sl/app/screen/home/HomeScreen.dart';
 import 'package:sl/app/screen/home/HomeScreenPresenter.dart';
-import 'package:sl/app/screen/home/HomeViewData.dart';
 import 'package:sl/sl/action/Action.dart';
 import 'package:sl/sl/action/Actions.dart';
 import 'package:sl/sl/presenter/Presenter.dart';
 import 'package:sl/sl/state/States.dart';
-import 'package:sl/ui/LifecycleState.dart';
+import 'package:sl/ui/LifecycleWidgetState.dart';
 
-class HomeScreenState extends LifecycleState<HomeScreen> {
+class HomeScreenState extends LifecycleWidgetState<HomeScreen> {
   String _title = States.StateCreate;
-  HomeViewData _data = new HomeViewData();
+  HomeChangeState _data = new HomeChangeState();
 
   HomeScreenState() : super();
 
@@ -18,12 +18,11 @@ class HomeScreenState extends LifecycleState<HomeScreen> {
   void onAction(final Action action) {
     switch (action.getName()) {
       case HomeScreenPresenter.Increment:
-        _data.counter += (action.getValue() as HomeViewData).counter;
+        _data.counter += (action.getValue() as HomeChangeState).counter;
         break;
 
-      case HomeScreenPresenter.OnChangeObject:
       case HomeScreenPresenter.Response:
-        _title = (action.getValue() as HomeViewData).title;
+        _title = (action.getValue() as HomeChangeState).title;
         break;
     }
   }
@@ -64,7 +63,7 @@ class HomeScreenState extends LifecycleState<HomeScreen> {
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: (() {
-          HomeViewData viewData = new HomeViewData();
+          HomeChangeState viewData = new HomeChangeState();
           viewData.counter = 2;
           getPresenter().doOrder(HomeScreenPresenter.Increment, viewData);
         }),
@@ -75,7 +74,7 @@ class HomeScreenState extends LifecycleState<HomeScreen> {
   }
 
   @override
-  Presenter<LifecycleState<StatefulWidget>> createPresenter() {
+  Presenter<LifecycleWidgetState<StatefulWidget>> createPresenter() {
     return new HomeScreenPresenter(this);
   }
 }
