@@ -91,6 +91,6 @@ class SecondScreenPresenter<HomeScreenState extends LifecycleWidgetState> extend
   void onChange<String>(String object) {
     final HomeScreenData data = new HomeScreenData();
     data.title = ("Изменился объект:$object");
-    getLifecycleState().addAction(new DataAction(OnChangeObject).setData(data));
+    getLifecycleState().addAction(new DataAction<HomeScreenData>(OnChangeObject).setData(data));
   }
 }

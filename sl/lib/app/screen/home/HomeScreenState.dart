@@ -70,7 +70,7 @@ class HomeScreenState extends LifecycleWidgetState<HomeScreen> {
         onPressed: (() {
           HomeScreenData data = new HomeScreenData();
           data.counter = 2;
-          getPresenter().addAction(new DataAction(HomeScreenPresenter.Increment).setData(data));
+          getPresenter().addAction(new DataAction<HomeScreenData>(HomeScreenPresenter.Increment).setData(data));
         }),
         tooltip: 'Increment',
         child: new Icon(Icons.add),
