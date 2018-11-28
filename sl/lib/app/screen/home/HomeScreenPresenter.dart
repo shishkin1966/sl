@@ -54,6 +54,6 @@ class HomeScreenPresenter<HomeScreenState extends LifecycleWidgetState> extends 
   void response(Result result) {
     final HomeScreenData data = new HomeScreenData();
     data.title = result.getData() as String;
-    getLifecycleState().addAction(new DataAction(Response).setData(data));
+    getLifecycleState().addAction(new DataAction<HomeScreenData>(Response).setData(data));
   }
 }
