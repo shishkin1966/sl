@@ -1,4 +1,3 @@
-import 'package:rxdart/rxdart.dart';
 import 'package:sl/common/StringUtils.dart';
 import 'package:sl/sl/AbsSmallUnion.dart';
 import 'package:sl/sl/Secretary.dart';
@@ -11,7 +10,6 @@ import 'package:sl/sl/state/States.dart';
 class MessengerUnionImpl extends AbsSmallUnion<MessengerSubscriber> implements MessengerUnion {
   static const String NAME = "MessagerUnionImpl";
 
-  Observable myObservable;
   Map<int, Message> _messages = new Map();
   Secretary<List<String>> _messagingList = new SecretaryImpl();
   int _id = 0;

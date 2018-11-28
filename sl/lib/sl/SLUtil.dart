@@ -1,5 +1,6 @@
 import 'package:sl/sl/SL.dart';
 import 'package:sl/sl/observe/ObjectObservable.dart';
+import 'package:sl/sl/specialist/error/ErrorSpecialistImpl.dart';
 import 'package:sl/sl/specialist/messager/MessengerUnion.dart';
 import 'package:sl/sl/specialist/messager/MessengerUnionImpl.dart';
 import 'package:sl/sl/specialist/observable/ObservableUnion.dart';
@@ -25,5 +26,9 @@ class SLUtil {
     if (observable != null) {
       observable.onChange(object);
     }
+  }
+
+  static void onError(String sender, Exception e) {
+    ErrorSpecialistImpl.instance.onError(sender, e);
   }
 }

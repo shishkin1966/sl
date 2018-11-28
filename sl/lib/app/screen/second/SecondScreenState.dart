@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:sl/app/screen/home/HomeChangeState.dart';
 import 'package:sl/app/screen/home/HomeScreenPresenter.dart';
 import 'package:sl/app/screen/second/SecondScreen.dart';
 import 'package:sl/app/screen/second/SecondScreenPresenter.dart';
 import 'package:sl/sl/action/Action.dart';
 import 'package:sl/sl/action/Actions.dart';
+import 'package:sl/sl/action/ApplicationAction.dart';
+import 'package:sl/sl/action/DataAction.dart';
 import 'package:sl/sl/presenter/Presenter.dart';
 import 'package:sl/ui/LifecycleWidgetState.dart';
 
@@ -15,10 +16,13 @@ class SecondScreenState extends LifecycleWidgetState<SecondScreen> {
 
   @override
   void onAction(final Action action) {
-    switch (action.getName()) {
-      case SecondScreenPresenter.OnChangeObject:
-        _title = (action.getValue() as HomeChangeState).title;
-        break;
+    if (action is DataAction) {
+      String actionName = action.getName();
+      switch (actionName) {
+        case SecondScreenPresenter.OnChangeObject:
+          _title = action.getData().title;
+          break;
+      }
     }
   }
 
@@ -30,7 +34,7 @@ class SecondScreenState extends LifecycleWidgetState<SecondScreen> {
       ),
       floatingActionButton: new FloatingActionButton(
           onPressed: (() {
-            getPresenter().doOrder(HomeScreenPresenter.Increment, null);
+            getPresenter().addAction(new ApplicationAction(HomeScreenPresenter.Increment));
           }),
           child: new Icon(Icons.add)),
       bottomSheet: new Container(
@@ -39,7 +43,7 @@ class SecondScreenState extends LifecycleWidgetState<SecondScreen> {
         color: Colors.deepOrange,
         child: MaterialButton(
           onPressed: () {
-            getPresenter().doOrder(Actions.OnPressed, null);
+            getPresenter().addAction(new ApplicationAction(Actions.OnPressed));
           },
           child: new Text(
             "Назад",

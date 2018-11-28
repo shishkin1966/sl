@@ -2,16 +2,18 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:sl/app/screen/home/HomeChangeState.dart';
+import 'package:sl/app/screen/home/HomeScreenData.dart';
 import 'package:sl/app/screen/home/HomeScreenPresenter.dart';
 import 'package:sl/sl/SL.dart';
 import 'package:sl/sl/SLUtil.dart';
+import 'package:sl/sl/action/Action.dart';
 import 'package:sl/sl/action/Actions.dart';
+import 'package:sl/sl/action/ApplicationAction.dart';
+import 'package:sl/sl/action/DataAction.dart';
 import 'package:sl/sl/data/Result.dart';
 import 'package:sl/sl/message/ResultMessage.dart';
 import 'package:sl/sl/observe/ObjectObservable.dart';
 import 'package:sl/sl/observe/ObjectObservableSubscriber.dart';
-import 'package:sl/sl/order/Order.dart';
 import 'package:sl/sl/presenter/AbsPresenter.dart';
 import 'package:sl/sl/presenter/Presenter.dart';
 import 'package:sl/sl/specialist/observable/ObservableUnionImpl.dart';
@@ -32,19 +34,23 @@ class SecondScreenPresenter<HomeScreenState extends LifecycleWidgetState> extend
   }
 
   @override
-  void onOrder(Order order) {
-    switch (order.getName()) {
-      case HomeScreenPresenter.Increment:
-        final Presenter presenter =
-            (SL.instance.get(PresenterUnionImpl.NAME) as PresenterUnion).getSubscriber(HomeScreenPresenter.NAME);
-        HomeChangeState viewData = new HomeChangeState();
-        viewData.counter = 4;
-        presenter.doOrder(HomeScreenPresenter.Increment, viewData);
-        break;
+  void onAction(Action action) {
+    if (action is ApplicationAction) {
+      String actionName = action.getName();
+      switch (actionName) {
+        case HomeScreenPresenter.Increment:
+          final Presenter presenter =
+              (SL.instance.get(PresenterUnionImpl.NAME) as PresenterUnion).getSubscriber(HomeScreenPresenter.NAME);
+          HomeScreenData data = new HomeScreenData();
+          data.counter = 4;
+          presenter.addAction(new DataAction(HomeScreenPresenter.Increment).setData(data));
+          break;
 
-      case Actions.OnPressed:
-        Navigator.pop(getLifecycleState().context);
-        break;
+        case Actions.OnPressed:
+          Navigator.pop(getLifecycleState().context);
+          break;
+      }
+      return;
     }
   }
 
@@ -83,8 +89,8 @@ class SecondScreenPresenter<HomeScreenState extends LifecycleWidgetState> extend
 
   @override
   void onChange<String>(String object) {
-    final HomeChangeState stateChange = new HomeChangeState();
-    stateChange.title = ("Изменился объект:$object");
-    addAction(OnChangeObject, stateChange);
+    final HomeScreenData data = new HomeScreenData();
+    data.title = ("Изменился объект:$object");
+    getLifecycleState().addAction(new DataAction(OnChangeObject).setData(data));
   }
 }
