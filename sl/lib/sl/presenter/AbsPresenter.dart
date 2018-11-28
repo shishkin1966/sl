@@ -1,18 +1,18 @@
 import 'package:sl/sl/SL.dart';
+import 'package:sl/sl/action/Action.dart';
 import 'package:sl/sl/data/Result.dart';
 import 'package:sl/sl/message/Message.dart';
-import 'package:sl/sl/order/Order.dart';
 import 'package:sl/sl/presenter/Presenter.dart';
 import 'package:sl/sl/specialist/messager/MessengerUnionImpl.dart';
 import 'package:sl/sl/specialist/presenter/PresenterUnionImpl.dart';
 import 'package:sl/sl/state/StateObserver.dart';
 import 'package:sl/sl/state/States.dart';
-import 'package:sl/sl/statechange/StateChange.dart';
 import 'package:sl/ui/LifecycleWidgetState.dart';
 
 abstract class AbsPresenter<M extends LifecycleWidgetState> implements Presenter<M> {
   StateObserver _lifecycle;
   LifecycleWidgetState _lifecycleState;
+  List<Action> _actions = new List<Action>();
 
   AbsPresenter(M lifecycleState) {
     _lifecycleState = lifecycleState;
@@ -24,13 +24,38 @@ abstract class AbsPresenter<M extends LifecycleWidgetState> implements Presenter
   }
 
   @override
-  void addAction(String action, StateChange arg) {
-    _lifecycleState.addAction(action, arg);
+  void addAction(Action action) {
+    if (action == null) return;
+
+    final String state = getState();
+    switch (state) {
+      case States.StateDestroy:
+        return;
+
+      case States.StateCreate:
+      case States.StateNotReady:
+        _actions.add(action);
+        return;
+
+      default:
+        _actions.add(action);
+        _doActions();
+        break;
+    }
   }
 
-  @override
-  void doOrder(String order, StateChange arg) {
-    onOrder(new Order.value(order, arg));
+  void _doActions() {
+    final List<Action> deleted = new List<Action>();
+    for (int i = 0; i < _actions.length; i++) {
+      if (getState() != States.StateReady) {
+        break;
+      }
+      onAction(_actions[i]);
+      deleted.add(_actions[i]);
+    }
+    for (Action action in deleted) {
+      _actions.remove(action);
+    }
   }
 
   @override
@@ -42,9 +67,6 @@ abstract class AbsPresenter<M extends LifecycleWidgetState> implements Presenter
   }
 
   @override
-  void onOrder(Order order);
-
-  @override
   void onReady() {
     SL.instance.registerSubscriber(this);
   }
@@ -53,7 +75,7 @@ abstract class AbsPresenter<M extends LifecycleWidgetState> implements Presenter
   void read(Message message) {}
 
   @override
-  String getPasport() {
+  String getPassport() {
     return getName();
   }
 

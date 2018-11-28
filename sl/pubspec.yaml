@@ -13,6 +13,8 @@ dependencies:
 
   fluttertoast: ^2.1.0
 
+  executor: ^2.1.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

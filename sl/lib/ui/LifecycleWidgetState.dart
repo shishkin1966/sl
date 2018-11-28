@@ -4,7 +4,6 @@ import 'package:sl/sl/presenter/Presenter.dart';
 import 'package:sl/sl/state/StateObservable.dart';
 import 'package:sl/sl/state/Stateable.dart';
 import 'package:sl/sl/state/States.dart';
-import 'package:sl/sl/statechange/StateChange.dart';
 
 abstract class LifecycleWidgetState<T extends StatefulWidget> extends State<T> with WidgetsBindingObserver {
   StateObservable _lifecycle = new StateObservable();
@@ -68,7 +67,7 @@ abstract class LifecycleWidgetState<T extends StatefulWidget> extends State<T> w
     }
   }
 
-  void _addAction(final Action action) {
+  void addAction(final Action action) {
     if (action == null) return;
 
     final String state = getState();
@@ -86,10 +85,6 @@ abstract class LifecycleWidgetState<T extends StatefulWidget> extends State<T> w
         _doActions();
         break;
     }
-  }
-
-  void addAction(final String name, final StateChange arg) {
-    _addAction(new Action.value(name, arg));
   }
 
   void _doActions() {

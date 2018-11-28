@@ -24,7 +24,7 @@ abstract class AbsObservable<K extends ObservableSubscriber> implements Observab
   }
 
   @override
-  String getPasport() {
+  String getPassport() {
     return getName();
   }
 

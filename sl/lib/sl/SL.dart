@@ -38,7 +38,7 @@ class SL extends AbsServiceLocator {
   }
 
   @override
-  String getPasport() {
+  String getPassport() {
     return getName();
   }
 }

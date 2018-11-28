@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:sl/app/screen/home/HomeChangeState.dart';
+import 'package:sl/app/screen/home/HomeScreenData.dart';
 import 'package:sl/app/screen/second/SecondScreen.dart';
+import 'package:sl/sl/action/Action.dart';
 import 'package:sl/sl/action/Actions.dart';
+import 'package:sl/sl/action/ApplicationAction.dart';
+import 'package:sl/sl/action/DataAction.dart';
 import 'package:sl/sl/data/Result.dart';
-import 'package:sl/sl/order/Order.dart';
 import 'package:sl/sl/presenter/AbsPresenter.dart';
 import 'package:sl/sl/request/ResponseListener.dart';
 import 'package:sl/ui/LifecycleWidgetState.dart';
@@ -23,25 +25,35 @@ class HomeScreenPresenter<HomeScreenState extends LifecycleWidgetState> extends 
   }
 
   @override
-  void onOrder(Order order) {
-    switch (order.getName()) {
-      case Increment:
-        addAction(Increment, order.getValue());
-        break;
+  void onAction(Action action) {
+    if (action is DataAction) {
+      String actionName = action.getName();
+      switch (actionName) {
+        case Increment:
+          getLifecycleState().addAction(action);
+          break;
+      }
+      return;
+    }
 
-      case Actions.OnPressed:
-        Navigator.push(
-          getLifecycleState().context,
-          MaterialPageRoute(builder: (context) => SecondScreen()),
-        );
-        break;
+    if (action is ApplicationAction) {
+      String actionName = action.getName();
+      switch (actionName) {
+        case Actions.OnPressed:
+          Navigator.push(
+            getLifecycleState().context,
+            MaterialPageRoute(builder: (context) => SecondScreen()),
+          );
+          break;
+      }
+      return;
     }
   }
 
   @override
   void response(Result result) {
-    final HomeChangeState stateChange = new HomeChangeState();
-    stateChange.title = result.getData() as String;
-    addAction(Response, stateChange);
+    final HomeScreenData data = new HomeScreenData();
+    data.title = result.getData() as String;
+    getLifecycleState().addAction(new DataAction(Response).setData(data));
   }
 }

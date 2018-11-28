@@ -137,7 +137,7 @@ abstract class AbsSmallUnion<T extends SpecialistSubscriber> extends AbsSpeciali
 
   @override
   bool checkSubscriber<T>(T subscriber) {
-    return !StringUtils.isNullOrEmpty((subscriber as SpecialistSubscriber).getPasport()) &&
+    return !StringUtils.isNullOrEmpty((subscriber as SpecialistSubscriber).getPassport()) &&
         !StringUtils.isNullOrEmpty((subscriber as SpecialistSubscriber).getName());
   }
 }

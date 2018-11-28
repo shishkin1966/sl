@@ -86,7 +86,7 @@ abstract class AbsMessage extends Message {
   }
 
   @override
-  String getPasport() {
+  String getPassport() {
     return getName();
   }
 
