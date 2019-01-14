@@ -1,4 +1,5 @@
 import 'package:sl/sl/querybuilder/QueryBuilderUtils.dart';
+import 'package:sl/sl/querybuilder/SqliteQueryBuilder.dart';
 
 abstract class Projection {
   static ColumnProjection column(String column) {
@@ -76,7 +77,7 @@ abstract class Projection {
     return new CastDateTimeProjection(this);
   }
 
-  Projection castAsDouble() {
+  Projection castAsReal() {
     return new CastRealProjection(this);
   }
 
@@ -224,8 +225,8 @@ class AliasedProjection extends Projection {
   }
 
   @override
-  Projection castAsDouble() {
-    if (_projection != null) _projection = _projection.castAsDouble();
+  Projection castAsReal() {
+    if (_projection != null) _projection = _projection.castAsReal();
     return this;
   }
 
@@ -277,6 +278,118 @@ class CastRealProjection extends Projection {
   List<Object> buildParameters() {
     if (_projection != null)
       return _projection.buildParameters();
+    else
+      return QueryBuilderUtils.EMPTY_LIST;
+  }
+}
+
+class CastIntProjection extends Projection {
+  Projection _projection;
+
+  CastIntProjection(Projection projection) {
+    _projection = projection;
+  }
+
+  @override
+  String build() {
+    String ret = (_projection != null ? _projection.build() : "");
+    return "CAST(" + ret + " AS INTEGER)";
+  }
+
+  @override
+  List<Object> buildParameters() {
+    if (_projection != null)
+      return _projection.buildParameters();
+    else
+      return QueryBuilderUtils.EMPTY_LIST;
+  }
+}
+
+class CastStringProjection extends Projection {
+  Projection _projection;
+
+  CastStringProjection(Projection projection) {
+    _projection = projection;
+  }
+
+  @override
+  String build() {
+    String ret = (_projection != null ? _projection.build() : "");
+    return "CAST(" + ret + " AS TEXT)";
+  }
+
+  @override
+  List<Object> buildParameters() {
+    if (_projection != null)
+      return _projection.buildParameters();
+    else
+      return QueryBuilderUtils.EMPTY_LIST;
+  }
+}
+
+class CastDateProjection extends Projection {
+  Projection _projection;
+
+  CastDateProjection(Projection projection) {
+    _projection = projection;
+  }
+
+  @override
+  String build() {
+    String ret = (_projection != null ? _projection.build() : "");
+    return "DATE(" + ret + ")";
+  }
+
+  @override
+  List<Object> buildParameters() {
+    if (_projection != null)
+      return _projection.buildParameters();
+    else
+      return QueryBuilderUtils.EMPTY_LIST;
+  }
+}
+
+class CastDateTimeProjection extends Projection {
+  Projection _projection;
+
+  CastDateTimeProjection(Projection projection) {
+    _projection = projection;
+  }
+
+  @override
+  String build() {
+    String ret = (_projection != null ? _projection.build() : "");
+    return "DATETIME(" + ret + ")";
+  }
+
+  @override
+  List<Object> buildParameters() {
+    if (_projection != null)
+      return _projection.buildParameters();
+    else
+      return QueryBuilderUtils.EMPTY_LIST;
+  }
+}
+
+class SubQueryProjection extends Projection {
+  SqliteQueryBuilder _subQuery;
+
+  SubQueryProjection(SqliteQueryBuilder subQuery) {
+    _subQuery = subQuery;
+  }
+
+  @override
+  String build() {
+    if (_subQuery != null)
+      return "(" + _subQuery.build() + ")";
+    else
+      return "";
+  }
+
+  @override
+  List<Object> buildParameters() {
+    if (_subQuery != null)
+      return _subQuery.buildParameters();
     else
       return QueryBuilderUtils.EMPTY_LIST;
   }

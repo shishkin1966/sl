@@ -1,3 +1,5 @@
+import 'package:sl/sl/querybuilder/Projection.dart';
+
 abstract class QueryBuilder {
   String build();
 
