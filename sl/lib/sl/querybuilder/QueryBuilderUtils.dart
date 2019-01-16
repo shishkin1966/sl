@@ -1,4 +1,6 @@
+import 'package:intl/intl.dart';
 import 'package:sl/sl/querybuilder/Projection.dart';
+import 'package:sl/sl/querybuilder/QueryBuildConfiguration.dart';
 
 class QueryBuilderUtils {
   static final List<Object> EMPTY_LIST = new List<Object>();
@@ -27,5 +29,13 @@ class QueryBuilderUtils {
       projections[i] = Projection.column(columns[i]);
     }
     return projections;
+  }
+
+  static String dateToString(DateTime date, DateFormat format) {
+    if (date == null) return null;
+
+    if (format == null) format = QueryBuildConfiguration.instance.getDateFormat();
+
+    return format.format(date);
   }
 }

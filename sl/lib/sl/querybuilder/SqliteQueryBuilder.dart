@@ -3,8 +3,11 @@ import 'dart:core';
 import 'package:intl/intl.dart';
 import 'package:sl/sl/querybuilder/Criteria.dart';
 import 'package:sl/sl/querybuilder/From.dart';
+import 'package:sl/sl/querybuilder/Order.dart';
 import 'package:sl/sl/querybuilder/Projection.dart';
+import 'package:sl/sl/querybuilder/QueryBuildConfiguration.dart';
 import 'package:sl/sl/querybuilder/QueryBuilder.dart';
+import 'package:sl/sl/querybuilder/QueryBuilderUtils.dart';
 
 class SqliteQueryBuilder implements QueryBuilder {
   List<Projection> _projections;
@@ -20,171 +23,442 @@ class SqliteQueryBuilder implements QueryBuilder {
   DateFormat _dateFormat;
   DateFormat _dateTimeFormat;
 
+  SqliteQueryBuilder.dateformat(DateFormat dateFormat, DateFormat dateTimeFormat) {
+    _projections = new List<Projection>();
+    _from = null;
+    _criteria = null;
+    _groupBy = new List<Projection>();
+    _orderBy = new List<Order>();
+    _skip = -1;
+    _take = -1;
+    _distinct = false;
+    _unionQueries = new List<SqliteQueryBuilder>();
+    _unionAll = false;
+    _dateFormat = dateFormat;
+    _dateTimeFormat = dateTimeFormat;
+  }
+
+  SqliteQueryBuilder.string(String dateFormat, String dateTimeFormat)
+      : this.dateformat(new DateFormat(dateFormat), new DateFormat(dateTimeFormat));
+
+  SqliteQueryBuilder()
+      : this.dateformat(
+            QueryBuildConfiguration.instance.getDateFormat(), QueryBuildConfiguration.instance.getDateTimeFormat());
+
+  @override
+  SqliteQueryBuilder withDateFormat(String format) {
+    return withDateFormat2(new DateFormat(format));
+  }
+
+  SqliteQueryBuilder withDateFormat2(DateFormat format) {
+    _dateFormat = format;
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder withDateTimeFormat(String format) {
+    return withDateTimeFormat2(new DateFormat(format));
+  }
+
+  SqliteQueryBuilder withDateTimeFormat2(DateFormat format) {
+    _dateTimeFormat = format;
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder select(List<String> columns) {
+    if (columns == null) return this;
+
+    return select2(QueryBuilderUtils.buildColumnProjections(columns));
+  }
+
+  @override
+  SqliteQueryBuilder select2(List<Projection> projections) {
+    if (projections == null) return this;
+
+    for (int i = 0; i < projections.length; i++) {
+      _projections.add(projections[i]);
+    }
+
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder from2(From from) {
+    if (from != null) _from = from;
+
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder from(String table) {
+    return from2(From.table(table));
+  }
+
+  @override
+  SqliteQueryBuilder from3(QueryBuilder subQuery) {
+    return from2(From.subQuery(subQuery));
+  }
+
+  @override
+  SqliteQueryBuilder whereAnd(Criteria criteria) {
+    if (criteria != null) {
+      if (_criteria == null)
+        _criteria = criteria;
+      else
+        _criteria = _criteria.and(criteria);
+    }
+
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder whereOr(Criteria criteria) {
+    if (criteria != null) {
+      if (_criteria == null)
+        _criteria = criteria;
+      else
+        _criteria = _criteria.or(criteria);
+    }
+
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder groupBy(List<String> columns) {
+    if (columns == null) return this;
+
+    return groupBy2(QueryBuilderUtils.buildColumnProjections(columns));
+  }
+
+  @override
+  SqliteQueryBuilder groupBy2(List<Projection> projections) {
+    if (projections == null) return this;
+
+    for (int i = 0; i < projections.length; i++) {
+      _groupBy.add(projections[i]);
+    }
+
+    return this;
+  }
+
+  SqliteQueryBuilder clearGroupBy() {
+    _groupBy.clear();
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder orderByAscending(List<String> columns) {
+    if (columns == null) return this;
+
+    return orderByAscending2(QueryBuilderUtils.buildColumnProjections(columns));
+  }
+
+  @override
+  SqliteQueryBuilder orderByAscending2(List<Projection> projections) {
+    if (projections == null) return this;
+
+    for (int i = 0; i < projections.length; i++) {
+      _orderBy.add(Order.orderByAscending2(projections[i]));
+    }
+
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder orderByDescending(List<String> columns) {
+    if (columns == null) return this;
+
+    return orderByDescending2(QueryBuilderUtils.buildColumnProjections(columns));
+  }
+
+  @override
+  SqliteQueryBuilder orderByDescending2(List<Projection> projections) {
+    if (projections == null) return this;
+
+    for (int i = 0; i < projections.length; i++) {
+      _orderBy.add(Order.orderByDescending2(projections[i]));
+    }
+
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder orderByAscendingIgnoreCase(List<String> columns) {
+    if (columns == null) return this;
+
+    return orderByAscendingIgnoreCase2(QueryBuilderUtils.buildColumnProjections(columns));
+  }
+
+  @override
+  SqliteQueryBuilder orderByAscendingIgnoreCase2(List<Projection> projections) {
+    if (projections == null) return this;
+
+    for (int i = 0; i < projections.length; i++) {
+      _orderBy.add(Order.orderByAscendingIgnoreCase2(projections[i]));
+    }
+
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder orderByDescendingIgnoreCase(List<String> columns) {
+    if (columns == null) return this;
+
+    return orderByDescendingIgnoreCase2(QueryBuilderUtils.buildColumnProjections(columns));
+  }
+
+  @override
+  SqliteQueryBuilder orderByDescendingIgnoreCase2(List<Projection> projections) {
+    if (projections == null) return this;
+
+    for (int i = 0; i < projections.length; i++) {
+      _orderBy.add(Order.orderByDescendingIgnoreCase2(projections[i]));
+    }
+
+    return this;
+  }
+
+  SqliteQueryBuilder clearOrderBy() {
+    _orderBy.clear();
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder offset(int skip) {
+    _skip = skip;
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder offsetNone() {
+    _skip = -1;
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder limit(int take) {
+    _take = take;
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder limitAll() {
+    _take = -1;
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder distinct() {
+    _distinct = true;
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder notDistinct() {
+    _distinct = false;
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder union(QueryBuilder query) {
+    (query as SqliteQueryBuilder)._unionAll = false;
+    _unionQueries.add(query as SqliteQueryBuilder);
+
+    return this;
+  }
+
+  @override
+  SqliteQueryBuilder unionAll(QueryBuilder query) {
+    (query as SqliteQueryBuilder)._unionAll = true;
+    _unionQueries.add(query as SqliteQueryBuilder);
+
+    return this;
+  }
+
+  void _buildSkipClause(StringBuffer sb) {
+    if (_skip > 0) {
+      sb.write(" OFFSET ");
+      sb.write(_skip);
+    }
+  }
+
+  void _buildTakeClause(StringBuffer sb) {
+    if (_take > 0) {
+      sb.write(" LIMIT ");
+      sb.write(_take);
+    }
+  }
+
+  void _buildOrderByClause(StringBuffer sb) {
+    if (_orderBy.length > 0) {
+      sb.write(" ORDER BY ");
+
+      for (int i = 0; i < _orderBy.length; i++) {
+        sb.write(_orderBy[i].build());
+        if (i < _orderBy.length - 1) {
+          sb.write(", ");
+        }
+      }
+    }
+  }
+
+  void _buildUnionClause(StringBuffer sb) {
+    List<Order> oldOrderBy;
+    int oldSkip;
+    int oldTake;
+
+    for (SqliteQueryBuilder union in _unionQueries) {
+      sb.write(union._unionAll ? " UNION ALL " : " UNION ");
+
+      oldOrderBy = union._orderBy;
+      oldSkip = union._skip;
+      oldTake = union._take;
+
+      union._orderBy = new List<Order>();
+      union._skip = -1;
+      union._take = -1;
+
+      sb.write(union.build());
+
+      union._orderBy = oldOrderBy;
+      union._skip = oldSkip;
+      union._take = oldTake;
+    }
+  }
+
+  void _buildGroupByClause(StringBuffer sb) {
+    if (_groupBy.length > 0) {
+      sb.write(" GROUP BY ");
+
+      for (int i = 0; i < _groupBy.length; i++) {
+        Projection p = _groupBy[i];
+        if (p is AliasedProjection) p = (p as AliasedProjection).removeAlias();
+
+        sb.write(p.build());
+        if (i < _groupBy.length - 1) {
+          sb.write(", ");
+        }
+      }
+    }
+  }
+
+  void _buildWhereClause(StringBuffer sb) {
+    if (_criteria != null) {
+      sb.write("WHERE ");
+      sb.write(_criteria.build());
+    }
+  }
+
+  void _buildFromClause(StringBuffer sb) {
+    if (_from != null) {
+      sb.write("FROM ");
+      sb.write(_from.build());
+      sb.write(" ");
+    }
+  }
+
+  void _buildSelectClause(StringBuffer sb) {
+    sb.write("SELECT ");
+
+    if (_distinct) sb.write("DISTINCT ");
+
+    if (_projections.length <= 0) {
+      sb.write("*");
+    } else {
+      for (int i = 0; i < _projections.length; i++) {
+        Projection p = _projections[i];
+        sb.write(p.build());
+        if (i < _projections.length - 1) {
+          sb.write(", ");
+        }
+      }
+    }
+    sb.write(" ");
+  }
+
   @override
   String build() {
-    // TODO: implement build
-    return null;
+    StringBuffer sb = new StringBuffer();
+
+    _buildSelectClause(sb);
+
+    _buildFromClause(sb);
+
+    _buildWhereClause(sb);
+
+    _buildGroupByClause(sb);
+
+    _buildUnionClause(sb);
+
+    _buildOrderByClause(sb);
+
+    _buildTakeClause(sb);
+
+    _buildSkipClause(sb);
+
+    return sb.toString();
   }
 
-  @override
-  QueryBuilder distinct() {
-    // TODO: implement distinct
-    return null;
+  void _buildSelectClauseParameters(List<Object> ret) {
+    for (Projection p in _projections) {
+      ret.addAll(p.buildParameters());
+    }
   }
 
-  @override
-  QueryBuilder from(String table) {
-    // TODO: implement from
-    return null;
+  List<Object> buildParameters() {
+    List<Object> ret = new List<Object>();
+    List<Order> oldOrderBy;
+    int oldSkip;
+    int oldTake;
+
+    _buildSelectClauseParameters(ret);
+
+    if (_from != null) ret.addAll(_from.buildParameters());
+
+    if (_criteria != null) ret.addAll(_criteria.buildParameters());
+
+    for (Projection p in _groupBy) {
+      ret.addAll(p.buildParameters());
+    }
+
+    for (SqliteQueryBuilder union in _unionQueries) {
+      oldOrderBy = union._orderBy;
+      oldSkip = union._skip;
+      oldTake = union._take;
+
+      union._orderBy = new List<Order>();
+      union._skip = -1;
+      union._take = -1;
+
+      ret.addAll(union.buildParameters());
+
+      union._orderBy = oldOrderBy;
+      union._skip = oldSkip;
+      union._take = oldTake;
+    }
+
+    for (Order o in _orderBy) {
+      ret.addAll(o.buildParameters());
+    }
+
+    _preProcessDateValues(ret);
+    return ret;
   }
 
-  @override
-  QueryBuilder fromFrom(from) {
-    // TODO: implement fromFrom
-    return null;
-  }
+  void _preProcessDateValues(List<Object> values) {
+    Object value;
+    int index = 0;
 
-  @override
-  QueryBuilder fromQueryBuilder(QueryBuilder subQuery) {
-    // TODO: implement fromQueryBuilder
-    return null;
-  }
+    while (index < values.length) {
+      value = values[index];
 
-  @override
-  QueryBuilder groupBy(List<String> columns) {
-    // TODO: implement groupBy
-    return null;
-  }
+      if (value is DateTime) {
+        values.remove(index);
+        values.insert(index, QueryBuilderUtils.dateToString(value as DateTime, _dateTimeFormat));
+      }
 
-  @override
-  QueryBuilder groupByProjection(List<Projection> projections) {
-    // TODO: implement groupByProjection
-    return null;
-  }
-
-  @override
-  QueryBuilder limit(int limit) {
-    // TODO: implement limit
-    return null;
-  }
-
-  @override
-  QueryBuilder limitAll() {
-    // TODO: implement limitAll
-    return null;
-  }
-
-  @override
-  QueryBuilder notDistinct() {
-    // TODO: implement notDistinct
-    return null;
-  }
-
-  @override
-  QueryBuilder offset(int skip) {
-    // TODO: implement offset
-    return null;
-  }
-
-  @override
-  QueryBuilder offsetNone() {
-    // TODO: implement offsetNone
-    return null;
-  }
-
-  @override
-  QueryBuilder orderByAscending(List<String> columns) {
-    // TODO: implement orderByAscending
-    return null;
-  }
-
-  @override
-  QueryBuilder orderByAscendingIgnoreCase(List<String> columns) {
-    // TODO: implement orderByAscendingIgnoreCase
-    return null;
-  }
-
-  @override
-  QueryBuilder orderByAscendingIgnoreCaseProjection(List<Projection> projections) {
-    // TODO: implement orderByAscendingIgnoreCaseProjection
-    return null;
-  }
-
-  @override
-  QueryBuilder orderByAscendingProjection(List<Projection> projections) {
-    // TODO: implement orderByAscendingProjection
-    return null;
-  }
-
-  @override
-  QueryBuilder orderByDescending(List<String> columns) {
-    // TODO: implement orderByDescending
-    return null;
-  }
-
-  @override
-  QueryBuilder orderByDescendingIgnoreCase(List<String> columns) {
-    // TODO: implement orderByDescendingIgnoreCase
-    return null;
-  }
-
-  @override
-  QueryBuilder orderByDescendingIgnoreCaseProjection(List<Projection> projections) {
-    // TODO: implement orderByDescendingIgnoreCaseProjection
-    return null;
-  }
-
-  @override
-  QueryBuilder orderByDescendingProjection(List<Projection> projections) {
-    // TODO: implement orderByDescendingProjection
-    return null;
-  }
-
-  @override
-  QueryBuilder select(List<String> columns) {
-    // TODO: implement select
-    return null;
-  }
-
-  @override
-  QueryBuilder selectProjection(List<Projection> projections) {
-    // TODO: implement selectProjection
-    return null;
-  }
-
-  @override
-  QueryBuilder union(QueryBuilder query) {
-    // TODO: implement union
-    return null;
-  }
-
-  @override
-  QueryBuilder unionAll(QueryBuilder query) {
-    // TODO: implement unionAll
-    return null;
-  }
-
-  @override
-  QueryBuilder whereAnd(criteria) {
-    // TODO: implement whereAnd
-    return null;
-  }
-
-  @override
-  QueryBuilder whereOr(criteria) {
-    // TODO: implement whereOr
-    return null;
-  }
-
-  @override
-  QueryBuilder withDateFormat(String format) {
-    // TODO: implement withDateFormat
-    return null;
-  }
-
-  @override
-  QueryBuilder withDateTimeFormat(String format) {
-    // TODO: implement withDateTimeFormat
-    return null;
+      index++;
+    }
   }
 }

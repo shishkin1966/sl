@@ -17,26 +17,26 @@ abstract class From {
   }
 
   PartialJoin innerJoin(String table) {
-    return innerJoinFrom(From.table(table));
+    return innerJoin3(From.table(table));
   }
 
-  PartialJoin innerJoinBuilder(SqliteQueryBuilder subQuery) {
-    return innerJoin(From.subQuery(subQuery));
+  PartialJoin innerJoin2(SqliteQueryBuilder subQuery) {
+    return innerJoin3(From.subQuery(subQuery));
   }
 
-  PartialJoin innerJoinFrom(From table) {
+  PartialJoin innerJoin3(From table) {
     return new PartialJoin(this, table, "INNER JOIN");
   }
 
   PartialJoin leftJoin(String table) {
-    return leftJoinFrom(From.table(table));
+    return leftJoin3(From.table(table));
   }
 
-  PartialJoin leftJoinBuilder(SqliteQueryBuilder subQuery) {
-    return leftJoin(From.subQuery(subQuery));
+  PartialJoin leftJoin2(SqliteQueryBuilder subQuery) {
+    return leftJoin3(From.subQuery(subQuery));
   }
 
-  PartialJoin leftJoinFrom(From table) {
+  PartialJoin leftJoin3(From table) {
     return new PartialJoin(this, table, "LEFT JOIN");
   }
 }
@@ -53,10 +53,10 @@ class PartialJoin {
   }
 
   JoinFrom on(String leftColumn, String rightColumn) {
-    return onCriteria(Criteria.equalsProjection(Projection.column(leftColumn), Projection.column(rightColumn)));
+    return on2(Criteria.equals2(Projection.column(leftColumn), Projection.column(rightColumn)));
   }
 
-  JoinFrom onCriteria(Criteria criteria) {
+  JoinFrom on2(Criteria criteria) {
     return new JoinFrom(_left, _right, _joinType, criteria);
   }
 }
@@ -84,19 +84,19 @@ class JoinFrom extends From {
   }
 
   JoinFrom onOr(String leftColumn, String rightColumn) {
-    return onOrCriteria(Criteria.equalsProjection(Projection.column(leftColumn), Projection.column(rightColumn)));
+    return onOr2(Criteria.equals2(Projection.column(leftColumn), Projection.column(rightColumn)));
   }
 
   JoinFrom onAnd(String leftColumn, String rightColumn) {
-    return onAndCriteria(Criteria.equalsProjection(Projection.column(leftColumn), Projection.column(rightColumn)));
+    return onAnd2(Criteria.equals2(Projection.column(leftColumn), Projection.column(rightColumn)));
   }
 
-  JoinFrom onAndCriteria(Criteria criteria) {
+  JoinFrom onAnd2(Criteria criteria) {
     _criteria = (_criteria != null ? _criteria.and(criteria) : criteria);
     return this;
   }
 
-  JoinFrom onOrCriteria(Criteria criteria) {
+  JoinFrom onOr2(Criteria criteria) {
     _criteria = (_criteria != null ? _criteria.or(criteria) : criteria);
     return this;
   }
@@ -143,5 +143,30 @@ class TableFrom extends AliasableFrom<TableFrom> {
   @override
   List<Object> buildParameters() {
     return QueryBuilderUtils.EMPTY_LIST;
+  }
+}
+
+class SubQueryFrom extends AliasableFrom<SubQueryFrom> {
+  SqliteQueryBuilder _subQuery;
+
+  SubQueryFrom(SqliteQueryBuilder subQuery) {
+    _subQuery = subQuery;
+  }
+
+  @override
+  String build() {
+    String ret = (_subQuery != null ? "(" + _subQuery.build() + ")" : "");
+
+    if (!QueryBuilderUtils.isNullOrWhiteSpace(alias)) ret = ret + " AS " + alias;
+
+    return ret;
+  }
+
+  @override
+  List<Object> buildParameters() {
+    if (_subQuery != null)
+      return _subQuery.buildParameters();
+    else
+      return QueryBuilderUtils.EMPTY_LIST;
   }
 }

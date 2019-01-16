@@ -13,11 +13,11 @@ abstract class Criteria {
     return new BasicCriteria(Projection.column(column), Operators.IS_NOT_NULL, null);
   }
 
-  static Criteria isNullProjection(Projection projection) {
+  static Criteria isNull2(Projection projection) {
     return new BasicCriteria(projection, Operators.IS_NULL, null);
   }
 
-  static Criteria notIsNullProjection(Projection projection) {
+  static Criteria notIsNull2(Projection projection) {
     return new BasicCriteria(projection, Operators.IS_NOT_NULL, null);
   }
 
@@ -46,27 +46,27 @@ abstract class Criteria {
     return new BasicCriteria(Projection.column(column), Operators.LESSER_OR_EQUALS, value);
   }
 
-  static Criteria equalsProjection(Projection column, Object value) {
+  static Criteria equals2(Projection column, Object value) {
     return new BasicCriteria(column, Operators.EQUALS, value);
   }
 
-  static Criteria notEqualsProjection(Projection column, Object value) {
+  static Criteria notEquals2(Projection column, Object value) {
     return new BasicCriteria(column, Operators.NOT_EQUALS, value);
   }
 
-  static Criteria greaterThanProjection(Projection column, Object value) {
+  static Criteria greaterThan2(Projection column, Object value) {
     return new BasicCriteria(column, Operators.GREATER, value);
   }
 
-  static Criteria lesserThanProjection(Projection column, Object value) {
+  static Criteria lesserThan2(Projection column, Object value) {
     return new BasicCriteria(column, Operators.LESSER, value);
   }
 
-  static Criteria greaterThanOrEqualProjection(Projection column, Object value) {
+  static Criteria greaterThanOrEqual2(Projection column, Object value) {
     return new BasicCriteria(column, Operators.GREATER_OR_EQUALS, value);
   }
 
-  static Criteria lesserThanOrEqualProjection(Projection column, Object value) {
+  static Criteria lesserThanOrEqual2(Projection column, Object value) {
     return new BasicCriteria(column, Operators.LESSER_OR_EQUALS, value);
   }
 
@@ -95,27 +95,27 @@ abstract class Criteria {
     return new BasicCriteria(Projection.column(column), Operators.NOT_LIKE, "%" + value + "%");
   }
 
-  static Criteria startsWithProjection(Projection column, String value) {
+  static Criteria startsWith2(Projection column, String value) {
     return new BasicCriteria(column, Operators.LIKE, value + "%");
   }
 
-  static Criteria notStartsWithProjection(Projection column, String value) {
+  static Criteria notStartsWith2(Projection column, String value) {
     return new BasicCriteria(column, Operators.NOT_LIKE, value + "%");
   }
 
-  static Criteria endsWithProjection(Projection column, String value) {
+  static Criteria endsWith2(Projection column, String value) {
     return new BasicCriteria(column, Operators.LIKE, "%" + value);
   }
 
-  static Criteria notEndsWithProjection(Projection column, String value) {
+  static Criteria notEndsWith2(Projection column, String value) {
     return new BasicCriteria(column, Operators.NOT_LIKE, "%" + value);
   }
 
-  static Criteria containsProjection(Projection column, String value) {
+  static Criteria contains2(Projection column, String value) {
     return new BasicCriteria(column, Operators.LIKE, "%" + value + "%");
   }
 
-  static Criteria notContainsProjection(Projection column, String value) {
+  static Criteria notContains2(Projection column, String value) {
     return new BasicCriteria(column, Operators.NOT_LIKE, "%" + value + "%");
   }
 
@@ -136,11 +136,11 @@ abstract class Criteria {
     return new ValueBetweenCriteria(value, Projection.column(columnMin), Projection.column(columnMax));
   }
 
-  static Criteria betweenProjection(Projection column, Object valueMin, Object valueMax) {
+  static Criteria between2(Projection column, Object valueMin, Object valueMax) {
     return new BetweenCriteria(column, valueMin, valueMax);
   }
 
-  static Criteria valueBetweenProjection(Object value, Projection columnMin, Projection columnMax) {
+  static Criteria valueBetween2(Object value, Projection columnMin, Projection columnMax) {
     return new ValueBetweenCriteria(value, columnMin, columnMax);
   }
 
@@ -162,11 +162,11 @@ abstract class Criteria {
     return new NotInCriteria(Projection.column(column), values);
   }
 
-  static Criteria inProjection(Projection column, List<Object> values) {
+  static Criteria in2(Projection column, List<Object> values) {
     return new InCriteria(column, values);
   }
 
-  static Criteria notInProjection(Projection column, List<Object> values) {
+  static Criteria notIn2(Projection column, List<Object> values) {
     return new NotInCriteria(column, values);
   }
 

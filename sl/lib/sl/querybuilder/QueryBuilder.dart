@@ -1,3 +1,5 @@
+import 'package:sl/sl/querybuilder/Criteria.dart';
+import 'package:sl/sl/querybuilder/From.dart';
 import 'package:sl/sl/querybuilder/Projection.dart';
 
 abstract class QueryBuilder {
@@ -9,29 +11,29 @@ abstract class QueryBuilder {
 
   QueryBuilder from(String table);
 
-  QueryBuilder fromFrom(From from);
+  QueryBuilder from2(From from);
 
-  QueryBuilder fromQueryBuilder(QueryBuilder subQuery);
+  QueryBuilder from3(QueryBuilder subQuery);
 
   QueryBuilder groupBy(List<String> columns);
 
-  QueryBuilder groupByProjection(List<Projection> projections);
+  QueryBuilder groupBy2(List<Projection> projections);
 
   QueryBuilder orderByAscending(List<String> columns);
 
-  QueryBuilder orderByAscendingProjection(List<Projection> projections);
+  QueryBuilder orderByAscending2(List<Projection> projections);
 
   QueryBuilder orderByAscendingIgnoreCase(List<String> columns);
 
-  QueryBuilder orderByAscendingIgnoreCaseProjection(List<Projection> projections);
+  QueryBuilder orderByAscendingIgnoreCase2(List<Projection> projections);
 
   QueryBuilder orderByDescending(List<String> columns);
 
-  QueryBuilder orderByDescendingProjection(List<Projection> projections);
+  QueryBuilder orderByDescending2(List<Projection> projections);
 
   QueryBuilder orderByDescendingIgnoreCase(List<String> columns);
 
-  QueryBuilder orderByDescendingIgnoreCaseProjection(List<Projection> projections);
+  QueryBuilder orderByDescendingIgnoreCase2(List<Projection> projections);
 
   QueryBuilder union(QueryBuilder query);
 
@@ -39,7 +41,7 @@ abstract class QueryBuilder {
 
   QueryBuilder select(List<String> columns);
 
-  QueryBuilder selectProjection(List<Projection> projections);
+  QueryBuilder select2(List<Projection> projections);
 
   QueryBuilder whereAnd(Criteria criteria);
 
