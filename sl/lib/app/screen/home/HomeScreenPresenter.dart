@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:sl/app/screen/home/HomeScreenData.dart';
-import 'package:sl/app/screen/second/SecondScreen.dart';
+import 'package:sl/app/screen/second/SecondScreenWidget.dart';
 import 'package:sl/sl/action/Action.dart';
 import 'package:sl/sl/action/Actions.dart';
 import 'package:sl/sl/action/ApplicationAction.dart';
@@ -9,15 +9,15 @@ import 'package:sl/sl/action/DataAction.dart';
 import 'package:sl/sl/data/Result.dart';
 import 'package:sl/sl/presenter/AbsPresenter.dart';
 import 'package:sl/sl/request/ResponseListener.dart';
-import 'package:sl/ui/LifecycleWidgetState.dart';
+import 'package:sl/ui/WidgetState.dart';
 
-class HomeScreenPresenter<HomeScreenState extends LifecycleWidgetState> extends AbsPresenter<HomeScreenState>
+class HomeScreenPresenter<HomeScreenWidgetState extends WidgetState> extends AbsPresenter<HomeScreenWidgetState>
     implements ResponseListener {
   static const String NAME = "HomeScreenPresenenter";
   static const String Increment = "Increment";
   static const String Response = "Response";
 
-  HomeScreenPresenter(LifecycleWidgetState<StatefulWidget> lifecycleState) : super(lifecycleState);
+  HomeScreenPresenter(WidgetState<StatefulWidget> lifecycleState) : super(lifecycleState);
 
   @override
   String getName() {
@@ -30,7 +30,7 @@ class HomeScreenPresenter<HomeScreenState extends LifecycleWidgetState> extends 
       String actionName = action.getName();
       switch (actionName) {
         case Increment:
-          getLifecycleState().addAction(action);
+          getWidget().addAction(action);
           break;
       }
       return;
@@ -41,8 +41,8 @@ class HomeScreenPresenter<HomeScreenState extends LifecycleWidgetState> extends 
       switch (actionName) {
         case Actions.OnPressed:
           Navigator.push(
-            getLifecycleState().context,
-            MaterialPageRoute(builder: (context) => SecondScreen()),
+            getWidget().context,
+            MaterialPageRoute(builder: (context) => SecondScreenWidget()),
           );
           break;
       }
@@ -54,6 +54,6 @@ class HomeScreenPresenter<HomeScreenState extends LifecycleWidgetState> extends 
   void response(Result result) {
     final HomeScreenData data = new HomeScreenData();
     data.title = result.getData() as String;
-    getLifecycleState().addAction(new DataAction<HomeScreenData>(Response).setData(data));
+    getWidget().addAction(new DataAction<HomeScreenData>(Response).setData(data));
   }
 }

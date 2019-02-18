@@ -39,7 +39,8 @@ class SecretaryImpl<T> implements Secretary<T> {
 
     List<String> keys = new List();
     for (MapEntry entry in _subscribers.entries) {
-      keys.add(entry.key as String);
+      String key = entry.key;
+      if (!StringUtils.isNullOrEmpty(key)) keys.add(key);
     }
     return keys;
   }
@@ -59,7 +60,7 @@ class SecretaryImpl<T> implements Secretary<T> {
   T remove(String key) {
     if (StringUtils.isNullOrEmpty(key)) return null;
 
-    return _subscribers.remove(key); // ignore: return_of_invalid_type
+    return _subscribers.remove(key);
   }
 
   @override
@@ -72,7 +73,9 @@ class SecretaryImpl<T> implements Secretary<T> {
     if (_subscribers.isEmpty) return new List();
 
     List<T> list = new List<T>();
-    list.addAll(_subscribers.values);
+    for (MapEntry entry in _subscribers.entries) {
+      if (entry.value != null) list.add(entry.value);
+    }
     return list;
   }
 }

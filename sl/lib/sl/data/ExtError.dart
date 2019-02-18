@@ -1,24 +1,26 @@
 import 'package:sl/common/StringUtils.dart';
 
+///
+/// Расширенная ошибка
+///
 class ExtError {
-  final StringBuffer buffer = StringBuffer();
-
+  final StringBuffer _buffer = StringBuffer();
   String owner; // хозяин ошибки
 
   String get errorText {
-    return buffer.toString();
+    return _buffer.toString();
   }
 
   void addError(final String error) {
     if (!StringUtils.isNullOrEmpty(error)) {
-      if (buffer.length > 0) {
-        buffer.write("\n");
+      if (_buffer.length > 0) {
+        _buffer.write("\n");
       }
-      buffer.write(error);
+      _buffer.write(error);
     }
   }
 
   bool hasError() {
-    return buffer.length > 0;
+    return _buffer.length > 0;
   }
 }

@@ -5,17 +5,17 @@ import 'package:sl/sl/state/StateObservable.dart';
 import 'package:sl/sl/state/Stateable.dart';
 import 'package:sl/sl/state/States.dart';
 
-abstract class LifecycleWidgetState<T extends StatefulWidget> extends State<T> with WidgetsBindingObserver {
+abstract class WidgetState<T extends StatefulWidget> extends State<T> with WidgetsBindingObserver {
   StateObservable _lifecycle = new StateObservable();
   List<Action> _actions = new List<Action>();
   Presenter _presenter;
 
-  LifecycleWidgetState() {
+  WidgetState() {
     _presenter = createPresenter();
     addObserver(_presenter);
   }
 
-  Presenter<LifecycleWidgetState<StatefulWidget>> createPresenter();
+  Presenter<WidgetState<StatefulWidget>> createPresenter();
 
   Presenter getPresenter() {
     return _presenter;

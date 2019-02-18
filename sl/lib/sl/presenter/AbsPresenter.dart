@@ -7,11 +7,11 @@ import 'package:sl/sl/specialist/messager/MessengerUnionImpl.dart';
 import 'package:sl/sl/specialist/presenter/PresenterUnionImpl.dart';
 import 'package:sl/sl/state/StateObserver.dart';
 import 'package:sl/sl/state/States.dart';
-import 'package:sl/ui/LifecycleWidgetState.dart';
+import 'package:sl/ui/WidgetState.dart';
 
-abstract class AbsPresenter<M extends LifecycleWidgetState> implements Presenter<M> {
+abstract class AbsPresenter<M extends WidgetState> implements Presenter<M> {
   StateObserver _lifecycle;
-  LifecycleWidgetState _lifecycleState;
+  WidgetState _lifecycleState;
   List<Action> _actions = new List<Action>();
 
   AbsPresenter(M lifecycleState) {
@@ -19,7 +19,7 @@ abstract class AbsPresenter<M extends LifecycleWidgetState> implements Presenter
     _lifecycle = new StateObserver(this);
   }
 
-  LifecycleWidgetState getLifecycleState() {
+  WidgetState getWidget() {
     return _lifecycleState;
   }
 

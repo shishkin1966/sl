@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:sl/app/screen/home/HomeScreen.dart';
 import 'package:sl/app/screen/home/HomeScreenData.dart';
 import 'package:sl/app/screen/home/HomeScreenPresenter.dart';
+import 'package:sl/app/screen/home/HomeScreenWidget.dart';
 import 'package:sl/sl/action/Action.dart';
 import 'package:sl/sl/action/Actions.dart';
 import 'package:sl/sl/action/ApplicationAction.dart';
 import 'package:sl/sl/action/DataAction.dart';
 import 'package:sl/sl/presenter/Presenter.dart';
 import 'package:sl/sl/state/States.dart';
-import 'package:sl/ui/LifecycleWidgetState.dart';
+import 'package:sl/ui/WidgetState.dart';
 
-class HomeScreenState extends LifecycleWidgetState<HomeScreen> {
+class HomeScreenState extends WidgetState<HomeScreenWidget> {
   String _title = States.StateCreate;
   HomeScreenData _data = new HomeScreenData();
 
@@ -79,7 +79,7 @@ class HomeScreenState extends LifecycleWidgetState<HomeScreen> {
   }
 
   @override
-  Presenter<LifecycleWidgetState<StatefulWidget>> createPresenter() {
+  Presenter<WidgetState<StatefulWidget>> createPresenter() {
     return new HomeScreenPresenter(this);
   }
 }

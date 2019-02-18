@@ -1,5 +1,6 @@
 import 'package:sl/sl/Specialist.dart';
 import 'package:sl/sl/SpecialistFactory.dart';
+import 'package:sl/sl/specialist/desktop/DesktopSpecialistImpl.dart';
 import 'package:sl/sl/specialist/error/ErrorSpecialistImpl.dart';
 import 'package:sl/sl/specialist/messager/MessengerUnionImpl.dart';
 import 'package:sl/sl/specialist/observable/ObservableUnionImpl.dart';
@@ -20,6 +21,9 @@ class ServiceLocatorSpecialistFactory implements SpecialistFactory {
 
       case ObservableUnionImpl.NAME:
         return new ObservableUnionImpl();
+
+      case DesktopSpecialistImpl.NAME:
+        return new DesktopSpecialistImpl();
     }
     return null;
   }

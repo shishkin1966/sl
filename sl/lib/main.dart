@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sl/app/screen/home/HomeScreen.dart';
+import 'package:sl/app/screen/home/HomeScreenWidget.dart';
 import 'package:sl/ui/Application.dart';
 
 void main() => runApp(new MyApp());
@@ -13,7 +13,7 @@ class MyApp extends Application {
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new HomeScreen(title: 'Flutter Demo Home Page'),
+      home: new HomeScreenWidget(title: 'Flutter Demo Home Page'),
     );
   }
 }

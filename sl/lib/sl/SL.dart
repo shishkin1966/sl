@@ -2,6 +2,7 @@ import 'package:sl/sl/AbsServiceLocator.dart';
 import 'package:sl/sl/ServiceLocatorSpecialistFactory.dart';
 import 'package:sl/sl/SpecialistFactory.dart';
 import 'package:sl/sl/observe/ObjectObservable.dart';
+import 'package:sl/sl/specialist/desktop/DesktopSpecialistImpl.dart';
 import 'package:sl/sl/specialist/error/ErrorSpecialistImpl.dart';
 import 'package:sl/sl/specialist/messager/MessengerUnionImpl.dart';
 import 'package:sl/sl/specialist/observable/ObservableUnion.dart';
@@ -17,12 +18,23 @@ class SL extends AbsServiceLocator {
   SL._internal() {
     _specialistFactory = new ServiceLocatorSpecialistFactory();
 
+    // Специалист регистрации ошибок
     registerSpecialist(ErrorSpecialistImpl.instance);
+
+    // Messenger сообщений
     registerSpecialistByName(MessengerUnionImpl.NAME);
+
+    // Специалист презенторов
     registerSpecialistByName(PresenterUnionImpl.NAME);
+
+    // Специалист Observable
     registerSpecialistByName(ObservableUnionImpl.NAME);
 
+    // Регистрация слушателя изменения объектов
     (get(ObservableUnionImpl.NAME) as ObservableUnion).registerObservable(new ObjectObservable());
+
+    // Специалист рабочих столов
+    registerSpecialistByName(DesktopSpecialistImpl.NAME);
   }
 
   static SL get instance => _sl;

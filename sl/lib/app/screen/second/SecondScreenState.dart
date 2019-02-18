@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:sl/app/screen/home/HomeScreenPresenter.dart';
-import 'package:sl/app/screen/second/SecondScreen.dart';
 import 'package:sl/app/screen/second/SecondScreenPresenter.dart';
+import 'package:sl/app/screen/second/SecondScreenWidget.dart';
 import 'package:sl/sl/action/Action.dart';
 import 'package:sl/sl/action/Actions.dart';
 import 'package:sl/sl/action/ApplicationAction.dart';
 import 'package:sl/sl/action/DataAction.dart';
 import 'package:sl/sl/presenter/Presenter.dart';
-import 'package:sl/ui/LifecycleWidgetState.dart';
+import 'package:sl/ui/WidgetState.dart';
 
-class SecondScreenState extends LifecycleWidgetState<SecondScreen> {
+class SecondScreenState extends WidgetState<SecondScreenWidget> {
   String _title = "Экран 2";
 
   SecondScreenState() : super();
@@ -55,7 +55,7 @@ class SecondScreenState extends LifecycleWidgetState<SecondScreen> {
   }
 
   @override
-  Presenter<LifecycleWidgetState<StatefulWidget>> createPresenter() {
+  Presenter<WidgetState<StatefulWidget>> createPresenter() {
     return new SecondScreenPresenter(this);
   }
 }

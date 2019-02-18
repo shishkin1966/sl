@@ -1,14 +1,14 @@
 import 'package:sl/sl/data/ExtError.dart';
 
+///
+/// Результат
+///
 class Result<T> {
-  static const NOT_SEND = -1;
-  static const LAST = -2;
+  static const int NOT_SEND = -1;
+  static const int LAST = -2;
 
   T _data;
-  ExtError extError;
-  int order = NOT_SEND;
-  String name;
-  int id = 0;
+  ExtError _extError;
 
   Result(T data) {
     _data = data;
@@ -24,31 +24,31 @@ class Result<T> {
   }
 
   Result setError(final ExtError extError) {
-    this.extError = extError;
+    _extError = extError;
     return this;
   }
 
   Result addError(final String owner, final String error) {
-    if (extError == null) {
-      extError = new ExtError();
+    if (_extError == null) {
+      _extError = new ExtError();
     }
-    extError.owner = owner;
-    extError.addError(error);
+    _extError.owner = owner;
+    _extError.addError(error);
     return this;
   }
 
   Result addException(final String owner, final Exception exception) {
-    if (extError == null) {
-      extError = new ExtError();
+    if (_extError == null) {
+      _extError = new ExtError();
     }
-    extError.owner = owner;
-    extError.addError(exception.toString());
+    _extError.owner = owner;
+    _extError.addError(exception.toString());
     return this;
   }
 
   String getErrorText() {
-    if (extError != null) {
-      return extError.errorText;
+    if (_extError != null) {
+      return _extError.errorText;
     }
     return null;
   }
@@ -58,8 +58,8 @@ class Result<T> {
   }
 
   bool hasError() {
-    if (extError != null) {
-      return extError.hasError();
+    if (_extError != null) {
+      return _extError.hasError();
     }
     return false;
   }

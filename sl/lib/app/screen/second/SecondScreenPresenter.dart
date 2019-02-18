@@ -19,14 +19,14 @@ import 'package:sl/sl/presenter/Presenter.dart';
 import 'package:sl/sl/specialist/observable/ObservableUnionImpl.dart';
 import 'package:sl/sl/specialist/presenter/PresenterUnion.dart';
 import 'package:sl/sl/specialist/presenter/PresenterUnionImpl.dart';
-import 'package:sl/ui/LifecycleWidgetState.dart';
+import 'package:sl/ui/WidgetState.dart';
 
-class SecondScreenPresenter<HomeScreenState extends LifecycleWidgetState> extends AbsPresenter<HomeScreenState>
+class SecondScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresenter<HomeScreenState>
     implements ObjectObservableSubscriber {
   static const String NAME = "SecondScreenPresenenter";
   static const String OnChangeObject = "OnChangeObject";
 
-  SecondScreenPresenter(LifecycleWidgetState<StatefulWidget> lifecycleState) : super(lifecycleState);
+  SecondScreenPresenter(WidgetState<StatefulWidget> lifecycleState) : super(lifecycleState);
 
   @override
   String getName() {
@@ -47,7 +47,7 @@ class SecondScreenPresenter<HomeScreenState extends LifecycleWidgetState> extend
           break;
 
         case Actions.OnPressed:
-          Navigator.pop(getLifecycleState().context);
+          Navigator.pop(getWidget().context);
           break;
       }
       return;
@@ -91,6 +91,6 @@ class SecondScreenPresenter<HomeScreenState extends LifecycleWidgetState> extend
   void onChange<String>(String object) {
     final HomeScreenData data = new HomeScreenData();
     data.title = ("Изменился объект:$object");
-    getLifecycleState().addAction(new DataAction<HomeScreenData>(OnChangeObject).setData(data));
+    getWidget().addAction(new DataAction<HomeScreenData>(OnChangeObject).setData(data));
   }
 }
