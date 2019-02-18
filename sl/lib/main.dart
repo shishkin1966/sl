@@ -13,7 +13,7 @@ class MyApp extends Application {
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new HomeScreenWidget(title: 'Flutter Demo Home Page'),
+      home: new HomeScreenWidget(),
     );
   }
 }
