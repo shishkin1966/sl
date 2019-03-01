@@ -10,8 +10,9 @@ import 'package:psb/sl/presenter/Presenter.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTickerProviderStateMixin {
-  Completer<GoogleMapController> _controller = Completer();
-  StreamController<double> controller = StreamController.broadcast();
+  Completer<GoogleMapController> _mapController = Completer();
+  StreamController<double> _streamController = StreamController.broadcast();
+  ScrollController _scrollController = new ScrollController();
   double position = 64;
   double childHeight = 63;
 
@@ -29,7 +30,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
       child: new Scaffold(
         backgroundColor: Color(0x00000000),
         bottomSheet: StreamBuilder(
-          stream: controller.stream,
+          stream: _streamController.stream,
           builder: (context, snapshot) => GestureDetector(
                 onVerticalDragUpdate: (DragUpdateDetails details) {
                   position = MediaQuery.of(context).size.height - details.globalPosition.dy;
@@ -37,7 +38,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
                     position = 64;
                   }
                   childHeight = position - 1;
-                  controller.add(position);
+                  _streamController.add(position);
                 },
                 behavior: HitTestBehavior.translucent,
                 child: new Container(
@@ -53,6 +54,13 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
                       new Container(
                         padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
                         height: childHeight,
+                        child: new NestedScrollView(
+                          controller: _scrollController,
+                          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                            return <Widget>[];
+                          },
+                          body: new Container(),
+                        ),
                       )
                     ],
                   ),
@@ -84,7 +92,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
               mapType: MapType.normal,
               initialCameraPosition: _kGooglePlex,
               onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
+                _mapController.complete(controller);
               },
             ),
           ),
