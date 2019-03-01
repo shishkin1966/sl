@@ -31,9 +31,9 @@ class AddressScreenPresenter<AddressScreenState extends WidgetState> extends Abs
       LocationData data = await _location.getLocation();
       getWidget().addAction(new DataAction(LocationChanged).setData(data));
 
-      _location.onLocationChanged().listen((location) async {
-        getWidget().addAction(new DataAction(LocationChanged).setData(location));
-      });
+      //_location.onLocationChanged().listen((location) async {
+      //  getWidget().addAction(new DataAction(LocationChanged).setData(location));
+      //});
     }
   }
 }

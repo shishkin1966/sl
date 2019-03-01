@@ -19,6 +19,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
   double _bottomPosition = 64;
   double _bottomHeight = 63;
   AddressScreenData _data = new AddressScreenData();
+  CameraPosition _cameraPosition;
 
   @override
   Presenter<WidgetState<StatefulWidget>> createPresenter() {
@@ -100,6 +101,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
               initialCameraPosition: _getPosition(),
               onMapCreated: (GoogleMapController controller) {
                 _mapController = controller;
+                _mapController.addListener(_onMapListener);
               },
             ),
           ),
@@ -130,5 +132,16 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
           break;
       }
     }
+  }
+
+  void _onMapListener() {
+    _cameraPosition = _mapController.cameraPosition;
+  }
+
+  @override
+  void dispose() {
+    _mapController.removeListener(_onMapListener);
+
+    super.dispose();
   }
 }
