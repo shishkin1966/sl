@@ -8,23 +8,12 @@ import 'package:psb/app/screen/address/AddressScreenPresenter.dart';
 import 'package:psb/app/screen/address/AddressScreenWidget.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
 import 'package:psb/ui/WidgetState.dart';
-import 'package:rubber/rubber.dart';
 
 class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTickerProviderStateMixin {
   Completer<GoogleMapController> _controller = Completer();
-  RubberAnimationController _animationController;
-  ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    _animationController = RubberAnimationController(
-        vsync: this,
-        dismissable: true,
-        lowerBoundValue: AnimationControllerValue(pixel: 80),
-        upperBoundValue: AnimationControllerValue(pixel: 400),
-        duration: Duration(milliseconds: 200));
-    super.initState();
-  }
+  StreamController<double> controller = StreamController.broadcast();
+  double position = 64;
+  double childHeight = 63;
 
   @override
   Presenter<WidgetState<StatefulWidget>> createPresenter() {
@@ -39,6 +28,37 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
       },
       child: new Scaffold(
         backgroundColor: Color(0x00000000),
+        bottomSheet: StreamBuilder(
+          stream: controller.stream,
+          builder: (context, snapshot) => GestureDetector(
+                onVerticalDragUpdate: (DragUpdateDetails details) {
+                  position = MediaQuery.of(context).size.height - details.globalPosition.dy;
+                  if (position < 64) {
+                    position = 64;
+                  }
+                  childHeight = position - 1;
+                  controller.add(position);
+                },
+                behavior: HitTestBehavior.translucent,
+                child: new Container(
+                  color: Color(0xffffffff),
+                  height: position,
+                  width: double.infinity,
+                  child: new Column(
+                    children: <Widget>[
+                      new Container(
+                        height: 1,
+                        color: Color(0xffc9c9c9),
+                      ),
+                      new Container(
+                        padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                        height: childHeight,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+        ),
         body: new Builder(builder: (BuildContext context) {
           widgetContext = context;
           return SafeArea(top: true, child: _getWidget());
@@ -55,12 +75,18 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
           new Container(
             color: Color(0xffEEF5FF),
           ),
-          new GoogleMap(
-            mapType: MapType.normal,
-            initialCameraPosition: _kGooglePlex,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
+          new Positioned(
+            top: 0,
+            left: 0,
+            height: constraints.maxHeight - 64,
+            width: constraints.maxWidth,
+            child: new GoogleMap(
+              mapType: MapType.normal,
+              initialCameraPosition: _kGooglePlex,
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+              },
+            ),
           ),
         ],
       );
