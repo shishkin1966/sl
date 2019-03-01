@@ -4,17 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:psb/app/screen/address/AddressScreenData.dart';
 import 'package:psb/app/screen/address/AddressScreenPresenter.dart';
 import 'package:psb/app/screen/address/AddressScreenWidget.dart';
+import 'package:psb/sl/action/Action.dart';
+import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTickerProviderStateMixin {
-  Completer<GoogleMapController> _mapController = Completer();
+  GoogleMapController _mapController;
   StreamController<double> _streamController = StreamController.broadcast();
   ScrollController _scrollController = new ScrollController();
-  double position = 64;
-  double childHeight = 63;
+  double _bottomPosition = 64;
+  double _bottomHeight = 63;
+  AddressScreenData _data = new AddressScreenData();
 
   @override
   Presenter<WidgetState<StatefulWidget>> createPresenter() {
@@ -33,17 +37,17 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
           stream: _streamController.stream,
           builder: (context, snapshot) => GestureDetector(
                 onVerticalDragUpdate: (DragUpdateDetails details) {
-                  position = MediaQuery.of(context).size.height - details.globalPosition.dy;
-                  if (position < 64) {
-                    position = 64;
+                  _bottomPosition = MediaQuery.of(context).size.height - details.globalPosition.dy;
+                  if (_bottomPosition < 64) {
+                    _bottomPosition = 64;
                   }
-                  childHeight = position - 1;
-                  _streamController.add(position);
+                  _bottomHeight = _bottomPosition - 1;
+                  _streamController.add(_bottomPosition);
                 },
                 behavior: HitTestBehavior.translucent,
                 child: new Container(
                   color: Color(0xffffffff),
-                  height: position,
+                  height: _bottomPosition,
                   width: double.infinity,
                   child: new Column(
                     children: <Widget>[
@@ -53,7 +57,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
                       ),
                       new Container(
                         padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
-                        height: childHeight,
+                        height: _bottomHeight,
                         child: new NestedScrollView(
                           controller: _scrollController,
                           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -89,10 +93,13 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
             height: constraints.maxHeight - 64,
             width: constraints.maxWidth,
             child: new GoogleMap(
+              myLocationEnabled: true,
+              compassEnabled: true,
+              trackCameraPosition: true,
               mapType: MapType.normal,
-              initialCameraPosition: _kGooglePlex,
+              initialCameraPosition: _getPosition(),
               onMapCreated: (GoogleMapController controller) {
-                _mapController.complete(controller);
+                _mapController = controller;
               },
             ),
           ),
@@ -101,8 +108,27 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
     });
   }
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
+  CameraPosition _getPosition() {
+    LatLng l = new LatLng(55.7496, 37.6237); // Moscow
+    if (_data.location != null) {
+      l = new LatLng(_data.location.latitude, _data.location.longitude);
+    }
+    return new CameraPosition(target: l, zoom: 12);
+  }
+
+  @override
+  void onAction(final Action action) {
+    if (action is DataAction) {
+      String actionName = action.getName();
+      switch (actionName) {
+        case AddressScreenPresenter.LocationChanged:
+          _data.location = action.getData();
+          LatLng l = new LatLng(_data.location.latitude, _data.location.longitude);
+          if (_mapController != null) {
+            _mapController.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(target: l, zoom: 12)));
+          }
+          break;
+      }
+    }
+  }
 }
