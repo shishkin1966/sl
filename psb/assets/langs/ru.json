@@ -1,0 +1,16 @@
+﻿{
+  "exit": "Выход",
+  "press_twice": "Для выхода нажмите ещё раз",
+  "no_connectivity": "Сеть недоступна",
+  "user": "Шишкин Олег Георгиевич",
+  "accounts": "Счета",
+  "settings": "Настройки",
+  "currency_rates": "Курсы\nвалют",
+  "address": "Адреса",
+  "communication": "Связь с\nбанком",
+  "create_account": "Открыть счет",
+  "sort_by": "Сортировать по ...",
+  "select_by": "Выбрать по ...",
+  "templates": "Шаблоны"
+
+}
