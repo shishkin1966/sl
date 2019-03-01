@@ -1,0 +1,16 @@
+﻿{
+  "exit": "Exit",
+  "press_twice": "Press again to exit",
+  "no_connectivity": "The network is not available",
+  "user": "Shishkin Oleg Georgievich",
+  "accounts": "Accounts",
+  "settings": "Settings",
+  "currency_rates": "Currency rates",
+  "address": "Addresses",
+  "communication": "Communication",
+  "create_account": "Create account",
+  "sort_by": "Sort by ...",
+  "select_by": "Select by ...",
+  "templates": "Templates"
+
+}
