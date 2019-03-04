@@ -1,3 +1,4 @@
+import 'package:contacts_service/contacts_service.dart';
 import 'package:dio/dio.dart';
 import 'package:psb/app/data/Account.dart';
 import 'package:psb/app/data/Currency.dart';
@@ -11,6 +12,7 @@ class Repository {
   static const String GetAccounts = "GetAccounts";
   static const String GetOperations = "GetOperations";
   static const String GetRates = "GetRates";
+  static const String GetContacts = "GetContacts";
 
   static void getAccounts(String subscriber) {
     Future.delayed(const Duration(seconds: 2), () {
@@ -68,6 +70,21 @@ class Repository {
       SLUtil.addNotMandatoryMessage(message);
     } catch (e) {
       Result result = new Result(null).addError(subscriber, e.toString()).setName(GetRates);
+      ResultMessage message = new ResultMessage.result(subscriber, result);
+      SLUtil.addNotMandatoryMessage(message);
+    }
+  }
+
+  static void getContacts(String subscriber, String filter) async {
+    try {
+      List<Contact> list = new List();
+      Iterable<Contact> data = await ContactsService.getContacts();
+      list.addAll(data);
+      Result<List<Contact>> result = new Result<List<Contact>>(list).setName(GetContacts);
+      ResultMessage message = new ResultMessage.result(subscriber, result);
+      SLUtil.addNotMandatoryMessage(message);
+    } catch (e) {
+      Result result = new Result(null).addError(subscriber, e.toString()).setName(GetContacts);
       ResultMessage message = new ResultMessage.result(subscriber, result);
       SLUtil.addNotMandatoryMessage(message);
     }

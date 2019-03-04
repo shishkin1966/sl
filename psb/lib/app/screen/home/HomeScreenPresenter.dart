@@ -48,6 +48,10 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
           Router.showAddressScreen(getWidget().context);
           break;
 
+        case Router.ShowContactsScreen:
+          Router.showContactsScreen(getWidget().context);
+          break;
+
         case CreateAccount:
           _createAccount();
           break;

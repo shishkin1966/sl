@@ -3,6 +3,7 @@ import 'package:psb/app/data/Operation.dart';
 import 'package:psb/app/screen/Rates/RatesScreenWidget.dart';
 import 'package:psb/app/screen/accounts/AccountsScreenWidget.dart';
 import 'package:psb/app/screen/address/AddressScreenWidget.dart';
+import 'package:psb/app/screen/contacts/ContactsScreenWidget.dart';
 import 'package:psb/app/screen/settings/SettingsScreenWidget.dart';
 
 class Router {
@@ -10,6 +11,7 @@ class Router {
   static const String ShowSettingsScreen = "ShowSettingsScreen";
   static const String ShowRatesScreen = "ShowRatesScreen";
   static const String ShowAddressScreen = "ShowAddressScreen";
+  static const String ShowContactsScreen = "ShowContactsScreen";
 
   static void showAccountsScreen(BuildContext context) {
     Navigator.push(
@@ -38,6 +40,13 @@ class Router {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => AddressScreenWidget()),
+    );
+  }
+
+  static void showContactsScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ContactsScreenWidget()),
     );
   }
 }
