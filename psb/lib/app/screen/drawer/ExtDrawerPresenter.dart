@@ -50,6 +50,12 @@ class ExtDrawerPresenter<ExtDrawerState extends WidgetState> extends AbsPresente
           HomeScreenPresenter presenter = SLUtil.getPresenterUnion().getPresenter(HomeScreenPresenter.NAME);
           presenter.addAction(action);
           break;
+
+        case Router.ShowContactsScreen:
+          Navigator.pop(getWidget().context);
+          HomeScreenPresenter presenter = SLUtil.getPresenterUnion().getPresenter(HomeScreenPresenter.NAME);
+          presenter.addAction(action);
+          break;
       }
     }
   }

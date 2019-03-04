@@ -308,8 +308,7 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                       color: Color(0xff377ad0),
                       child: InkWell(
                         onTap: () {
-                          Navigator.pop(context);
-                          SLUtil.getUISpecialist().showToast('OnTapCommunication');
+                          getPresenter().addAction(new ApplicationAction(Router.ShowContactsScreen));
                         },
                         child: new Column(
                           mainAxisSize: MainAxisSize.max,
