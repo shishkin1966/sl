@@ -4,6 +4,7 @@ import 'package:psb/app/data/Account.dart';
 import 'package:psb/app/data/Currency.dart';
 import 'package:psb/app/data/Operation.dart';
 import 'package:psb/app/data/Ticker.dart';
+import 'package:psb/common/StringUtils.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/data/Result.dart';
 import 'package:psb/sl/message/ResultMessage.dart';
@@ -78,7 +79,15 @@ class Repository {
   static void getContacts(String subscriber, String filter) async {
     try {
       List<Contact> list = new List();
-      Iterable<Contact> data = await ContactsService.getContacts();
+      Iterable<Contact> data;
+      if (StringUtils.isNullOrEmpty(filter)) {
+        data = await ContactsService.getContacts();
+      } else {
+        data = await ContactsService.getContacts(
+          query: filter,
+          withThumbnails: true,
+        );
+      }
       list.addAll(data);
       Result<List<Contact>> result = new Result<List<Contact>>(list).setName(GetContacts);
       ResultMessage message = new ResultMessage.result(subscriber, result);

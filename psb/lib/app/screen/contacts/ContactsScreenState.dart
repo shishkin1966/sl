@@ -5,6 +5,7 @@ import 'package:psb/app/repository/Repository.dart';
 import 'package:psb/app/screen/contacts/ContactsScreenData.dart';
 import 'package:psb/app/screen/contacts/ContactsScreenPresenter.dart';
 import 'package:psb/app/screen/contacts/ContactsScreenWidget.dart';
+import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/Actions.dart';
 import 'package:psb/sl/action/ApplicationAction.dart';
@@ -47,16 +48,43 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
               color: Color(0xffEEF5FF),
             ),
             _showHorizontalProgress(context, constraints),
-            _showContacts(context, constraints),
+            new Column(
+              children: <Widget>[
+                _showFilter(context, constraints),
+                new Expanded(
+                  child: _showContacts(context, constraints),
+                  flex: 1,
+                ),
+              ],
+            ),
           ],
         ),
       );
     });
   }
 
+  Widget _showFilter(BuildContext context, BoxConstraints constraints) {
+    return new Container(
+      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+      height: 40,
+      child: new TextField(
+        decoration: InputDecoration(
+          hintText: SLUtil.getString(context, "search"),
+          icon: Icon(Icons.search),
+        ),
+        keyboardType: TextInputType.text,
+        onChanged: (text) {
+          getPresenter().addAction(new DataAction(ContactsScreenPresenter.ChangeFilter).setData(text));
+        },
+        maxLines: 1,
+      ),
+    );
+  }
+
   Widget _showContacts(BuildContext context, BoxConstraints constraints) {
     if (_data.contacts.isNotEmpty) {
       return new ListView.builder(
+          shrinkWrap: true,
           itemCount: _data.contacts.length,
           itemBuilder: (context, position) {
             return new Material(
@@ -109,13 +137,7 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
             );
           });
     } else {
-      return new Positioned(
-        top: 0,
-        left: 0,
-        height: 0,
-        width: constraints.maxWidth,
-        child: new Container(),
-      );
+      return new Container();
     }
   }
 

@@ -15,6 +15,8 @@ class ContactsScreenPresenter<ContactsScreenState extends WidgetState> extends A
     implements ResponseListener {
   static const String NAME = "ContactsScreenPresenter";
 
+  static const String ChangeFilter = "ChangeFilter";
+
   String _filter;
 
   ContactsScreenPresenter(ContactsScreenState lifecycleState) : super(lifecycleState);
@@ -30,6 +32,16 @@ class ContactsScreenPresenter<ContactsScreenState extends WidgetState> extends A
       String actionName = action.getName();
       switch (actionName) {
         case Actions.Refresh:
+          _getContacts();
+          break;
+      }
+    }
+
+    if (action is DataAction) {
+      String actionName = action.getName();
+      switch (actionName) {
+        case ChangeFilter:
+          _filter = action.getData();
           _getContacts();
           break;
       }
