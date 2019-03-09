@@ -18,11 +18,15 @@ import 'package:psb/sl/message/ActionMessage.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
 import 'package:psb/sl/state/States.dart';
 import 'package:psb/ui/Application.dart';
+import 'package:psb/ui/Dimen.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class HomeScreenState extends WidgetState<HomeScreenWidget> {
   HomeScreenData _data = new HomeScreenData();
   int _exitCount = 0;
+  StreamController<double> _streamController = StreamController.broadcast();
+  ScrollController _scrollController = new ScrollController();
+  double _bottomPosition = Dimen.Menu_Height;
 
   HomeScreenState() : super();
 
@@ -85,6 +89,110 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
       child: new Scaffold(
         backgroundColor: Color(0x00000000),
         drawer: new ExtDrawerWidget(),
+        bottomSheet: StreamBuilder(
+          stream: _streamController.stream,
+          builder: (context, snapshot) => GestureDetector(
+                onVerticalDragUpdate: (DragUpdateDetails details) {
+                  _bottomPosition = MediaQuery.of(context).size.height - details.globalPosition.dy;
+                  if (_bottomPosition < Dimen.Menu_Height) {
+                    _bottomPosition = Dimen.Menu_Height;
+                  }
+                  if (_bottomPosition > 122) {
+                    _bottomPosition = 122;
+                  }
+                  _streamController.add(_bottomPosition);
+                },
+                behavior: HitTestBehavior.translucent,
+                child: new Container(
+                  color: Color(0xff074a80),
+                  height: _bottomPosition,
+                  width: double.infinity,
+                  child: new NestedScrollView(
+                    controller: _scrollController,
+                    headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                      return <Widget>[];
+                    },
+                    body: new ListView(
+                      children: <Widget>[
+                        new Material(
+                          color: Color(0xff377ad0),
+                          child: InkWell(
+                            onTap: () {
+                              SLUtil.getUISpecialist().showToast('OnTapPayments');
+                              _bottomPosition = Dimen.Menu_Height;
+                              setState(() {});
+                            },
+                            child: new Container(
+                              padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                              height: Dimen.Dimen_40,
+                              child: new Align(
+                                alignment: Alignment.centerLeft,
+                                child: new Text(
+                                  SLUtil.getString(context, 'payments'),
+                                  style: TextStyle(color: Colors.white, fontSize: 20),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        new Container(
+                          height: 1,
+                          color: Color(0xffd9d9d9),
+                        ),
+                        new Material(
+                          color: Color(0xff377ad0),
+                          child: InkWell(
+                            onTap: () {
+                              SLUtil.getUISpecialist().showToast('OnTapSortBy');
+                              _bottomPosition = Dimen.Menu_Height;
+                              setState(() {});
+                            },
+                            child: new Container(
+                              padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                              height: Dimen.Dimen_40,
+                              child: new Align(
+                                alignment: Alignment.centerLeft,
+                                child: new Text(
+                                  SLUtil.getString(context, 'sort_by'),
+                                  style: TextStyle(color: Colors.white, fontSize: 20),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        new Container(
+                          height: 1,
+                          color: Color(0xffd9d9d9),
+                        ),
+                        /*
+                        new Material(
+                          color: Color(0xff377ad0),
+                          child: InkWell(
+                            onTap: () {
+                              SLUtil.getUISpecialist().showToast('OnTapSelectBy');
+                              _bottomPosition = Dimen.Menu_Height;
+                              setState(() {});
+                            },
+                            child: new Container(
+                              padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                              height: Dimen.Dimen_40,
+                              child: new Align(
+                                alignment: Alignment.centerLeft,
+                                child: new Text(
+                                  SLUtil.getString(context, 'select_by'),
+                                  style: TextStyle(color: Colors.white, fontSize: 20),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        */
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+        ),
         body: new Builder(builder: (BuildContext context) {
           widgetContext = context;
           return SafeArea(top: true, child: _getWidget());
@@ -109,7 +217,6 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
               color: Color(0xffEEF5FF),
             ),
             _showOperations(context, constraints),
-            _showMenuButton(context, constraints),
             _showHorizontalProgress(context, constraints),
           ],
         ),
@@ -235,76 +342,5 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
         child: new Container(),
       );
     }
-  }
-
-  Widget _showMenuButton(BuildContext context, BoxConstraints constraints) {
-    if (_data.menuButton) {
-      return new Positioned(
-        left: constraints.maxWidth - 44,
-        top: constraints.maxHeight - 44,
-        child: new Material(
-          child: InkWell(
-            onTap: () {
-              _showModalBottomSheet(context);
-            },
-            child: new Container(
-              width: 44,
-              height: 44,
-              child: Image.asset("assets/images/ic_menu_button.png"),
-            ),
-          ),
-        ),
-      );
-    } else {
-      return new Positioned(
-        top: 0,
-        left: 0,
-        height: 0,
-        width: constraints.maxWidth,
-        child: new Container(),
-      );
-    }
-  }
-
-  void _showModalBottomSheet(context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return Container(
-            child: new Wrap(
-              children: <Widget>[
-                new ListTile(
-                  title: new Text(SLUtil.getString(context, 'templates')),
-                  onTap: () {
-                    Navigator.pop(context);
-                    getPresenter().addAction(new ApplicationAction(HomeScreenPresenter.CreateAccount));
-                  },
-                ),
-                new Container(
-                  height: 1,
-                  color: Color(0xffd9d9d9),
-                ),
-                new ListTile(
-                  title: new Text(SLUtil.getString(context, 'sort_by')),
-                  onTap: () {
-                    Navigator.pop(context);
-                    getPresenter().addAction(new ApplicationAction(HomeScreenPresenter.SortBy));
-                  },
-                ),
-                new Container(
-                  height: 1,
-                  color: Color(0xffd9d9d9),
-                ),
-                new ListTile(
-                  title: new Text(SLUtil.getString(context, 'select_by')),
-                  onTap: () {
-                    Navigator.pop(context);
-                    getPresenter().addAction(new ApplicationAction(HomeScreenPresenter.SelectBy));
-                  },
-                ),
-              ],
-            ),
-          );
-        });
   }
 }
