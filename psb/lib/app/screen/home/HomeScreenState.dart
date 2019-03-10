@@ -25,7 +25,6 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
   HomeScreenData _data = new HomeScreenData();
   int _exitCount = 0;
   StreamController<double> _streamController = StreamController.broadcast();
-  ScrollController _scrollController = new ScrollController();
   double _bottomPosition = Dimen.Menu_Height;
 
   HomeScreenState() : super();
@@ -108,7 +107,6 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                   height: _bottomPosition,
                   width: double.infinity,
                   child: new NestedScrollView(
-                    controller: _scrollController,
                     headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
                       return <Widget>[];
                     },
