@@ -107,16 +107,22 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
   Widget _getWidget() {
     return new LayoutBuilder(
       builder: (context, constraints) {
-        return new Stack(
-          fit: StackFit.expand,
-          children: [
-            new Container(
-              color: Color(0xffEEF5FF),
-            ),
-            _showRefreshOperations(context, constraints),
-            _showHorizontalProgress(context, constraints),
-            _showBottomMenu(context, constraints),
-          ],
+        return new GestureDetector(
+          onTap: () {
+            _bottomPosition = RolledBottomMenuHeight;
+            setState(() {});
+          },
+          child: new Stack(
+            fit: StackFit.expand,
+            children: [
+              new Container(
+                color: Color(0xffEEF5FF),
+              ),
+              _showRefreshOperations(context, constraints),
+              _showHorizontalProgress(context, constraints),
+              _showBottomMenu(context, constraints),
+            ],
+          ),
         );
       },
     );
