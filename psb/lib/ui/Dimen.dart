@@ -8,5 +8,4 @@ class Dimen {
   static const double Dimen_40 = 40;
   static const double Dimen_56 = 56;
   static const double Dimen_64 = 64;
-  static const double Menu_Height = 42;
 }

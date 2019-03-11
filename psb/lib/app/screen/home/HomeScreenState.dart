@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:psb/app/repository/Repository.dart';
 import 'package:psb/app/router/Router.dart';
@@ -23,10 +24,11 @@ import 'package:psb/ui/WidgetState.dart';
 
 class HomeScreenState extends WidgetState<HomeScreenWidget> {
   static const double ExpandedBottomMenuHeight = 122;
+  static const double RolledBottomMenuHeight = 42;
 
   HomeScreenData _data = new HomeScreenData();
   int _exitCount = 0;
-  double _bottomPosition = Dimen.Menu_Height;
+  double _bottomPosition = RolledBottomMenuHeight;
 
   HomeScreenState() : super();
 
@@ -137,18 +139,18 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
           width: double.infinity,
           child: NotificationListener(
             onNotification: (notification) {
-              if (notification is ScrollStartNotification) {
-                if (notification.dragDetails != null) {
-                  _bottomPosition = Dimen.Menu_Height;
+              if (notification is UserScrollNotification) {
+                if (notification.direction == ScrollDirection.forward) {
+                  _bottomPosition = RolledBottomMenuHeight;
                   setState(() {});
                 }
               } else if (notification is ScrollUpdateNotification) {
                 if (notification.dragDetails != null) {
                   _bottomPosition = MediaQuery.of(context).size.height + notification.dragDetails.delta.dy;
-                  if (_bottomPosition < Dimen.Menu_Height) {
-                    _bottomPosition = Dimen.Menu_Height;
+                  if (_bottomPosition < RolledBottomMenuHeight) {
+                    _bottomPosition = RolledBottomMenuHeight;
                   }
-                  if (_bottomPosition > ExpandedBottomMenuHeight) {
+                  if (_bottomPosition >= ExpandedBottomMenuHeight) {
                     _bottomPosition = ExpandedBottomMenuHeight;
                   }
                   setState(() {});
@@ -162,7 +164,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                   child: InkWell(
                     onTap: () {
                       SLUtil.getUISpecialist().showToast('OnTapPayments');
-                      _bottomPosition = Dimen.Menu_Height;
+                      _bottomPosition = RolledBottomMenuHeight;
                       setState(() {});
                     },
                     child: new Container(
@@ -187,7 +189,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                   child: InkWell(
                     onTap: () {
                       SLUtil.getUISpecialist().showToast('OnTapSortBy');
-                      _bottomPosition = Dimen.Menu_Height;
+                      _bottomPosition = RolledBottomMenuHeight;
                       setState(() {});
                     },
                     child: new Container(
@@ -212,7 +214,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                   child: InkWell(
                     onTap: () {
                       SLUtil.getUISpecialist().showToast('OnTapSelectBy');
-                      _bottomPosition = Dimen.Menu_Height;
+                      _bottomPosition = RolledBottomMenuHeight;
                       setState(() {});
                     },
                     child: new Container(
@@ -346,13 +348,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
         ),
       );
     } else {
-      return new Positioned(
-        top: 0,
-        left: 0,
-        height: 0,
-        width: constraints.maxWidth,
-        child: new Container(),
-      );
+      return new Container();
     }
   }
 }
