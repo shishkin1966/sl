@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:psb/app/repository/Repository.dart';
 import 'package:psb/app/router/Router.dart';
@@ -138,8 +139,8 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
           width: double.infinity,
           child: NotificationListener(
             onNotification: (notification) {
-              if (notification is ScrollStartNotification) {
-                if (notification.dragDetails != null) {
+              if (notification is UserScrollNotification) {
+                if (notification.direction == ScrollDirection.forward) {
                   _bottomPosition = RolledBottomMenuHeight;
                   setState(() {});
                 }
@@ -157,7 +158,6 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
               }
             },
             child: new ListView(
-              shrinkWrap: false,
               children: <Widget>[
                 new Material(
                   color: Color(0xff377ad0),
