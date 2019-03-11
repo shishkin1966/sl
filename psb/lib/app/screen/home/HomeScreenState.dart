@@ -18,11 +18,16 @@ import 'package:psb/sl/message/ActionMessage.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
 import 'package:psb/sl/state/States.dart';
 import 'package:psb/ui/Application.dart';
+import 'package:psb/ui/Dimen.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class HomeScreenState extends WidgetState<HomeScreenWidget> {
   HomeScreenData _data = new HomeScreenData();
   int _exitCount = 0;
+  StreamController<double> _streamController = StreamController.broadcast();
+  ScrollController _scrollController = new ScrollController();
+  ScrollController _scrollListController = new ScrollController();
+  double _bottomPosition = Dimen.Menu_Height;
 
   HomeScreenState() : super();
 
@@ -99,27 +104,148 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
   }
 
   Widget _getWidget() {
-    return new LayoutBuilder(builder: (context, constraints) {
-      return new RefreshIndicator(
-        onRefresh: _onRefresh,
-        child: new Stack(
+    return new LayoutBuilder(
+      builder: (context, constraints) {
+        return new Stack(
           fit: StackFit.expand,
           children: [
             new Container(
               color: Color(0xffEEF5FF),
             ),
-            _showOperations(context, constraints),
-            _showMenuButton(context, constraints),
+            _showRefreshOperations(context, constraints),
             _showHorizontalProgress(context, constraints),
+            _showBottomMenu(context, constraints),
           ],
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
   Future<Null> _onRefresh() async {
     getPresenter().addAction(new ApplicationAction(Actions.Refresh));
     return null;
+  }
+
+  Widget _showBottomMenu(BuildContext context, BoxConstraints constraints) {
+    return new Positioned(
+      top: constraints.maxHeight - _bottomPosition,
+      height: _bottomPosition,
+      left: 0,
+      width: constraints.maxWidth,
+      child: new Container(
+          color: Color(0xff074a80),
+          height: _bottomPosition,
+          width: double.infinity,
+          child: NotificationListener(
+            onNotification: (notification) {
+              if (notification is ScrollStartNotification) {
+                if (notification.dragDetails != null) {
+                  _bottomPosition = Dimen.Menu_Height;
+                  setState(() {});
+                }
+              } else if (notification is ScrollUpdateNotification) {
+                if (notification.dragDetails != null) {
+                  _bottomPosition = MediaQuery.of(context).size.height + notification.dragDetails.delta.dy;
+                  if (_bottomPosition < Dimen.Menu_Height) {
+                    _bottomPosition = Dimen.Menu_Height;
+                  }
+                  if (_bottomPosition > 122) {
+                    _bottomPosition = 122;
+                  }
+                  setState(() {});
+                }
+              }
+            },
+            child: new ListView(
+              children: <Widget>[
+                new Material(
+                  color: Color(0xff377ad0),
+                  child: InkWell(
+                    onTap: () {
+                      SLUtil.getUISpecialist().showToast('OnTapPayments');
+                      _bottomPosition = Dimen.Menu_Height;
+                      setState(() {});
+                    },
+                    child: new Container(
+                      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                      height: Dimen.Dimen_40,
+                      child: new Align(
+                        alignment: Alignment.centerLeft,
+                        child: new Text(
+                          SLUtil.getString(context, 'payments'),
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                new Container(
+                  height: 1,
+                  color: Color(0xffd9d9d9),
+                ),
+                new Material(
+                  color: Color(0xff377ad0),
+                  child: InkWell(
+                    onTap: () {
+                      SLUtil.getUISpecialist().showToast('OnTapSortBy');
+                      _bottomPosition = Dimen.Menu_Height;
+                      setState(() {});
+                    },
+                    child: new Container(
+                      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                      height: Dimen.Dimen_40,
+                      child: new Align(
+                        alignment: Alignment.centerLeft,
+                        child: new Text(
+                          SLUtil.getString(context, 'sort_by'),
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                new Container(
+                  height: 1,
+                  color: Color(0xffd9d9d9),
+                ),
+                new Material(
+                  color: Color(0xff377ad0),
+                  child: InkWell(
+                    onTap: () {
+                      SLUtil.getUISpecialist().showToast('OnTapSelectBy');
+                      _bottomPosition = Dimen.Menu_Height;
+                      setState(() {});
+                    },
+                    child: new Container(
+                      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                      height: Dimen.Dimen_40,
+                      child: new Align(
+                        alignment: Alignment.centerLeft,
+                        child: new Text(
+                          SLUtil.getString(context, 'select_by'),
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )),
+    );
+  }
+
+  Widget _showRefreshOperations(BuildContext context, BoxConstraints constraints) {
+    return new LayoutBuilder(builder: (context, constraints) {
+      return new RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: new Container(
+          height: constraints.maxHeight - _bottomPosition,
+          width: constraints.maxWidth,
+          child: _showOperations(context, constraints),
+        ),
+      );
+    });
   }
 
   Widget _showOperations(BuildContext context, BoxConstraints constraints) {
@@ -203,13 +329,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
             );
           });
     } else {
-      return new Positioned(
-        top: 0,
-        left: 0,
-        height: 0,
-        width: constraints.maxWidth,
-        child: new Container(),
-      );
+      return new Container();
     }
   }
 
@@ -235,76 +355,5 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
         child: new Container(),
       );
     }
-  }
-
-  Widget _showMenuButton(BuildContext context, BoxConstraints constraints) {
-    if (_data.menuButton) {
-      return new Positioned(
-        left: constraints.maxWidth - 44,
-        top: constraints.maxHeight - 44,
-        child: new Material(
-          child: InkWell(
-            onTap: () {
-              _showModalBottomSheet(context);
-            },
-            child: new Container(
-              width: 44,
-              height: 44,
-              child: Image.asset("assets/images/ic_menu_button.png"),
-            ),
-          ),
-        ),
-      );
-    } else {
-      return new Positioned(
-        top: 0,
-        left: 0,
-        height: 0,
-        width: constraints.maxWidth,
-        child: new Container(),
-      );
-    }
-  }
-
-  void _showModalBottomSheet(context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return Container(
-            child: new Wrap(
-              children: <Widget>[
-                new ListTile(
-                  title: new Text(SLUtil.getString(context, 'templates')),
-                  onTap: () {
-                    Navigator.pop(context);
-                    getPresenter().addAction(new ApplicationAction(HomeScreenPresenter.CreateAccount));
-                  },
-                ),
-                new Container(
-                  height: 1,
-                  color: Color(0xffd9d9d9),
-                ),
-                new ListTile(
-                  title: new Text(SLUtil.getString(context, 'sort_by')),
-                  onTap: () {
-                    Navigator.pop(context);
-                    getPresenter().addAction(new ApplicationAction(HomeScreenPresenter.SortBy));
-                  },
-                ),
-                new Container(
-                  height: 1,
-                  color: Color(0xffd9d9d9),
-                ),
-                new ListTile(
-                  title: new Text(SLUtil.getString(context, 'select_by')),
-                  onTap: () {
-                    Navigator.pop(context);
-                    getPresenter().addAction(new ApplicationAction(HomeScreenPresenter.SelectBy));
-                  },
-                ),
-              ],
-            ),
-          );
-        });
   }
 }

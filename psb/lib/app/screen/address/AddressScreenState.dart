@@ -10,13 +10,14 @@ import 'package:psb/app/screen/address/AddressScreenWidget.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
+import 'package:psb/ui/Dimen.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTickerProviderStateMixin {
   GoogleMapController _mapController;
   StreamController<double> _streamController = StreamController.broadcast();
   ScrollController _scrollController = new ScrollController();
-  double _bottomPosition = 64;
+  double _bottomPosition = Dimen.Dimen_64;
   double _bottomHeight = 63;
   AddressScreenData _data = new AddressScreenData();
   CameraPosition _cameraPosition;
@@ -39,8 +40,8 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
           builder: (context, snapshot) => GestureDetector(
                 onVerticalDragUpdate: (DragUpdateDetails details) {
                   _bottomPosition = MediaQuery.of(context).size.height - details.globalPosition.dy;
-                  if (_bottomPosition < 64) {
-                    _bottomPosition = 64;
+                  if (_bottomPosition < Dimen.Dimen_64) {
+                    _bottomPosition = Dimen.Dimen_64;
                   }
                   _bottomHeight = _bottomPosition - 1;
                   _streamController.add(_bottomPosition);
