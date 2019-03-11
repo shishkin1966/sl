@@ -112,7 +112,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
             new Container(
               color: Color(0xffEEF5FF),
             ),
-            _showOperations(context, constraints),
+            _showRefreshOperations(context, constraints),
             _showHorizontalProgress(context, constraints),
             _showBottomMenu(context, constraints),
           ],
@@ -235,6 +235,19 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
     );
   }
 
+  Widget _showRefreshOperations(BuildContext context, BoxConstraints constraints) {
+    return new LayoutBuilder(builder: (context, constraints) {
+      return new RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: new Container(
+          height: constraints.maxHeight - _bottomPosition,
+          width: constraints.maxWidth,
+          child: _showOperations(context, constraints),
+        ),
+      );
+    });
+  }
+
   Widget _showOperations(BuildContext context, BoxConstraints constraints) {
     if (_data.operations.isNotEmpty) {
       return new ListView.builder(
@@ -316,13 +329,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
             );
           });
     } else {
-      return new Positioned(
-        top: 0,
-        left: 0,
-        height: 0,
-        width: constraints.maxWidth,
-        child: new Container(),
-      );
+      return new Container();
     }
   }
 
