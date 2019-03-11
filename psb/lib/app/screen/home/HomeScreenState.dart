@@ -22,11 +22,10 @@ import 'package:psb/ui/Dimen.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class HomeScreenState extends WidgetState<HomeScreenWidget> {
+  static const double ExpandedBottomMenuHeight = 122;
+
   HomeScreenData _data = new HomeScreenData();
   int _exitCount = 0;
-  StreamController<double> _streamController = StreamController.broadcast();
-  ScrollController _scrollController = new ScrollController();
-  ScrollController _scrollListController = new ScrollController();
   double _bottomPosition = Dimen.Menu_Height;
 
   HomeScreenState() : super();
@@ -149,8 +148,8 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                   if (_bottomPosition < Dimen.Menu_Height) {
                     _bottomPosition = Dimen.Menu_Height;
                   }
-                  if (_bottomPosition > 122) {
-                    _bottomPosition = 122;
+                  if (_bottomPosition > ExpandedBottomMenuHeight) {
+                    _bottomPosition = ExpandedBottomMenuHeight;
                   }
                   setState(() {});
                 }
@@ -167,7 +166,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                       setState(() {});
                     },
                     child: new Container(
-                      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                      padding: EdgeInsets.fromLTRB(Dimen.Dimen_12, 0, Dimen.Dimen_12, 0),
                       height: Dimen.Dimen_40,
                       child: new Align(
                         alignment: Alignment.centerLeft,
@@ -217,7 +216,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                       setState(() {});
                     },
                     child: new Container(
-                      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                      padding: EdgeInsets.fromLTRB(Dimen.Dimen_12, 0, Dimen.Dimen_12, 0),
                       height: Dimen.Dimen_40,
                       child: new Align(
                         alignment: Alignment.centerLeft,
@@ -264,13 +263,13 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     new Container(
-                      height: 4,
+                      height: Dimen.Dimen_4,
                     ),
                     new Row(
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         new Container(
-                          padding: EdgeInsets.fromLTRB(12, 0, 8, 0),
+                          padding: EdgeInsets.fromLTRB(Dimen.Dimen_12, 0, Dimen.Dimen_8, 0),
                           child: new Icon(Icons.message),
                         ),
                         new Expanded(
@@ -288,7 +287,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                                     ),
                                   ),
                                   new Container(
-                                    padding: EdgeInsets.fromLTRB(8, 0, 12, 0),
+                                    padding: EdgeInsets.fromLTRB(Dimen.Dimen_8, 0, Dimen.Dimen_12, 0),
                                     child: new Text(
                                       _data.operations[position].amount.toString(),
                                       style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
@@ -305,7 +304,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                                 style: TextStyle(color: Color(0xff2E9E5F), fontSize: 14),
                               ),
                               new Container(
-                                padding: EdgeInsets.fromLTRB(0, 0, 12, 0),
+                                padding: EdgeInsets.fromLTRB(0, 0, Dimen.Dimen_12, 0),
                                 child: new Text(
                                   _data.operations[position].name,
                                   style: TextStyle(color: Color(0xff427CB9), fontSize: 20),
@@ -317,7 +316,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                       ],
                     ),
                     new Container(
-                      height: 4,
+                      height: Dimen.Dimen_4,
                     ),
                     new Container(
                       height: 1,
