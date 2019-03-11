@@ -26,6 +26,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
   int _exitCount = 0;
   StreamController<double> _streamController = StreamController.broadcast();
   double _bottomPosition = Dimen.Menu_Height;
+  Timer _debounce;
 
   HomeScreenState() : super();
 
@@ -88,7 +89,50 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
       child: new Scaffold(
         backgroundColor: Color(0x00000000),
         drawer: new ExtDrawerWidget(),
-        bottomSheet: StreamBuilder(
+        body: new Builder(builder: (BuildContext context) {
+          widgetContext = context;
+          return SafeArea(top: true, child: _getWidget());
+        }),
+      ),
+    );
+  }
+
+  @override
+  Presenter<WidgetState<StatefulWidget>> createPresenter() {
+    return new HomeScreenPresenter(this);
+  }
+
+  Widget _getWidget() {
+    return new LayoutBuilder(builder: (context, constraints) {
+      return new RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: new Stack(
+          fit: StackFit.expand,
+          children: [
+            new Container(
+              color: Color(0xffEEF5FF),
+            ),
+            _showOperations(context, constraints),
+            _showHorizontalProgress(context, constraints),
+            _showBottomMenu(context, constraints),
+          ],
+        ),
+      );
+    });
+  }
+
+  Future<Null> _onRefresh() async {
+    getPresenter().addAction(new ApplicationAction(Actions.Refresh));
+    return null;
+  }
+
+  Widget _showBottomMenu(BuildContext context, BoxConstraints constraints) {
+    return new Positioned(
+        top: constraints.maxHeight - _bottomPosition,
+        height: _bottomPosition,
+        left: 0,
+        width: constraints.maxWidth,
+        child: new StreamBuilder(
           stream: _streamController.stream,
           builder: (context, snapshot) => GestureDetector(
                 onVerticalDragUpdate: (DragUpdateDetails details) {
@@ -100,6 +144,10 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                     _bottomPosition = 122;
                   }
                   _streamController.add(_bottomPosition);
+                  if (_debounce?.isActive ?? false) _debounce.cancel();
+                  _debounce = Timer(const Duration(milliseconds: 100), () {
+                    setState(() {});
+                  });
                 },
                 behavior: HitTestBehavior.translucent,
                 child: new Container(
@@ -107,6 +155,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                   height: _bottomPosition,
                   width: double.infinity,
                   child: new NestedScrollView(
+                    controller: new ScrollController(),
                     headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
                       return <Widget>[];
                     },
@@ -190,41 +239,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                   ),
                 ),
               ),
-        ),
-        body: new Builder(builder: (BuildContext context) {
-          widgetContext = context;
-          return SafeArea(top: true, child: _getWidget());
-        }),
-      ),
-    );
-  }
-
-  @override
-  Presenter<WidgetState<StatefulWidget>> createPresenter() {
-    return new HomeScreenPresenter(this);
-  }
-
-  Widget _getWidget() {
-    return new LayoutBuilder(builder: (context, constraints) {
-      return new RefreshIndicator(
-        onRefresh: _onRefresh,
-        child: new Stack(
-          fit: StackFit.expand,
-          children: [
-            new Container(
-              color: Color(0xffEEF5FF),
-            ),
-            _showOperations(context, constraints),
-            _showHorizontalProgress(context, constraints),
-          ],
-        ),
-      );
-    });
-  }
-
-  Future<Null> _onRefresh() async {
-    getPresenter().addAction(new ApplicationAction(Actions.Refresh));
-    return null;
+        ));
   }
 
   Widget _showOperations(BuildContext context, BoxConstraints constraints) {
@@ -340,5 +355,12 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
         child: new Container(),
       );
     }
+  }
+
+  @override
+  void dispose() {
+    if (_debounce?.isActive ?? false) _debounce.cancel();
+
+    super.dispose();
   }
 }
