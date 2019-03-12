@@ -5,7 +5,7 @@ import 'package:psb/sl/AbsSpecialist.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/message/ActionMessage.dart';
-import 'package:psb/sl/specialist/ui/UI.dart';
+import 'package:psb/sl/specialist/ui/UISpecialist.dart';
 import 'package:psb/ui/Application.dart';
 
 class UISpecialistImpl extends AbsSpecialist implements UISpecialist {
