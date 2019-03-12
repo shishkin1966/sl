@@ -29,6 +29,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
   HomeScreenData _data = new HomeScreenData();
   int _exitCount = 0;
   double _bottomPosition = RolledBottomMenuHeight;
+  double _velocity = 100;
 
   HomeScreenState() : super();
 
@@ -152,7 +153,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                 }
               } else if (notification is ScrollUpdateNotification) {
                 if (notification.dragDetails != null) {
-                  _bottomPosition = MediaQuery.of(context).size.height + notification.dragDetails.delta.dy;
+                  _bottomPosition -= notification.dragDetails.delta.dy * 4;
                   if (_bottomPosition < RolledBottomMenuHeight) {
                     _bottomPosition = RolledBottomMenuHeight;
                   }

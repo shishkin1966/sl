@@ -97,7 +97,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
               }
             } else if (notification is OverscrollNotification) {
               if (notification.dragDetails != null) {
-                _bottomPosition -= notification.dragDetails.delta.dy;
+                _bottomPosition -= notification.dragDetails.delta.dy * 4;
                 if (_bottomPosition < RolledBottomMenuHeight) {
                   _bottomPosition = RolledBottomMenuHeight;
                 }
