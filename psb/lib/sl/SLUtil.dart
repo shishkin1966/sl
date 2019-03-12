@@ -15,7 +15,7 @@ import 'package:psb/sl/specialist/preferences/PreferencesSpecialist.dart';
 import 'package:psb/sl/specialist/preferences/PreferencesSpecialistImpl.dart';
 import 'package:psb/sl/specialist/presenter/PresenterUnion.dart';
 import 'package:psb/sl/specialist/presenter/PresenterUnionImpl.dart';
-import 'package:psb/sl/specialist/ui/UI.dart';
+import 'package:psb/sl/specialist/ui/UISpecialist.dart';
 import 'package:psb/sl/specialist/ui/UISpecialistImpl.dart';
 
 class SLUtil {

@@ -22,7 +22,6 @@ class MyApp extends Application {
     return EasyLocalizationProvider(
       data: data,
       child: MaterialApp(
-        title: 'Flutter Demo',
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
