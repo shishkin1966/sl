@@ -77,7 +77,6 @@ public class Secure {
 
     private boolean checkKeyPair(Context context) {
         lock.lock();
-
         try {
             if (!keyStore.containsAlias(alias)) {
                 if (createKeyPair(context)) {

@@ -18,7 +18,8 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
   GoogleMapController _mapController;
   double _bottomPosition = RolledBottomMenuHeight;
   AddressScreenData _data = new AddressScreenData();
-  CameraPosition _cameraPosition;
+  Marker _marker;
+  Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
 
   @override
   Presenter<WidgetState<StatefulWidget>> createPresenter() {
@@ -67,12 +68,11 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
       child: new GoogleMap(
         myLocationEnabled: true,
         compassEnabled: true,
-        trackCameraPosition: true,
         mapType: MapType.normal,
         initialCameraPosition: _getPosition(),
+        markers: Set<Marker>.of(_markers.values),
         onMapCreated: (GoogleMapController controller) {
           _mapController = controller;
-          _mapController.addListener(_onMapListener);
         },
       ),
     );
@@ -142,20 +142,24 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
           LatLng l = new LatLng(_data.location.latitude, _data.location.longitude);
           if (_mapController != null) {
             _mapController.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(target: l, zoom: 12)));
+            if (_marker != null) {
+              _marker.copyWith(positionParam: l);
+            } else {
+              double ratio = MediaQuery.of(context).devicePixelRatio;
+              String icon = 'assets/images/pin.png';
+              if (ratio >= 2.0) {
+                icon = 'assets/images/2x/pin.png';
+              }
+              _marker = new Marker(
+                markerId: new MarkerId("1"),
+                position: l,
+                icon: BitmapDescriptor.fromAsset(icon),
+              );
+              _markers[_marker.markerId] = _marker;
+            }
           }
           break;
       }
     }
-  }
-
-  void _onMapListener() {
-    _cameraPosition = _mapController.cameraPosition;
-  }
-
-  @override
-  void dispose() {
-    _mapController.removeListener(_onMapListener);
-
-    super.dispose();
   }
 }
