@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:psb/app/screen/address/AddressScreenData.dart';
 import 'package:psb/app/screen/address/AddressScreenPresenter.dart';
 import 'package:psb/app/screen/address/AddressScreenWidget.dart';
+import 'package:psb/common/AppUtils.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
@@ -146,15 +147,10 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
             if (_marker != null) {
               _marker.copyWith(positionParam: l);
             } else {
-              double ratio = MediaQuery.of(context).devicePixelRatio;
-              String icon = 'assets/images/pin.png';
-              if (ratio >= 2.0) {
-                icon = 'assets/images/2x/pin.png';
-              }
               _marker = new Marker(
                 markerId: new MarkerId("1"),
                 position: l,
-                icon: BitmapDescriptor.fromAsset(icon),
+                icon: BitmapDescriptor.fromAsset(AppUtils.getAssetImage(context, "pin.png")),
               );
               _markers[_marker.markerId] = _marker;
             }
