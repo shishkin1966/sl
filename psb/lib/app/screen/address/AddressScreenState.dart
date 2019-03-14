@@ -71,6 +71,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
         mapType: MapType.normal,
         initialCameraPosition: _getPosition(),
         markers: Set<Marker>.of(_markers.values),
+        onCameraMove: _onCameraMove,
         onMapCreated: (GoogleMapController controller) {
           _mapController = controller;
         },
@@ -161,5 +162,9 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
           break;
       }
     }
+  }
+
+  void _onCameraMove(CameraPosition position) {
+    getPresenter().addAction(new DataAction(AddressScreenPresenter.CameraMoved).setData(position));
   }
 }
