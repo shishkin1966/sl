@@ -65,6 +65,7 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
           break;
 
         case Actions.Refresh:
+          getWidget().addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
           // Получим операции
           Repository.getOperations(NAME);
           break;
@@ -85,7 +86,6 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
 
   @override
   void response(Result result) {
-    getWidget().addAction(new ApplicationAction(Actions.HideHorizontalProgress));
     if (!result.hasError()) {
       switch (result.getName()) {
         case Repository.GetAccounts:
@@ -96,10 +96,12 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
           break;
 
         case Repository.GetOperations:
+          getWidget().addAction(new ApplicationAction(Actions.HideHorizontalProgress).setNeedRefresh(false));
           getWidget().addAction(new DataAction(Repository.GetOperations).setData(result.getData()));
           break;
       }
     } else {
+      getWidget().addAction(new ApplicationAction(Actions.HideHorizontalProgress));
       SLUtil.getUISpecialist().showErrorToast(result.getErrorText());
     }
   }
