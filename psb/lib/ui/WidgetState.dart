@@ -142,7 +142,9 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
         break;
       }
       onAction(_actions[i]);
-      setState(() {});
+      if (_actions[i].getNeedRefresh()) {
+        setState(() {});
+      }
       deleted.add(_actions[i]);
     }
     for (Action action in deleted) {
