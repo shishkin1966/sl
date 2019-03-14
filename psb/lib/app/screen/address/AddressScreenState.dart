@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -21,6 +23,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
   AddressScreenData _data = new AddressScreenData();
   Marker _marker;
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
+  Timer _debounce;
 
   @override
   Presenter<WidgetState<StatefulWidget>> createPresenter() {
@@ -161,6 +164,16 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
   }
 
   void _onCameraMove(CameraPosition position) {
-    getPresenter().addAction(new DataAction(AddressScreenPresenter.CameraMoved).setData(position));
+    if (_debounce?.isActive ?? false) _debounce.cancel();
+    _debounce = Timer(const Duration(seconds: 1), () {
+      getPresenter().addAction(new DataAction(AddressScreenPresenter.CameraMoved).setData(position.target));
+    });
+  }
+
+  @override
+  void dispose() {
+    if (_debounce?.isActive ?? false) _debounce.cancel();
+
+    super.dispose();
   }
 }
