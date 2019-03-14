@@ -9,6 +9,7 @@ import 'package:psb/ui/WidgetState.dart';
 class AddressScreenPresenter<AddressScreenState extends WidgetState> extends AbsPresenter<AddressScreenState> {
   static const String NAME = "AddressScreenPresenter";
   static const String LocationChanged = "LocationChanged";
+  static const String CameraMoved = "CameraMoved";
 
   Location _location;
 
@@ -20,7 +21,15 @@ class AddressScreenPresenter<AddressScreenState extends WidgetState> extends Abs
   }
 
   @override
-  void onAction(Action action) {}
+  void onAction(Action action) {
+    if (action is DataAction) {
+      String actionName = action.getName();
+      switch (actionName) {
+        case CameraMoved:
+          break;
+      }
+    }
+  }
 
   @override
   Future onReady() async {
