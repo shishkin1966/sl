@@ -69,7 +69,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
         if (SLUtil.getPresenterUnion().hasSubscriber(ExtDrawerPresenter.NAME)) {
           ExtDrawerPresenter presenter = SLUtil.getPresenterUnion().getPresenter(ExtDrawerPresenter.NAME);
           if (presenter.getState() == States.StateReady) {
-            Navigator.pop(widgetContext);
+            Navigator.pop(getScaffoldState().context);
             return false;
           }
         }
@@ -99,7 +99,6 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
         backgroundColor: Color(0x00000000),
         drawer: new ExtDrawerWidget(),
         body: new Builder(builder: (BuildContext context) {
-          widgetContext = context;
           return SafeArea(top: true, child: _getWidget());
         }),
       ),

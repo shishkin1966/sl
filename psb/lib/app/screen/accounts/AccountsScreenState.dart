@@ -22,7 +22,6 @@ class AccountsScreenState extends WidgetState<AccountsScreenWidget> {
         key: getKey(),
         backgroundColor: Color(0xfff0f0ff),
         body: new Builder(builder: (BuildContext context) {
-          widgetContext = context;
           return SafeArea(top: true, child: _getWidget());
         }),
       ),
