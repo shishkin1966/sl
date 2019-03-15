@@ -16,7 +16,6 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
   Presenter _presenter;
   StreamSubscription _subscription;
   SnackBar snackbar;
-  BuildContext widgetContext;
   List<String> _modified = new List();
   GlobalKey _key = new GlobalKey();
 
@@ -74,7 +73,8 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
       snackbar = null;
     }
     if (snackbar == null) {
-      snackbar = SLUtil.getUISpecialist().getNoConnectivitySnackBar(SLUtil.getString(widgetContext, 'no_connectivity'));
+      snackbar = SLUtil.getUISpecialist()
+          .getNoConnectivitySnackBar(SLUtil.getString(getScaffoldState().context, 'no_connectivity'));
       state.showSnackBar(snackbar);
     }
   }
