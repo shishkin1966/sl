@@ -95,7 +95,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
         return false;
       },
       child: new Scaffold(
-        key: getKey(),
+        key: getScaffoldKey(),
         backgroundColor: Color(0x00000000),
         drawer: new ExtDrawerWidget(),
         body: new Builder(builder: (BuildContext context) {

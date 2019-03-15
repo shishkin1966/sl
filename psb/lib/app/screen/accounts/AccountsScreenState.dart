@@ -19,7 +19,7 @@ class AccountsScreenState extends WidgetState<AccountsScreenWidget> {
         return true;
       },
       child: new Scaffold(
-        key: getKey(),
+        key: getScaffoldKey(),
         backgroundColor: Color(0xfff0f0ff),
         body: new Builder(builder: (BuildContext context) {
           return SafeArea(top: true, child: _getWidget());

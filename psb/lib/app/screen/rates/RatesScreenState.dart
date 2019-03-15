@@ -27,7 +27,7 @@ class RatesScreenState extends WidgetState<RatesScreenWidget> {
         return true;
       },
       child: new Scaffold(
-        key: getKey(),
+        key: getScaffoldKey(),
         backgroundColor: Color(0x00000000),
         body: new Builder(builder: (BuildContext context) {
           return SafeArea(top: true, child: _getWidget());
