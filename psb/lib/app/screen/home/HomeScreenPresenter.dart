@@ -36,23 +36,23 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
       String actionName = action.getName();
       switch (actionName) {
         case Router.ShowAccountsScreen:
-          Router.showAccountsScreen(getWidget().context);
+          Router.showAccountsScreen(getWidget().getScaffoldState().context);
           break;
 
         case Router.ShowSettingsScreen:
-          Router.showSettingsScreen(getWidget().context);
+          Router.showSettingsScreen(getWidget().getScaffoldState().context);
           break;
 
         case Router.ShowRatesScreen:
-          Router.showRatesScreen(getWidget().context);
+          Router.showRatesScreen(getWidget().getScaffoldState().context);
           break;
 
         case Router.ShowAddressScreen:
-          Router.showAddressScreen(getWidget().context);
+          Router.showAddressScreen(getWidget().getScaffoldState().context);
           break;
 
         case Router.ShowContactsScreen:
-          Router.showContactsScreen(getWidget().context);
+          Router.showContactsScreen(getWidget().getScaffoldState().context);
           break;
 
         case CreateAccount:

@@ -41,11 +41,14 @@ class AddressScreenPresenter<AddressScreenState extends WidgetState> extends Abs
       if (_location.hasPermission == false) {
         PermissionStatus permission = await PermissionHandler().checkPermissionStatus(PermissionGroup.locationAlways);
         if (permission != PermissionStatus.granted) {
-          bool isShown = await PermissionHandler().shouldShowRequestPermissionRationale(PermissionGroup.locationAlways);
+          Map<PermissionGroup, PermissionStatus> map =
+              await PermissionHandler().requestPermissions([PermissionGroup.locationAlways]);
+          if (map[PermissionGroup.locationAlways] == PermissionStatus.granted) {
+            _getLocation();
+          }
         }
       } else {
-        LocationData data = await _location.getLocation();
-        getWidget().addAction(new DataAction(LocationChanged).setData(data));
+        _getLocation();
 
         //_location.onLocationChanged().listen((location) async {
         //  getWidget().addAction(new DataAction(LocationChanged).setData(location));
@@ -54,5 +57,10 @@ class AddressScreenPresenter<AddressScreenState extends WidgetState> extends Abs
     } catch (e) {
       SLUtil.onError(NAME, e);
     }
+  }
+
+  void _getLocation() async {
+    LocationData data = await _location.getLocation();
+    getWidget().addAction(new DataAction(LocationChanged).setData(data));
   }
 }

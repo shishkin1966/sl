@@ -52,6 +52,7 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setConnectivityState();
       _lifecycle.setState(States.StateReady);
+      _doActions();
     });
   }
 
@@ -103,7 +104,7 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
         break;
 
       case AppLifecycleState.inactive:
-        _lifecycle.setState(States.StateNotReady);
+        //_lifecycle.setState(States.StateNotReady);
         break;
 
       case AppLifecycleState.paused:

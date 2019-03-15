@@ -69,6 +69,7 @@ abstract class AbsPresenter<M extends WidgetState> implements Presenter<M> {
   @override
   void onReady() {
     SL.instance.registerSubscriber(this);
+    _doActions();
   }
 
   @override
