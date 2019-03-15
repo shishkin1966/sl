@@ -17,6 +17,8 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
   StreamSubscription _subscription;
   SnackBar snackbar;
   BuildContext widgetContext;
+  List<String> _modified = new List();
+  GlobalKey _key = new GlobalKey();
 
   WidgetState() {
     _presenter = createPresenter();
@@ -66,22 +68,21 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
   }
 
   void showConnectivitySnackBar() {
-    if (widgetContext != null) {
-      if (snackbar != null) {
-        Scaffold.of(widgetContext).removeCurrentSnackBar();
-        snackbar = null;
-      }
-      if (snackbar == null) {
-        snackbar =
-            SLUtil.getUISpecialist().getNoConnectivitySnackBar(SLUtil.getString(widgetContext, 'no_connectivity'));
-        Scaffold.of(widgetContext).showSnackBar(snackbar);
-      }
+    ScaffoldState state = getScaffoldState();
+    if (snackbar != null) {
+      getScaffoldState().removeCurrentSnackBar();
+      snackbar = null;
+    }
+    if (snackbar == null) {
+      snackbar = SLUtil.getUISpecialist().getNoConnectivitySnackBar(SLUtil.getString(widgetContext, 'no_connectivity'));
+      state.showSnackBar(snackbar);
     }
   }
 
   void hideConnectivitySnackBar() {
-    if (snackbar != null && widgetContext != null) {
-      Scaffold.of(widgetContext).removeCurrentSnackBar();
+    ScaffoldState state = getScaffoldState();
+    if (snackbar != null) {
+      state.removeCurrentSnackBar();
     }
     snackbar = null;
   }
@@ -142,7 +143,7 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
         break;
       }
       onAction(_actions[i]);
-      if (_actions[i].getNeedRefresh()) {
+      if (_actions[i].isNeedRefresh()) {
         setState(() {});
       }
       deleted.add(_actions[i]);
@@ -156,4 +157,28 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
 
   @override
   Widget build(BuildContext context) {}
+
+  void setModified(String widget) {
+    if (!_modified.contains(widget)) {
+      _modified.add(widget);
+    }
+  }
+
+  void removeModified(String widget) {
+    if (_modified.contains(widget)) {
+      _modified.remove(widget);
+    }
+  }
+
+  bool getModified(String widget) {
+    return _modified.contains(widget);
+  }
+
+  GlobalKey getKey() {
+    return _key;
+  }
+
+  ScaffoldState getScaffoldState() {
+    return _key.currentState as ScaffoldState;
+  }
 }
