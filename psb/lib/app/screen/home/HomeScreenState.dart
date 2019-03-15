@@ -29,7 +29,6 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
   HomeScreenData _data = new HomeScreenData();
   int _exitCount = 0;
   double _bottomPosition = RolledBottomMenuHeight;
-  double _velocity = 100;
 
   HomeScreenState() : super();
 
@@ -39,11 +38,11 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
       String actionName = action.getName();
       switch (actionName) {
         case Actions.ShowHorizontalProgress:
-          _data.progress = true;
+          setModified(HomeScreenPresenter.WidgetHorizontalProgress);
           break;
 
         case Actions.HideHorizontalProgress:
-          _data.progress = false;
+          removeModified(HomeScreenPresenter.WidgetHorizontalProgress);
           break;
       }
     }
@@ -53,6 +52,11 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
       switch (actionName) {
         case Repository.GetOperations:
           _data.operations = action.getData();
+          if (_data.operations.isEmpty) {
+            removeModified(HomeScreenPresenter.WidgetRefreshOperations);
+          } else {
+            setModified(HomeScreenPresenter.WidgetRefreshOperations);
+          }
           break;
       }
     }
@@ -73,13 +77,14 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
         if (_exitCount == 1) {
           String actionName = SLUtil.getString(context, 'exit');
           String text = SLUtil.getString(context, 'press_twice');
+          ScaffoldState state = getScaffoldState();
           if (snackbar != null) {
-            Scaffold.of(widgetContext).removeCurrentSnackBar();
+            state.removeCurrentSnackBar();
             snackbar = null;
           }
           snackbar = SLUtil.getUISpecialist().getSnackBarWithAction(
               text, new Duration(seconds: 4), actionName, new ApplicationAction(Actions.ExitApplication));
-          Scaffold.of(widgetContext).showSnackBar(snackbar);
+          state.showSnackBar(snackbar);
           Future.delayed(const Duration(seconds: 4), () {
             _exitCount = 0;
             setConnectivityState();
@@ -90,6 +95,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
         return false;
       },
       child: new Scaffold(
+        key: getKey(),
         backgroundColor: Color(0x00000000),
         drawer: new ExtDrawerWidget(),
         body: new Builder(builder: (BuildContext context) {
@@ -115,18 +121,26 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
           },
           child: new Stack(
             fit: StackFit.expand,
-            children: [
-              new Container(
-                color: Color(0xffEEF5FF),
-              ),
-              _showRefreshOperations(context, constraints),
-              _showHorizontalProgress(context, constraints),
-              _showBottomMenu(context, constraints),
-            ],
+            children: _refreshWidgets(context, constraints),
           ),
         );
       },
     );
+  }
+
+  List<Widget> _refreshWidgets(BuildContext context, BoxConstraints constraints) {
+    List<Widget> list = new List();
+    list.add(new Container(
+      color: Color(0xffEEF5FF),
+    ));
+    if (getModified(HomeScreenPresenter.WidgetRefreshOperations)) {
+      list.add(_showRefreshOperations(context, constraints));
+    }
+    if (getModified(HomeScreenPresenter.WidgetHorizontalProgress)) {
+      list.add(_showHorizontalProgress(context, constraints));
+    }
+    list.add(_showBottomMenu(context, constraints));
+    return list;
   }
 
   Future<Null> _onRefresh() async {
@@ -342,20 +356,16 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
   }
 
   Widget _showHorizontalProgress(BuildContext context, BoxConstraints constraints) {
-    if (_data.progress) {
-      return new Positioned(
-        top: 0,
-        left: 0,
-        width: constraints.maxWidth,
-        child: new LinearProgressIndicator(
-          backgroundColor: Color(0xffffffff),
-          valueColor: new AlwaysStoppedAnimation<Color>(
-            Color(0xff00ff00),
-          ),
+    return new Positioned(
+      top: 0,
+      left: 0,
+      width: constraints.maxWidth,
+      child: new LinearProgressIndicator(
+        backgroundColor: Color(0xffffffff),
+        valueColor: new AlwaysStoppedAnimation<Color>(
+          Color(0xff00ff00),
         ),
-      );
-    } else {
-      return new Container();
-    }
+      ),
+    );
   }
 }

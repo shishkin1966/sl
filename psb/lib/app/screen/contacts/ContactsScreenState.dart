@@ -28,6 +28,7 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
         return true;
       },
       child: new Scaffold(
+        key: getKey(),
         backgroundColor: Color(0x00000000),
         body: new Builder(builder: (BuildContext context) {
           widgetContext = context;

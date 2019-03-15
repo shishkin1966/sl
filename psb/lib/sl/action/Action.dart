@@ -2,14 +2,14 @@
 /// Действие
 ///
 class Action {
-  bool _isNeedRefresh = true;
+  bool _needRefresh = true;
 
   Action setNeedRefresh(bool needRefresh) {
-    _isNeedRefresh = needRefresh;
+    _needRefresh = needRefresh;
     return this;
   }
 
-  bool getNeedRefresh() {
-    return _isNeedRefresh;
+  bool isNeedRefresh() {
+    return _needRefresh;
   }
 }
