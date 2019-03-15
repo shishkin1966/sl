@@ -54,7 +54,12 @@ class ContactsScreenPresenter<ContactsScreenState extends WidgetState> extends A
       getWidget().addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
       Repository.getContacts(NAME, _filter);
     } else {
-      bool isShown = await PermissionHandler().shouldShowRequestPermissionRationale(PermissionGroup.contacts);
+      Map<PermissionGroup, PermissionStatus> map =
+          await PermissionHandler().requestPermissions([PermissionGroup.contacts]);
+      if (map[PermissionGroup.contacts] == PermissionStatus.granted) {
+        getWidget().addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
+        Repository.getContacts(NAME, _filter);
+      }
     }
   }
 
