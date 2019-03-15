@@ -17,7 +17,7 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
   StreamSubscription _subscription;
   SnackBar snackbar;
   List<String> _modified = new List();
-  GlobalKey _key = new GlobalKey();
+  GlobalKey _scaffoldKey = new GlobalKey();
 
   WidgetState() {
     _presenter = createPresenter();
@@ -174,11 +174,11 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
     return _modified.contains(widget);
   }
 
-  GlobalKey getKey() {
-    return _key;
+  GlobalKey getScaffoldKey() {
+    return _scaffoldKey;
   }
 
   ScaffoldState getScaffoldState() {
-    return _key.currentState as ScaffoldState;
+    return _scaffoldKey.currentState as ScaffoldState;
   }
 }
