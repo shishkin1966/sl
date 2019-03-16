@@ -6,6 +6,7 @@ import 'package:psb/sl/specialist/messager/MessengerUnionImpl.dart';
 import 'package:psb/sl/specialist/observable/ObservableUnionImpl.dart';
 import 'package:psb/sl/specialist/preferences/PreferencesSpecialistImpl.dart';
 import 'package:psb/sl/specialist/presenter/PresenterUnionImpl.dart';
+import 'package:psb/sl/specialist/secure/SecureSpecialistImpl.dart';
 import 'package:psb/sl/specialist/ui/UISpecialistImpl.dart';
 
 class ServiceLocatorSpecialistFactory implements SpecialistFactory {
@@ -32,6 +33,9 @@ class ServiceLocatorSpecialistFactory implements SpecialistFactory {
 
       case PreferencesSpecialistImpl.NAME:
         return new PreferencesSpecialistImpl();
+
+      case SecureSpecialistImpl.NAME:
+        return new SecureSpecialistImpl();
     }
     return null;
   }
