@@ -24,6 +24,9 @@ import 'package:psb/ui/WidgetState.dart';
 class HomeScreenState extends WidgetState<HomeScreenWidget> {
   static const double ExpandedBottomMenuHeight = 122;
   static const double RolledBottomMenuHeight = 42;
+  static const String WidgetHorizontalProgress = 'HorizontalProgress';
+  static const String WidgetRefreshOperations = 'WidgetRefreshOperations';
+  static const String WidgetBottomMenu = 'WidgetBottomMenu';
 
   HomeScreenData _data = new HomeScreenData();
   int _exitCount = 0;
@@ -37,11 +40,11 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
       String actionName = action.getName();
       switch (actionName) {
         case Actions.ShowHorizontalProgress:
-          setModified(HomeScreenPresenter.WidgetHorizontalProgress);
+          setModified(WidgetHorizontalProgress);
           break;
 
         case Actions.HideHorizontalProgress:
-          removeModified(HomeScreenPresenter.WidgetHorizontalProgress);
+          removeModified(WidgetHorizontalProgress);
           break;
       }
     }
@@ -52,9 +55,9 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
         case Repository.GetOperations:
           _data.operations = action.getData();
           if (_data.operations.isEmpty) {
-            removeModified(HomeScreenPresenter.WidgetRefreshOperations);
+            removeModified(WidgetRefreshOperations);
           } else {
-            setModified(HomeScreenPresenter.WidgetRefreshOperations);
+            setModified(WidgetRefreshOperations);
           }
           break;
       }
@@ -119,22 +122,22 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
           },
           child: new Stack(
             fit: StackFit.expand,
-            children: _refreshWidgets(context, constraints),
+            children: _getChildren(context, constraints),
           ),
         );
       },
     );
   }
 
-  List<Widget> _refreshWidgets(BuildContext context, BoxConstraints constraints) {
+  List<Widget> _getChildren(BuildContext context, BoxConstraints constraints) {
     List<Widget> list = new List();
     list.add(new Container(
       color: Color(0xffEEF5FF),
     ));
-    if (getModified(HomeScreenPresenter.WidgetRefreshOperations)) {
+    if (getModified(WidgetRefreshOperations)) {
       list.add(_showRefreshOperations(context, constraints));
     }
-    if (getModified(HomeScreenPresenter.WidgetHorizontalProgress)) {
+    if (getModified(WidgetHorizontalProgress)) {
       list.add(_showHorizontalProgress(context, constraints));
     }
     list.add(_showBottomMenu(context, constraints));
