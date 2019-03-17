@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:psb/app/router/Router.dart';
 import 'package:psb/app/screen/home/HomeScreenPresenter.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/Actions.dart';
 import 'package:psb/sl/action/ApplicationAction.dart';
 import 'package:psb/sl/presenter/AbsPresenter.dart';
+import 'package:psb/sl/specialist/router/Router.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class ExtDrawerPresenter<ExtDrawerState extends WidgetState> extends AbsPresenter<ExtDrawerState> {
@@ -27,34 +27,13 @@ class ExtDrawerPresenter<ExtDrawerState extends WidgetState> extends AbsPresente
           getWidget().addAction(action);
           break;
 
-        case Router.ShowAccountsScreen:
-          Navigator.pop(getWidget().context);
-          HomeScreenPresenter presenter = SLUtil.getPresenterUnion().getPresenter(HomeScreenPresenter.NAME);
-          presenter.addAction(action);
-          break;
-
         case Router.ShowSettingsScreen:
-          Navigator.pop(getWidget().context);
-          HomeScreenPresenter presenter = SLUtil.getPresenterUnion().getPresenter(HomeScreenPresenter.NAME);
-          presenter.addAction(action);
-          break;
-
+        case Router.ShowAccountsScreen:
         case Router.ShowRatesScreen:
-          Navigator.pop(getWidget().context);
-          HomeScreenPresenter presenter = SLUtil.getPresenterUnion().getPresenter(HomeScreenPresenter.NAME);
-          presenter.addAction(action);
-          break;
-
         case Router.ShowAddressScreen:
-          Navigator.pop(getWidget().context);
-          HomeScreenPresenter presenter = SLUtil.getPresenterUnion().getPresenter(HomeScreenPresenter.NAME);
-          presenter.addAction(action);
-          break;
-
         case Router.ShowContactsScreen:
           Navigator.pop(getWidget().context);
-          HomeScreenPresenter presenter = SLUtil.getPresenterUnion().getPresenter(HomeScreenPresenter.NAME);
-          presenter.addAction(action);
+          SLUtil.getPresenterUnion().getPresenter(HomeScreenPresenter.NAME)?.addAction(action);
           break;
       }
     }

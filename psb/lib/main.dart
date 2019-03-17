@@ -7,16 +7,6 @@ import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/ui/Application.dart';
 
 void main() {
-  /*
-  Secure secure = new Secure();
-  secure.encode("12345678").then((onValue) {
-    SLUtil.getUISpecialist().showToast(onValue);
-    secure.decode(onValue).then((onValue) {
-      SLUtil.getUISpecialist().showToast(onValue);
-    });
-  });
-  */
-
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
     runApp(EasyLocalization(child: MyApp()));
   });

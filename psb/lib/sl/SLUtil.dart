@@ -15,6 +15,12 @@ import 'package:psb/sl/specialist/preferences/PreferencesSpecialist.dart';
 import 'package:psb/sl/specialist/preferences/PreferencesSpecialistImpl.dart';
 import 'package:psb/sl/specialist/presenter/PresenterUnion.dart';
 import 'package:psb/sl/specialist/presenter/PresenterUnionImpl.dart';
+import 'package:psb/sl/specialist/repository/RepositorySpecialist.dart';
+import 'package:psb/sl/specialist/repository/RepositorySpecialistImpl.dart';
+import 'package:psb/sl/specialist/router/RouterSpecialist.dart';
+import 'package:psb/sl/specialist/router/RouterSpecialistImpl.dart';
+import 'package:psb/sl/specialist/secure/SecureSpecialist.dart';
+import 'package:psb/sl/specialist/secure/SecureSpecialistImpl.dart';
 import 'package:psb/sl/specialist/ui/UISpecialist.dart';
 import 'package:psb/sl/specialist/ui/UISpecialistImpl.dart';
 
@@ -41,6 +47,18 @@ class SLUtil {
 
   static PreferencesSpecialist getPreferencesSpecialist() {
     return SL.instance.get(PreferencesSpecialistImpl.NAME);
+  }
+
+  static RepositorySpecialist getRepositorySpecialist() {
+    return SL.instance.get(RepositorySpecialistImpl.NAME);
+  }
+
+  static SecureSpecialist getSecureSpecialist() {
+    return SL.instance.get(SecureSpecialistImpl.NAME);
+  }
+
+  static RouterSpecialist getRouterSpecialist() {
+    return SL.instance.get(RouterSpecialistImpl.NAME);
   }
 
   static void onChange(String object) {

@@ -5,28 +5,30 @@ import 'package:psb/app/data/Currency.dart';
 import 'package:psb/app/data/Operation.dart';
 import 'package:psb/app/data/Ticker.dart';
 import 'package:psb/common/StringUtils.dart';
+import 'package:psb/sl/AbsSpecialist.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/data/Result.dart';
 import 'package:psb/sl/message/ResultMessage.dart';
+import 'package:psb/sl/specialist/repository/Repository.dart';
+import 'package:psb/sl/specialist/repository/RepositorySpecialist.dart';
 
-class Repository {
-  static const String GetAccounts = "GetAccounts";
-  static const String GetOperations = "GetOperations";
-  static const String GetRates = "GetRates";
-  static const String GetContacts = "GetContacts";
+class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecialist {
+  static const String NAME = "RepositorySpecialistImpl";
 
-  static void getAccounts(String subscriber) {
+  @override
+  void getAccounts(String subscriber) {
     Future.delayed(const Duration(seconds: 2), () {
       List<Account> list = new List();
       list.add(new Account(new Currency("RUB"), 220000));
       list.add(new Account(new Currency("USD"), 11500));
       ResultMessage message =
-          new ResultMessage.result(subscriber, new Result<List<Account>>(list).setName(GetAccounts));
+          new ResultMessage.result(subscriber, new Result<List<Account>>(list).setName(Repository.GetAccounts));
       SLUtil.addMessage(message);
     });
   }
 
-  static void getOperations(String subscriber) {
+  @override
+  void getOperations(String subscriber) {
     Future.delayed(const Duration(seconds: 2), () {
       List<Operation> list = new List();
       Operation operation = new Operation();
@@ -51,12 +53,13 @@ class Repository {
       list.add(operation);
 
       ResultMessage message =
-          new ResultMessage.result(subscriber, new Result<List<Operation>>(list).setName(GetOperations));
+          new ResultMessage.result(subscriber, new Result<List<Operation>>(list).setName(Repository.GetOperations));
       SLUtil.addNotMandatoryMessage(message);
     });
   }
 
-  static void getRates(String subscriber) async {
+  @override
+  void getRates(String subscriber) async {
     try {
       List<Ticker> list = new List();
       Response response = await Dio().get("https://api.coinmarketcap.com/v1/ticker/");
@@ -66,17 +69,18 @@ class Repository {
         ticker.name = rate["name"];
         list.add(ticker);
       }
-      Result<List<Ticker>> result = new Result<List<Ticker>>(list).setName(GetRates);
+      Result<List<Ticker>> result = new Result<List<Ticker>>(list).setName(Repository.GetRates);
       ResultMessage message = new ResultMessage.result(subscriber, result);
       SLUtil.addNotMandatoryMessage(message);
     } catch (e) {
-      Result result = new Result(null).addError(subscriber, e.toString()).setName(GetRates);
+      Result result = new Result(null).addError(subscriber, e.toString()).setName(Repository.GetRates);
       ResultMessage message = new ResultMessage.result(subscriber, result);
       SLUtil.addNotMandatoryMessage(message);
     }
   }
 
-  static void getContacts(String subscriber, String filter) async {
+  @override
+  void getContacts(String subscriber, String filter) async {
     try {
       List<Contact> list = new List();
       Iterable<Contact> data;
@@ -89,13 +93,23 @@ class Repository {
         );
       }
       list.addAll(data);
-      Result<List<Contact>> result = new Result<List<Contact>>(list).setName(GetContacts);
+      Result<List<Contact>> result = new Result<List<Contact>>(list).setName(Repository.GetContacts);
       ResultMessage message = new ResultMessage.result(subscriber, result);
       SLUtil.addNotMandatoryMessage(message);
     } catch (e) {
-      Result result = new Result(null).addError(subscriber, e.toString()).setName(GetContacts);
+      Result result = new Result(null).addError(subscriber, e.toString()).setName(Repository.GetContacts);
       ResultMessage message = new ResultMessage.result(subscriber, result);
       SLUtil.addNotMandatoryMessage(message);
     }
+  }
+
+  @override
+  int compareTo(other) {
+    return (other is RepositorySpecialist) ? 0 : 1;
+  }
+
+  @override
+  String getName() {
+    return NAME;
   }
 }

@@ -1,6 +1,5 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:psb/app/repository/Repository.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/Actions.dart';
@@ -9,6 +8,7 @@ import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/data/Result.dart';
 import 'package:psb/sl/presenter/AbsPresenter.dart';
 import 'package:psb/sl/request/ResponseListener.dart';
+import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class ContactsScreenPresenter<ContactsScreenState extends WidgetState> extends AbsPresenter<ContactsScreenState>
@@ -52,13 +52,13 @@ class ContactsScreenPresenter<ContactsScreenState extends WidgetState> extends A
     PermissionStatus permission = await PermissionHandler().checkPermissionStatus(PermissionGroup.contacts);
     if (permission == PermissionStatus.granted) {
       getWidget().addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
-      Repository.getContacts(NAME, _filter);
+      SLUtil.getRepositorySpecialist().getContacts(NAME, _filter);
     } else {
       Map<PermissionGroup, PermissionStatus> map =
           await PermissionHandler().requestPermissions([PermissionGroup.contacts]);
       if (map[PermissionGroup.contacts] == PermissionStatus.granted) {
         getWidget().addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
-        Repository.getContacts(NAME, _filter);
+        SLUtil.getRepositorySpecialist().getContacts(NAME, _filter);
       }
     }
   }

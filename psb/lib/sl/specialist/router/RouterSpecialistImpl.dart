@@ -5,48 +5,62 @@ import 'package:psb/app/screen/accounts/AccountsScreenWidget.dart';
 import 'package:psb/app/screen/address/AddressScreenWidget.dart';
 import 'package:psb/app/screen/contacts/ContactsScreenWidget.dart';
 import 'package:psb/app/screen/settings/SettingsScreenWidget.dart';
+import 'package:psb/sl/AbsSpecialist.dart';
+import 'package:psb/sl/specialist/router/RouterSpecialist.dart';
 
-class Router {
-  static const String ShowAccountsScreen = "ShowAccountsScreen";
-  static const String ShowSettingsScreen = "ShowSettingsScreen";
-  static const String ShowRatesScreen = "ShowRatesScreen";
-  static const String ShowAddressScreen = "ShowAddressScreen";
-  static const String ShowContactsScreen = "ShowContactsScreen";
+class RouterSpecialistImpl extends AbsSpecialist implements RouterSpecialist {
+  static const String NAME = "RouterSpecialistImpl";
 
-  static void showAccountsScreen(BuildContext context) {
+  @override
+  void showAccountsScreen(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => AccountsScreenWidget()),
     );
   }
 
-  static void showSettingsScreen(BuildContext context) {
+  @override
+  void showSettingsScreen(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => SettingsScreenWidget()),
     );
   }
 
-  static void showOperationScreen(BuildContext context, Operation operation) {}
+  @override
+  void showOperationScreen(BuildContext context, Operation operation) {}
 
-  static void showRatesScreen(BuildContext context) {
+  @override
+  void showRatesScreen(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => RatesScreenWidget()),
     );
   }
 
-  static void showAddressScreen(BuildContext context) {
+  @override
+  void showAddressScreen(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => AddressScreenWidget()),
     );
   }
 
-  static void showContactsScreen(BuildContext context) {
+  @override
+  void showContactsScreen(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ContactsScreenWidget()),
     );
+  }
+
+  @override
+  int compareTo(other) {
+    return (other is RouterSpecialist) ? 0 : 1;
+  }
+
+  @override
+  String getName() {
+    return NAME;
   }
 }
