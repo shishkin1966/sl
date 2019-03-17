@@ -14,6 +14,7 @@ import 'package:psb/ui/WidgetState.dart';
 
 class RatesScreenState extends WidgetState<RatesScreenWidget> {
   static const String WidgetHorizontalProgress = 'HorizontalProgress';
+  static const String WidgetRates = 'WidgetRates';
 
   RatesScreenData _data = new RatesScreenData();
 
@@ -55,11 +56,11 @@ class RatesScreenState extends WidgetState<RatesScreenWidget> {
     list.add(new Container(
       color: Color(0xffEEF5FF),
     ));
-    if (getModified(WidgetHorizontalProgress)) {
+    if (getVisible(WidgetHorizontalProgress)) {
       list.add(_showHorizontalProgress(context, constraints));
     }
-    if (_data.tickers.isNotEmpty) {
-      _showRates(context, constraints);
+    if (getVisible(WidgetRates)) {
+      list.add(_showRates(context, constraints));
     }
     return list;
   }
@@ -144,11 +145,11 @@ class RatesScreenState extends WidgetState<RatesScreenWidget> {
       String actionName = action.getName();
       switch (actionName) {
         case Actions.ShowHorizontalProgress:
-          setModified(WidgetHorizontalProgress);
+          setVisible(WidgetHorizontalProgress);
           break;
 
         case Actions.HideHorizontalProgress:
-          removeModified(WidgetHorizontalProgress);
+          setUnvisible(WidgetHorizontalProgress);
           break;
       }
     }
@@ -158,6 +159,11 @@ class RatesScreenState extends WidgetState<RatesScreenWidget> {
       switch (actionName) {
         case Repository.GetRates:
           _data.tickers = action.getData();
+          if (_data.tickers.isNotEmpty) {
+            setVisible(WidgetRates);
+          } else {
+            setUnvisible(WidgetRates);
+          }
           break;
       }
     }
