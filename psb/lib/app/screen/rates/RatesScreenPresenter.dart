@@ -1,5 +1,4 @@
 import 'package:psb/app/data/Ticker.dart';
-import 'package:psb/app/repository/Repository.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/Actions.dart';
@@ -8,6 +7,7 @@ import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/data/Result.dart';
 import 'package:psb/sl/presenter/AbsPresenter.dart';
 import 'package:psb/sl/request/ResponseListener.dart';
+import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class RatesScreenPresenter<RatesScreenState extends WidgetState> extends AbsPresenter<RatesScreenState>
@@ -35,7 +35,7 @@ class RatesScreenPresenter<RatesScreenState extends WidgetState> extends AbsPres
 
   void _getRates() {
     getWidget().addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
-    Repository.getRates(NAME);
+    SLUtil.getRepositorySpecialist().getRates(NAME);
   }
 
   @override

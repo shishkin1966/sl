@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
-import 'package:psb/app/repository/Repository.dart';
 import 'package:psb/app/screen/Rates/RatesScreenPresenter.dart';
 import 'package:psb/app/screen/Rates/RatesScreenWidget.dart';
 import 'package:psb/app/screen/rates/RatesScreenData.dart';
@@ -10,6 +9,7 @@ import 'package:psb/sl/action/Actions.dart';
 import 'package:psb/sl/action/ApplicationAction.dart';
 import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
+import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class RatesScreenState extends WidgetState<RatesScreenWidget> {

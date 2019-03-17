@@ -9,6 +9,8 @@ import 'package:psb/sl/specialist/observable/ObservableUnion.dart';
 import 'package:psb/sl/specialist/observable/ObservableUnionImpl.dart';
 import 'package:psb/sl/specialist/preferences/PreferencesSpecialistImpl.dart';
 import 'package:psb/sl/specialist/presenter/PresenterUnionImpl.dart';
+import 'package:psb/sl/specialist/repository/RepositorySpecialistImpl.dart';
+import 'package:psb/sl/specialist/router/RouterSpecialistImpl.dart';
 import 'package:psb/sl/specialist/secure/SecureSpecialistImpl.dart';
 import 'package:psb/sl/specialist/ui/UISpecialistImpl.dart';
 
@@ -45,8 +47,14 @@ class SL extends AbsServiceLocator {
     // Специалист Preferences
     registerSpecialistByName(PreferencesSpecialistImpl.NAME);
 
+    // Специалист Repository
+    registerSpecialistByName(RepositorySpecialistImpl.NAME);
+
     // Специалист Secure
     registerSpecialistByName(SecureSpecialistImpl.NAME);
+
+    // Специалист Router
+    registerSpecialistByName(RouterSpecialistImpl.NAME);
   }
 
   static SL get instance => _sl;

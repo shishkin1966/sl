@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
-import 'package:psb/app/repository/Repository.dart';
-import 'package:psb/app/router/Router.dart';
 import 'package:psb/app/screen/drawer/ExtDrawerPresenter.dart';
 import 'package:psb/app/screen/drawer/ExtDrawerWidget.dart';
 import 'package:psb/app/screen/home/HomeScreenData.dart';
@@ -17,6 +15,7 @@ import 'package:psb/sl/action/ApplicationAction.dart';
 import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/message/ActionMessage.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
+import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/sl/state/States.dart';
 import 'package:psb/ui/Application.dart';
 import 'package:psb/ui/Dimen.dart';
@@ -279,7 +278,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
               child: InkWell(
                 onTap: () {
                   SLUtil.getUISpecialist().showToast("OnTapOperation:" + _data.operations[position].name);
-                  Router.showOperationScreen(context, _data.operations[position]);
+                  SLUtil.getRouterSpecialist().showOperationScreen(context, _data.operations[position]);
                 },
                 child: new Column(
                   mainAxisSize: MainAxisSize.min,

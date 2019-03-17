@@ -1,6 +1,4 @@
-import 'package:psb/app/repository/ApplicationData.dart';
-import 'package:psb/app/repository/Repository.dart';
-import 'package:psb/app/router/Router.dart';
+import 'package:psb/app/ApplicationData.dart';
 import 'package:psb/app/screen/drawer/ExtDrawerPresenter.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
@@ -11,6 +9,8 @@ import 'package:psb/sl/data/Result.dart';
 import 'package:psb/sl/message/ActionMessage.dart';
 import 'package:psb/sl/presenter/AbsPresenter.dart';
 import 'package:psb/sl/request/ResponseListener.dart';
+import 'package:psb/sl/specialist/repository/Repository.dart';
+import 'package:psb/sl/specialist/router/Router.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresenter<HomeScreenState>
@@ -36,23 +36,23 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
       String actionName = action.getName();
       switch (actionName) {
         case Router.ShowAccountsScreen:
-          Router.showAccountsScreen(getWidget().getScaffoldState().context);
+          SLUtil.getRouterSpecialist().showAccountsScreen(getWidget().getScaffoldState().context);
           break;
 
         case Router.ShowSettingsScreen:
-          Router.showSettingsScreen(getWidget().getScaffoldState().context);
+          SLUtil.getRouterSpecialist().showSettingsScreen(getWidget().getScaffoldState().context);
           break;
 
         case Router.ShowRatesScreen:
-          Router.showRatesScreen(getWidget().getScaffoldState().context);
+          SLUtil.getRouterSpecialist().showRatesScreen(getWidget().getScaffoldState().context);
           break;
 
         case Router.ShowAddressScreen:
-          Router.showAddressScreen(getWidget().getScaffoldState().context);
+          SLUtil.getRouterSpecialist().showAddressScreen(getWidget().getScaffoldState().context);
           break;
 
         case Router.ShowContactsScreen:
-          Router.showContactsScreen(getWidget().getScaffoldState().context);
+          SLUtil.getRouterSpecialist().showContactsScreen(getWidget().getScaffoldState().context);
           break;
 
         case CreateAccount:
@@ -70,7 +70,7 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
         case Actions.Refresh:
           getWidget().addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
           // Получим операции
-          Repository.getOperations(NAME);
+          SLUtil.getRepositorySpecialist().getOperations(NAME);
           break;
       }
     }
@@ -82,9 +82,9 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
 
     getWidget().addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
     // Получим счета
-    Repository.getAccounts(NAME);
+    SLUtil.getRepositorySpecialist().getAccounts(NAME);
     // Получим операции
-    Repository.getOperations(NAME);
+    SLUtil.getRepositorySpecialist().getOperations(NAME);
   }
 
   @override
