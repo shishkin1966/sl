@@ -16,7 +16,7 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
   Presenter _presenter;
   StreamSubscription _subscription;
   SnackBar snackbar;
-  List<String> _modified = new List();
+  List<String> _visibled = new List();
   GlobalKey _scaffoldKey = new GlobalKey();
 
   WidgetState() {
@@ -144,7 +144,7 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
         break;
       }
       onAction(_actions[i]);
-      if (_actions[i].isNeedRefresh()) {
+      if (_actions[i].getStateChanged()) {
         setState(() {});
       }
       deleted.add(_actions[i]);
@@ -159,20 +159,20 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
   @override
   Widget build(BuildContext context) {}
 
-  void setModified(String widget) {
-    if (!_modified.contains(widget)) {
-      _modified.add(widget);
+  void setVisible(String widget) {
+    if (!_visibled.contains(widget)) {
+      _visibled.add(widget);
     }
   }
 
-  void removeModified(String widget) {
-    if (_modified.contains(widget)) {
-      _modified.remove(widget);
+  void setUnvisible(String widget) {
+    if (_visibled.contains(widget)) {
+      _visibled.remove(widget);
     }
   }
 
-  bool getModified(String widget) {
-    return _modified.contains(widget);
+  bool getVisible(String widget) {
+    return _visibled.contains(widget);
   }
 
   GlobalKey getScaffoldKey() {

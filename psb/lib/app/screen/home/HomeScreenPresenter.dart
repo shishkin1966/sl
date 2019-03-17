@@ -19,9 +19,6 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
   static const String CreateAccount = "CreateAccount";
   static const String SortBy = "SortBy";
   static const String SelectBy = "SelectBy";
-  static const String WidgetHorizontalProgress = 'HorizontalProgress';
-  static const String WidgetRefreshOperations = 'WidgetRefreshOperations';
-  static const String WidgetBottomMenu = 'WidgetBottomMenu';
 
   HomeScreenPresenter(HomeScreenState lifecycleState) : super(lifecycleState);
 
@@ -93,13 +90,11 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
       switch (result.getName()) {
         case Repository.GetAccounts:
           ApplicationData.instance.accounts = result.getData();
-          ActionMessage message =
-              new ActionMessage.action(ExtDrawerPresenter.NAME, new ApplicationAction(Actions.Refresh));
-          SLUtil.addMessage(message);
+          SLUtil.addMessage(new ActionMessage.action(ExtDrawerPresenter.NAME, new ApplicationAction(Actions.Refresh)));
           break;
 
         case Repository.GetOperations:
-          getWidget().addAction(new ApplicationAction(Actions.HideHorizontalProgress));
+          getWidget().addAction(new ApplicationAction(Actions.HideHorizontalProgress).setStateNonChanged());
           getWidget().addAction(new DataAction(Repository.GetOperations).setData(result.getData()));
           break;
       }
