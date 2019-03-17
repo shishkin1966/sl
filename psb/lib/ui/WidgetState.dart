@@ -137,6 +137,26 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
     }
   }
 
+  void addActions(List<Action> actions) {
+    if (actions == null) return;
+
+    final String state = getState();
+    switch (state) {
+      case States.StateDestroy:
+        return;
+
+      case States.StateCreate:
+      case States.StateNotReady:
+        _actions.addAll(actions);
+        return;
+
+      default:
+        _actions.addAll(actions);
+        _doActions();
+        break;
+    }
+  }
+
   void _doActions() {
     final List<Action> deleted = new List<Action>();
     for (int i = 0; i < _actions.length; i++) {
