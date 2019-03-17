@@ -94,7 +94,7 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
           break;
 
         case Repository.GetOperations:
-          getWidget().addAction(new ApplicationAction(Actions.HideHorizontalProgress));
+          getWidget().addAction(new ApplicationAction(Actions.HideHorizontalProgress).setStateNonChanged());
           getWidget().addAction(new DataAction(Repository.GetOperations).setData(result.getData()));
           break;
       }
