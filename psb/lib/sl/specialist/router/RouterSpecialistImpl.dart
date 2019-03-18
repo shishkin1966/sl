@@ -7,6 +7,16 @@ class RouterSpecialistImpl extends AbsSpecialist implements RouterSpecialist {
   static const String NAME = "RouterSpecialistImpl";
 
   @override
+  int compareTo(other) {
+    return (other is RouterSpecialist) ? 0 : 1;
+  }
+
+  @override
+  String getName() {
+    return NAME;
+  }
+
+  @override
   void showScreen(BuildContext context, String screen) {
     Navigator.of(context).pushNamed(screen);
   }
@@ -38,12 +48,8 @@ class RouterSpecialistImpl extends AbsSpecialist implements RouterSpecialist {
   }
 
   @override
-  int compareTo(other) {
-    return (other is RouterSpecialist) ? 0 : 1;
-  }
-
-  @override
-  String getName() {
-    return NAME;
+  Future showScreenWithResult(BuildContext context, String screen) async {
+    dynamic result = await Navigator.of(context).pushNamed(screen);
+    return result;
   }
 }
