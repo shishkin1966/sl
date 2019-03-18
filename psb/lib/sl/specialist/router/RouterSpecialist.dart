@@ -14,4 +14,6 @@ abstract class RouterSpecialist extends Specialist {
   void showWidget(BuildContext context, WidgetBuilder builder);
 
   Future showWidgetWithResult(BuildContext context, WidgetBuilder builder);
+
+  Future showScreenWithResult(BuildContext context, String screen);
 }

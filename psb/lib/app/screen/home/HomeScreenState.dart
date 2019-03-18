@@ -281,6 +281,13 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
             color: Color(0xffffffff),
             child: InkWell(
               onTap: () {
+                _showEditOperationName(context, _data.operations[position]).then((onValue) {
+                  if (!StringUtils.isNullOrEmpty(onValue)) {
+                    _data.operations[position].name = onValue;
+                    setState(() {});
+                  }
+                });
+                /*
                 SLUtil.getRouterSpecialist()
                     .showWidgetWithResult(context, (context) => _showOperation(context, _data.operations[position]))
                     .then((onValue) {
@@ -289,6 +296,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                     setState(() {});
                   }
                 });
+                */
                 //SLUtil.getUISpecialist().showToast("OnTapOperation:" + _data.operations[position].name);
                 //SLUtil.getRouterSpecialist().showOperationScreen(context, _data.operations[position]);
               },
@@ -376,22 +384,28 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
     );
   }
 
-  Widget _showOperation(BuildContext context, Operation operation) {
-    TextEditingController controller = new TextEditingController(text: operation.name);
-    controller.selection = new TextSelection(baseOffset: operation.name.length, extentOffset: operation.name.length);
-    return AlertDialog(
-      title: new Text(SLUtil.getString(context, "operation")),
-      content: new TextFormField(
-        controller: controller,
-      ),
-      actions: <Widget>[
-        new FlatButton(
-          child: new Text(SLUtil.getString(context, "ok")),
-          onPressed: () {
-            Navigator.of(context).pop(controller.text);
-          },
-        ),
-      ],
+  Future _showEditOperationName(BuildContext context, Operation operation) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        TextEditingController controller = new TextEditingController(text: operation.name);
+        controller.selection =
+            new TextSelection(baseOffset: operation.name.length, extentOffset: operation.name.length);
+        return AlertDialog(
+          title: new Text(SLUtil.getString(context, "operation")),
+          content: new TextFormField(
+            controller: controller,
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text(SLUtil.getString(context, "ok")),
+              onPressed: () {
+                Navigator.of(context).pop(controller.text);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
