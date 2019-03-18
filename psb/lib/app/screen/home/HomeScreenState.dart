@@ -377,8 +377,8 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
   }
 
   Widget _showOperation(BuildContext context, Operation operation) {
-    TextEditingController controller = TextEditingController();
-    controller.text = operation.name;
+    TextEditingController controller = new TextEditingController(text: operation.name);
+    controller.selection = new TextSelection(baseOffset: operation.name.length, extentOffset: operation.name.length);
     return AlertDialog(
       title: new Text(SLUtil.getString(context, "operation")),
       content: new TextFormField(
