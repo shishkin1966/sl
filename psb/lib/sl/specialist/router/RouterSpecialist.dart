@@ -3,15 +3,11 @@ import 'package:psb/app/data/Operation.dart';
 import 'package:psb/sl/Specialist.dart';
 
 abstract class RouterSpecialist extends Specialist {
-  void showAccountsScreen(BuildContext context);
+  void showScreen(BuildContext context, String screen);
 
-  void showSettingsScreen(BuildContext context);
+  void showScreenAndRemoveUntil(BuildContext context, String screen);
+
+  void removeScreenUntil(BuildContext context, String screen);
 
   void showOperationScreen(BuildContext context, Operation operation);
-
-  void showRatesScreen(BuildContext context);
-
-  void showAddressScreen(BuildContext context);
-
-  void showContactsScreen(BuildContext context);
 }
