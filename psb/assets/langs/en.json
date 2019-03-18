@@ -1,5 +1,7 @@
 ﻿{
   "exit": "Exit",
+  "ok": "Ok",
+  "operation": "Operation",
   "press_twice": "Press again to exit",
   "no_connectivity": "The network is not available",
   "user": "Shishkin Oleg Georgievich",

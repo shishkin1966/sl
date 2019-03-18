@@ -10,4 +10,8 @@ abstract class RouterSpecialist extends Specialist {
   void removeScreenUntil(BuildContext context, String screen);
 
   void showOperationScreen(BuildContext context, Operation operation);
+
+  void showWidget(BuildContext context, WidgetBuilder builder);
+
+  Future showWidgetWithResult(BuildContext context, WidgetBuilder builder);
 }
