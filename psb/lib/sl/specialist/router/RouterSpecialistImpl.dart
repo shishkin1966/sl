@@ -23,7 +23,18 @@ class RouterSpecialistImpl extends AbsSpecialist implements RouterSpecialist {
 
   @override
   void showOperationScreen(BuildContext context, Operation operation) {
-//    Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => new OperationScreen(operation)));
+    //Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => new OperationScreen(operation)));
+  }
+
+  @override
+  void showWidget(BuildContext context, WidgetBuilder builder) {
+    Navigator.push(context, new MaterialPageRoute(builder: builder));
+  }
+
+  @override
+  Future showWidgetWithResult(BuildContext context, WidgetBuilder builder) async {
+    dynamic result = await Navigator.push(context, new MaterialPageRoute(builder: builder));
+    return result;
   }
 
   @override

@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:psb/app/data/Operation.dart';
 import 'package:psb/app/screen/drawer/ExtDrawerPresenter.dart';
 import 'package:psb/app/screen/drawer/ExtDrawerWidget.dart';
 import 'package:psb/app/screen/home/HomeScreenData.dart';
 import 'package:psb/app/screen/home/HomeScreenPresenter.dart';
 import 'package:psb/app/screen/home/HomeScreenWidget.dart';
+import 'package:psb/common/StringUtils.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/Actions.dart';
@@ -279,8 +281,16 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
             color: Color(0xffffffff),
             child: InkWell(
               onTap: () {
-                SLUtil.getUISpecialist().showToast("OnTapOperation:" + _data.operations[position].name);
-                SLUtil.getRouterSpecialist().showOperationScreen(context, _data.operations[position]);
+                SLUtil.getRouterSpecialist()
+                    .showWidgetWithResult(context, (context) => _showOperation(context, _data.operations[position]))
+                    .then((onValue) {
+                  if (!StringUtils.isNullOrEmpty(onValue)) {
+                    _data.operations[position].name = onValue;
+                    setState(() {});
+                  }
+                });
+                //SLUtil.getUISpecialist().showToast("OnTapOperation:" + _data.operations[position].name);
+                //SLUtil.getRouterSpecialist().showOperationScreen(context, _data.operations[position]);
               },
               child: new Column(
                 mainAxisSize: MainAxisSize.min,
@@ -363,6 +373,25 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
           Color(0xff00ff00),
         ),
       ),
+    );
+  }
+
+  Widget _showOperation(BuildContext context, Operation operation) {
+    TextEditingController controller = TextEditingController();
+    controller.text = operation.name;
+    return AlertDialog(
+      title: new Text(SLUtil.getString(context, "operation")),
+      content: new TextFormField(
+        controller: controller,
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          child: new Text(SLUtil.getString(context, "ok")),
+          onPressed: () {
+            Navigator.of(context).pop(controller.text);
+          },
+        ),
+      ],
     );
   }
 }
