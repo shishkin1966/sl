@@ -186,7 +186,7 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
   void onAction(final Action action) {}
 
   @override
-  Widget build(BuildContext context) {}
+  Widget build(BuildContext context);
 
   void setVisible(String widget) {
     if (!_visibled.contains(widget)) {
