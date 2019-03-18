@@ -18,6 +18,7 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
   SnackBar snackbar;
   List<String> _visibled = new List();
   GlobalKey _scaffoldKey = new GlobalKey();
+  Timer _debounce;
 
   WidgetState() {
     _presenter = createPresenter();
@@ -91,6 +92,7 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
   @override
   void dispose() {
     _subscription.cancel();
+    if (_debounce?.isActive ?? false) _debounce.cancel();
     _lifecycle.setState(States.StateDestroy);
     WidgetsBinding.instance.removeObserver(this);
 
@@ -117,7 +119,7 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
     }
   }
 
-  void addAction(final Action action) {
+  void addAction(Action action) {
     if (action == null) return;
 
     final String state = getState();
@@ -135,6 +137,13 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
         _doActions();
         break;
     }
+  }
+
+  void addActionDebounced(final Action action, int duration) {
+    if (_debounce?.isActive ?? false) _debounce.cancel();
+    _debounce = Timer(Duration(milliseconds: duration), () {
+      addAction(action);
+    });
   }
 
   void addActions(List<Action> actions) {
@@ -177,7 +186,7 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
   void onAction(final Action action) {}
 
   @override
-  Widget build(BuildContext context) {}
+  Widget build(BuildContext context);
 
   void setVisible(String widget) {
     if (!_visibled.contains(widget)) {

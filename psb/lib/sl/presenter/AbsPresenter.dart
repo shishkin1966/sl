@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:psb/sl/SL.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/data/Result.dart';
@@ -13,6 +15,7 @@ abstract class AbsPresenter<M extends WidgetState> implements Presenter<M> {
   StateObserver _lifecycle;
   WidgetState _lifecycleState;
   List<Action> _actions = new List<Action>();
+  Timer _debounce;
 
   AbsPresenter(M lifecycleState) {
     _lifecycleState = lifecycleState;
@@ -42,6 +45,13 @@ abstract class AbsPresenter<M extends WidgetState> implements Presenter<M> {
         _doActions();
         break;
     }
+  }
+
+  void addActionDebounced(final Action action, int duration) {
+    if (_debounce?.isActive ?? false) _debounce.cancel();
+    _debounce = Timer(Duration(milliseconds: duration), () {
+      addAction(action);
+    });
   }
 
   void addActions(List<Action> actions) {
@@ -83,6 +93,7 @@ abstract class AbsPresenter<M extends WidgetState> implements Presenter<M> {
 
   @override
   void onDestroy() {
+    if (_debounce?.isActive ?? false) _debounce.cancel();
     SL.instance.unregisterSubscriber(this);
   }
 

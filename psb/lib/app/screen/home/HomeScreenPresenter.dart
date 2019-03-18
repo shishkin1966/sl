@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:psb/app/ApplicationData.dart';
 import 'package:psb/app/screen/drawer/ExtDrawerPresenter.dart';
 import 'package:psb/sl/SLUtil.dart';
@@ -31,25 +32,26 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
   void onAction(Action action) {
     if (action is ApplicationAction) {
       String actionName = action.getName();
+      BuildContext context = getWidget().getScaffoldState().context;
       switch (actionName) {
         case Router.ShowAccountsScreen:
-          SLUtil.getRouterSpecialist().showAccountsScreen(getWidget().getScaffoldState().context);
+          SLUtil.getRouterSpecialist().showScreen(context, Router.ShowAccountsScreen);
           break;
 
         case Router.ShowSettingsScreen:
-          SLUtil.getRouterSpecialist().showSettingsScreen(getWidget().getScaffoldState().context);
+          SLUtil.getRouterSpecialist().showScreen(context, Router.ShowSettingsScreen);
           break;
 
         case Router.ShowRatesScreen:
-          SLUtil.getRouterSpecialist().showRatesScreen(getWidget().getScaffoldState().context);
+          SLUtil.getRouterSpecialist().showScreen(context, Router.ShowRatesScreen);
           break;
 
         case Router.ShowAddressScreen:
-          SLUtil.getRouterSpecialist().showAddressScreen(getWidget().getScaffoldState().context);
+          SLUtil.getRouterSpecialist().showScreen(context, Router.ShowAddressScreen);
           break;
 
         case Router.ShowContactsScreen:
-          SLUtil.getRouterSpecialist().showContactsScreen(getWidget().getScaffoldState().context);
+          SLUtil.getRouterSpecialist().showScreen(context, Router.ShowContactsScreen);
           break;
 
         case CreateAccount:
