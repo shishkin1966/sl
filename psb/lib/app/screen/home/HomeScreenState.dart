@@ -392,6 +392,8 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
         controller.selection =
             new TextSelection(baseOffset: operation.name.length, extentOffset: operation.name.length);
         return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(Dimen.Dimen_12))),
+          contentPadding: EdgeInsets.fromLTRB(Dimen.Dimen_12, 0, Dimen.Dimen_12, 0),
           title: new Text(SLUtil.getString(context, "operation")),
           content: new TextFormField(
             controller: controller,
