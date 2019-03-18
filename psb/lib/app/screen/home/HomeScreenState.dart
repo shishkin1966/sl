@@ -10,6 +10,7 @@ import 'package:psb/app/screen/home/HomeScreenData.dart';
 import 'package:psb/app/screen/home/HomeScreenPresenter.dart';
 import 'package:psb/app/screen/home/HomeScreenWidget.dart';
 import 'package:psb/common/StringUtils.dart';
+import 'package:psb/common/WithoutGlowBehavior.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/Actions.dart';
@@ -181,80 +182,83 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                 }
               }
             },
-            child: new ListView(
-              children: <Widget>[
-                new Material(
-                  color: Color(0xff377ad0),
-                  child: InkWell(
-                    onTap: () {
-                      SLUtil.getUISpecialist().showToast('OnTapPayments');
-                      _bottomPosition = RolledBottomMenuHeight;
-                      setState(() {});
-                    },
-                    child: new Container(
-                      padding: EdgeInsets.fromLTRB(Dimen.Dimen_12, 0, Dimen.Dimen_12, 0),
-                      height: Dimen.Dimen_40,
-                      child: new Align(
-                        alignment: Alignment.centerLeft,
-                        child: new Text(
-                          SLUtil.getString(context, 'payments'),
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+            child: new ScrollConfiguration(
+              behavior: new WithoutGlowBehavior(),
+              child: new ListView(
+                children: <Widget>[
+                  new Material(
+                    color: Color(0xff377ad0),
+                    child: InkWell(
+                      onTap: () {
+                        SLUtil.getUISpecialist().showToast('OnTapPayments');
+                        _bottomPosition = RolledBottomMenuHeight;
+                        setState(() {});
+                      },
+                      child: new Container(
+                        padding: EdgeInsets.fromLTRB(Dimen.Dimen_12, 0, Dimen.Dimen_12, 0),
+                        height: Dimen.Dimen_40,
+                        child: new Align(
+                          alignment: Alignment.centerLeft,
+                          child: new Text(
+                            SLUtil.getString(context, 'payments'),
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                new Container(
-                  height: 1,
-                  color: Color(0xffd9d9d9),
-                ),
-                new Material(
-                  color: Color(0xff377ad0),
-                  child: InkWell(
-                    onTap: () {
-                      SLUtil.getUISpecialist().showToast('OnTapSortBy');
-                      _bottomPosition = RolledBottomMenuHeight;
-                      setState(() {});
-                    },
-                    child: new Container(
-                      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
-                      height: Dimen.Dimen_40,
-                      child: new Align(
-                        alignment: Alignment.centerLeft,
-                        child: new Text(
-                          SLUtil.getString(context, 'sort_by'),
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+                  new Container(
+                    height: 1,
+                    color: Color(0xffd9d9d9),
+                  ),
+                  new Material(
+                    color: Color(0xff377ad0),
+                    child: InkWell(
+                      onTap: () {
+                        SLUtil.getUISpecialist().showToast('OnTapSortBy');
+                        _bottomPosition = RolledBottomMenuHeight;
+                        setState(() {});
+                      },
+                      child: new Container(
+                        padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                        height: Dimen.Dimen_40,
+                        child: new Align(
+                          alignment: Alignment.centerLeft,
+                          child: new Text(
+                            SLUtil.getString(context, 'sort_by'),
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                new Container(
-                  height: 1,
-                  color: Color(0xffd9d9d9),
-                ),
-                new Material(
-                  color: Color(0xff377ad0),
-                  child: InkWell(
-                    onTap: () {
-                      SLUtil.getUISpecialist().showToast('OnTapSelectBy');
-                      _bottomPosition = RolledBottomMenuHeight;
-                      setState(() {});
-                    },
-                    child: new Container(
-                      padding: EdgeInsets.fromLTRB(Dimen.Dimen_12, 0, Dimen.Dimen_12, 0),
-                      height: Dimen.Dimen_40,
-                      child: new Align(
-                        alignment: Alignment.centerLeft,
-                        child: new Text(
-                          SLUtil.getString(context, 'select_by'),
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+                  new Container(
+                    height: 1,
+                    color: Color(0xffd9d9d9),
+                  ),
+                  new Material(
+                    color: Color(0xff377ad0),
+                    child: InkWell(
+                      onTap: () {
+                        SLUtil.getUISpecialist().showToast('OnTapSelectBy');
+                        _bottomPosition = RolledBottomMenuHeight;
+                        setState(() {});
+                      },
+                      child: new Container(
+                        padding: EdgeInsets.fromLTRB(Dimen.Dimen_12, 0, Dimen.Dimen_12, 0),
+                        height: Dimen.Dimen_40,
+                        child: new Align(
+                          alignment: Alignment.centerLeft,
+                          child: new Text(
+                            SLUtil.getString(context, 'select_by'),
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           )),
     );
