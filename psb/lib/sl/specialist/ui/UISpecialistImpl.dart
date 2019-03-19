@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:psb/common/StringUtils.dart';
@@ -48,35 +49,54 @@ class UISpecialistImpl extends AbsSpecialist implements UISpecialist {
   }
 
   @override
-  SnackBar getSnackBar(String text, Duration duration) {
-    return SnackBar(
-      backgroundColor: Color(0xff404040),
-      duration: duration,
-      content: Text(text),
-    );
-  }
-
-  @override
-  SnackBar getSnackBarWithAction(String text, Duration duration, String actionText, Action action) {
-    return SnackBar(
-      backgroundColor: Color(0xff404040),
-      duration: duration,
-      content: Text(text),
-      action: SnackBarAction(
-        label: actionText,
-        onPressed: () {
-          SLUtil.addMessage(new ActionMessage.action(Application.NAME, action));
-        },
-      ),
-    );
+  SnackBar getSnackBar(String text,
+      {Duration duration = const Duration(seconds: 4), String actionText, Action action}) {
+    if (StringUtils.isNullOrEmpty(actionText)) {
+      return new SnackBar(
+        backgroundColor: Color(0xff404040),
+        duration: duration,
+        content: Text(text),
+      );
+    } else {
+      return new SnackBar(
+        backgroundColor: Color(0xff404040),
+        duration: duration,
+        content: Text(text),
+        action: SnackBarAction(
+          label: actionText,
+          onPressed: () {
+            SLUtil.addMessage(new ActionMessage.action(Application.NAME, action));
+          },
+        ),
+      );
+    }
   }
 
   @override
   SnackBar getNoConnectivitySnackBar(String text) {
-    return SnackBar(
+    return new SnackBar(
       backgroundColor: Color(0xffff5514),
       duration: new Duration(days: 1),
       content: Text(text),
+    );
+  }
+
+  @override
+  Flushbar getFlushbar(String text,
+      {String title,
+      Duration duration,
+      flushbarPosition = FlushbarPosition.TOP,
+      backgroundColor = const Color(0xff404040),
+      icon,
+      bool isDismissible = true}) {
+    return new Flushbar(
+      message: text,
+      isDismissible: isDismissible,
+      title: title,
+      duration: duration,
+      flushbarPosition: flushbarPosition,
+      backgroundColor: backgroundColor,
+      icon: icon,
     );
   }
 }
