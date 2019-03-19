@@ -87,8 +87,8 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
             state.removeCurrentSnackBar();
             snackbar = null;
           }
-          snackbar = SLUtil.getUISpecialist().getSnackBarWithAction(
-              text, new Duration(seconds: 4), actionName, new ApplicationAction(Actions.ExitApplication));
+          snackbar = SLUtil.getUISpecialist()
+              .getSnackBar(text, actionText: actionName, action: new ApplicationAction(Actions.ExitApplication));
           state.showSnackBar(snackbar);
           Future.delayed(const Duration(seconds: 4), () {
             _exitCount = 0;
