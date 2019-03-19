@@ -2,6 +2,7 @@ import 'package:psb/sl/Specialist.dart';
 import 'package:psb/sl/SpecialistFactory.dart';
 import 'package:psb/sl/specialist/desktop/DesktopSpecialistImpl.dart';
 import 'package:psb/sl/specialist/error/ErrorSpecialistImpl.dart';
+import 'package:psb/sl/specialist/finger/FingerprintSpecialistImpl.dart';
 import 'package:psb/sl/specialist/messager/MessengerUnionImpl.dart';
 import 'package:psb/sl/specialist/observable/ObservableUnionImpl.dart';
 import 'package:psb/sl/specialist/preferences/PreferencesSpecialistImpl.dart';
@@ -44,6 +45,9 @@ class ServiceLocatorSpecialistFactory implements SpecialistFactory {
 
       case RouterSpecialistImpl.NAME:
         return new RouterSpecialistImpl();
+
+      case FingerprintSpecialistImpl.NAME:
+        return new FingerprintSpecialistImpl();
     }
     return null;
   }
