@@ -7,5 +7,5 @@ abstract class FingerprintSpecialist extends Specialist {
 
   Future<List<BiometricType>> getAvailableBiometrics();
 
-  Future<Result> authenticateWithBiometrics({String localizedReason, bool useErrorDialogs, bool stickyAuth});
+  Future<Result> authenticateWithBiometrics(String localizedReason, {bool useErrorDialogs, bool stickyAuth});
 }

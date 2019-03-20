@@ -79,6 +79,22 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
   void onReady() {
     super.onReady();
 
+    SLUtil.getFingerprintSpecialist().hasBiometrics().then((hasBiometrics) {
+      if (hasBiometrics) {
+        SLUtil.getFingerprintSpecialist().authenticateWithBiometrics("Отпечаток пальца").then((result) {
+          if (result.hasError()) {
+            SLUtil.getUISpecialist().showToast(result.getErrorText());
+          } else {
+            _getdata();
+          }
+        });
+      } else {
+        _getdata();
+      }
+    });
+  }
+
+  void _getdata() {
     getWidget().addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
     // Получим счета
     SLUtil.getRepositorySpecialist().getAccounts(NAME);

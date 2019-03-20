@@ -46,7 +46,8 @@ class FingerprintSpecialistImpl extends AbsSpecialist implements FingerprintSpec
   }
 
   @override
-  Future<Result> authenticateWithBiometrics({String localizedReason, bool useErrorDialogs, bool stickyAuth}) async {
+  Future<Result> authenticateWithBiometrics(String localizedReason,
+      {bool useErrorDialogs = true, bool stickyAuth = false}) async {
     bool authenticate = false;
     Result result = new Result(authenticate);
     try {
