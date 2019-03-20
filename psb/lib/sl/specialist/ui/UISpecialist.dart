@@ -21,4 +21,7 @@ abstract class UISpecialist extends Specialist {
     icon,
     bool isDismissible,
   });
+
+  Flushbar getErrorFlushbar(
+    String text);
 }

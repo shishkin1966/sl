@@ -1,5 +1,6 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:psb/common/StringUtils.dart';
 import 'package:psb/sl/AbsSpecialist.dart';
@@ -88,6 +89,7 @@ class UISpecialistImpl extends AbsSpecialist implements UISpecialist {
       flushbarPosition = FlushbarPosition.TOP,
       backgroundColor = const Color(0xff404040),
       icon,
+      dismissDirection = FlushbarDismissDirection.HORIZONTAL,
       bool isDismissible = true}) {
     return new Flushbar(
       message: text,
@@ -97,6 +99,22 @@ class UISpecialistImpl extends AbsSpecialist implements UISpecialist {
       flushbarPosition: flushbarPosition,
       backgroundColor: backgroundColor,
       icon: icon,
+    );
+  }
+
+  @override
+  Flushbar getErrorFlushbar(String text, {String title}) {
+    return new Flushbar(
+      message: text,
+      isDismissible: true,
+      dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+      title: title,
+      duration: new Duration(seconds: 8),
+      flushbarPosition: FlushbarPosition.TOP,
+      backgroundColor: Color(0xffff5514),
+      icon: new SvgPicture.asset(
+        "assets/vector/ic_error.svg",
+      ),
     );
   }
 }

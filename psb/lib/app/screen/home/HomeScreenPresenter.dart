@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:psb/app/ApplicationData.dart';
 import 'package:psb/app/screen/drawer/ExtDrawerPresenter.dart';
@@ -83,7 +84,8 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
       if (hasBiometrics) {
         SLUtil.getFingerprintSpecialist().authenticateWithBiometrics("Отпечаток пальца").then((result) {
           if (result.hasError()) {
-            SLUtil.getUISpecialist().showToast(result.getErrorText());
+            Flushbar flushbar = SLUtil.getUISpecialist().getErrorFlushbar(result.getErrorText());
+            flushbar.show(getWidget().context);
           } else {
             _getdata();
           }
