@@ -4,6 +4,7 @@ import 'package:psb/sl/SpecialistFactory.dart';
 import 'package:psb/sl/observe/ObjectObservable.dart';
 import 'package:psb/sl/specialist/desktop/DesktopSpecialistImpl.dart';
 import 'package:psb/sl/specialist/error/ErrorSpecialistImpl.dart';
+import 'package:psb/sl/specialist/finger/FingerprintSpecialistImpl.dart';
 import 'package:psb/sl/specialist/messager/MessengerUnionImpl.dart';
 import 'package:psb/sl/specialist/observable/ObservableUnion.dart';
 import 'package:psb/sl/specialist/observable/ObservableUnionImpl.dart';
@@ -55,6 +56,9 @@ class SL extends AbsServiceLocator {
 
     // Специалист Router
     registerSpecialistByName(RouterSpecialistImpl.NAME);
+
+    // Специалист Fingerprint
+    registerSpecialistByName(FingerprintSpecialistImpl.NAME);
   }
 
   static SL get instance => _sl;

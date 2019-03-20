@@ -7,6 +7,8 @@ import 'package:psb/sl/observe/ObjectObservable.dart';
 import 'package:psb/sl/specialist/desktop/DesktopSpecialist.dart';
 import 'package:psb/sl/specialist/desktop/DesktopSpecialistImpl.dart';
 import 'package:psb/sl/specialist/error/ErrorSpecialistImpl.dart';
+import 'package:psb/sl/specialist/finger/FingerPrintSpecialist.dart';
+import 'package:psb/sl/specialist/finger/FingerprintSpecialistImpl.dart';
 import 'package:psb/sl/specialist/messager/MessengerUnion.dart';
 import 'package:psb/sl/specialist/messager/MessengerUnionImpl.dart';
 import 'package:psb/sl/specialist/observable/ObservableUnion.dart';
@@ -59,6 +61,10 @@ class SLUtil {
 
   static RouterSpecialist getRouterSpecialist() {
     return SL.instance.get(RouterSpecialistImpl.NAME);
+  }
+
+  static FingerprintSpecialist getFingerprintSpecialist() {
+    return SL.instance.get(FingerprintSpecialistImpl.NAME);
   }
 
   static void onChange(String object) {
