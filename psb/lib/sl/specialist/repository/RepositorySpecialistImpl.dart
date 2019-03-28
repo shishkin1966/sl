@@ -19,7 +19,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   void getAccounts(String subscriber) {
     Future.delayed(const Duration(seconds: 2), () {
       List<Account> list = new List();
-      list.add(new Account(new Currency("RUB"), 220000));
+      list.add(new Account(new Currency("RUB"), 364500));
       list.add(new Account(new Currency("USD"), 11500));
       ResultMessage message =
           new ResultMessage.result(subscriber, new Result<List<Account>>(list).setName(Repository.GetAccounts));

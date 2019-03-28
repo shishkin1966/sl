@@ -1,4 +1,5 @@
 import 'package:psb/sl/action/Action.dart';
+import 'package:psb/sl/action/ActionSubscriber.dart';
 import 'package:psb/sl/message/AbsMessage.dart';
 import 'package:psb/sl/message/Message.dart';
 import 'package:psb/sl/specialist/messager/MessengerSubscriber.dart';
@@ -28,7 +29,11 @@ class ActionMessage extends AbsMessage {
 
   @override
   void read(MessengerSubscriber subscriber) {
-    subscriber.read(this);
+    if (subscriber is ActionSubscriber) {
+      (subscriber as ActionSubscriber).addAction(_action);
+    } else {
+      subscriber.read(this);
+    }
   }
 
   ActionMessage setAction(Action action) {
