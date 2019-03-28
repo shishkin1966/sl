@@ -31,6 +31,8 @@ class ActionMessage extends AbsMessage {
   void read(MessengerSubscriber subscriber) {
     if (subscriber is ActionSubscriber) {
       (subscriber as ActionSubscriber).addAction(_action);
+    } else {
+      subscriber.read(this);
     }
   }
 

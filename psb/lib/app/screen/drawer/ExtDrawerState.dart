@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:psb/app/ApplicationData.dart';
+import 'package:psb/app/common/AccountInheritedWidget.dart';
 import 'package:psb/app/data/Account.dart';
 import 'package:psb/app/screen/drawer/ExtDrawerPresenter.dart';
 import 'package:psb/app/screen/drawer/ExtDrawerWidget.dart';
@@ -315,29 +316,27 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
       switch (actionName) {
         case Actions.Refresh:
           action.setStateNonChanged();
-          if (_accountsKey.currentState != null) {
-            (_accountsKey.currentState as InheritedAccountsState).onChange(ApplicationData.instance.accounts);
-          }
+          (_accountsKey.currentState as AccountsWidgetState)?.onChange(ApplicationData.instance.accounts);
           break;
       }
     }
   }
 
   Widget _getAccountsWidget() {
-    return new InheritedAccounts(
+    return new AccountsWidget(
       key: _accountsKey,
     );
   }
 }
 
-class InheritedAccounts extends StatefulWidget {
-  InheritedAccounts({Key key}) : super(key: key);
+class AccountsWidget extends StatefulWidget {
+  AccountsWidget({Key key}) : super(key: key);
 
   @override
-  InheritedAccountsState createState() => new InheritedAccountsState();
+  AccountsWidgetState createState() => new AccountsWidgetState();
 }
 
-class InheritedAccountsState extends State<InheritedAccounts> {
+class AccountsWidgetState extends State<AccountsWidget> {
   List<Account> _accounts = ApplicationData.instance.accounts;
 
   void onChange(List<Account> accounts) {
@@ -348,13 +347,12 @@ class InheritedAccountsState extends State<InheritedAccounts> {
 
   @override
   Widget build(BuildContext context) {
-    return new _InheritedAccounts(
-      data: this,
-      child: _getAccountsWidget(),
+    return new AccountInheritedWidget(
+      child: _getWidget(),
     );
   }
 
-  Widget _getAccountsWidget() {
+  Widget _getWidget() {
     return new Column(
       children: <Widget>[
         ApplicationData.instance.accounts.isEmpty
@@ -417,16 +415,5 @@ class InheritedAccountsState extends State<InheritedAccounts> {
       );
     }
     return list;
-  }
-}
-
-class _InheritedAccounts extends InheritedWidget {
-  final InheritedAccountsState data;
-
-  _InheritedAccounts({this.data, Widget child}) : super(child: child);
-
-  @override
-  bool updateShouldNotify(_InheritedAccounts old) {
-    return true;
   }
 }
