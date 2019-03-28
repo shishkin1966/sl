@@ -15,11 +15,14 @@ import 'package:psb/sl/specialist/repository/RepositorySpecialist.dart';
 class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecialist {
   static const String NAME = "RepositorySpecialistImpl";
 
+  double count = 100000;
+
   @override
   void getAccounts(String subscriber) {
     Future.delayed(const Duration(seconds: 2), () {
       List<Account> list = new List();
-      list.add(new Account(new Currency("RUB"), 220000));
+      list.add(new Account(new Currency("RUB"), count));
+      count += 100000;
       list.add(new Account(new Currency("USD"), 11500));
       ResultMessage message =
           new ResultMessage.result(subscriber, new Result<List<Account>>(list).setName(Repository.GetAccounts));

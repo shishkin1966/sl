@@ -40,4 +40,12 @@ class ExtDrawerPresenter<ExtDrawerState extends WidgetState> extends AbsPresente
       }
     }
   }
+
+  @override
+  void onReady() {
+    super.onReady();
+
+    // Получим счета
+    SLUtil.getRepositorySpecialist().getAccounts(HomeScreenPresenter.NAME);
+  }
 }

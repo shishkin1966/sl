@@ -308,10 +308,101 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
     return list;
   }
 
+  @override
+  void onAction(final Action action) {
+    if (action is ApplicationAction) {
+      String actionName = action.getName();
+      switch (actionName) {
+        case Actions.Refresh:
+          action.setStateNonChanged();
+          if (_accountsKey.currentState != null) {
+            (_accountsKey.currentState as InheritedAccountsState).onChange(ApplicationData.instance.accounts);
+          }
+          break;
+      }
+    }
+  }
+
+  Widget _getAccountsWidget() {
+    return new InheritedAccounts(
+      key: _accountsKey,
+    );
+  }
+}
+
+class InheritedAccounts extends StatefulWidget {
+  InheritedAccounts({Key key}) : super(key: key);
+
+  @override
+  InheritedAccountsState createState() => new InheritedAccountsState();
+}
+
+class InheritedAccountsState extends State<InheritedAccounts> {
+  List<Account> _accounts = ApplicationData.instance.accounts;
+
+  void onChange(List<Account> accounts) {
+    setState(() {
+      _accounts = accounts;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new _InheritedAccounts(
+      data: this,
+      child: _getAccountsWidget(),
+    );
+  }
+
+  Widget _getAccountsWidget() {
+    return new Column(
+      children: <Widget>[
+        ApplicationData.instance.accounts.isEmpty
+            ? new Container()
+            : new Material(
+                color: Color(0xff377ad0),
+                child: InkWell(
+                  onTap: () {
+                    SLUtil.getPresenterUnion()
+                        .getPresenter(ExtDrawerPresenter.NAME)
+                        ?.addAction(new ApplicationAction(Router.ShowAccountsScreen));
+                  },
+                  child: new Container(
+                    padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
+                    child: new Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        new Expanded(
+                          child: new Text(
+                            SLUtil.getString(context, 'accounts'),
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                        ),
+                        new Container(
+                          child: new Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: _getAccounts(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+        ApplicationData.instance.accounts.isEmpty
+            ? new Container()
+            : new Container(
+                height: 1,
+                color: Color(0xffd9d9d9),
+              ),
+      ],
+    );
+  }
+
   List<Widget> _getAccounts() {
     List<Widget> list = new List();
-    int length = ApplicationData.instance.accounts.length;
-    for (Account account in ApplicationData.instance.accounts) {
+    int length = _accounts.length;
+    for (Account account in _accounts) {
       list.add(
         new Row(
           mainAxisSize: MainAxisSize.max,
@@ -327,87 +418,12 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
     }
     return list;
   }
-
-  @override
-  void onAction(final Action action) {
-    if (action is ApplicationAction) {
-      String actionName = action.getName();
-      switch (actionName) {
-        case Actions.Refresh:
-          action.setStateNonChanged();
-          _accountsKey.currentState.setState(() {});
-          break;
-      }
-    }
-  }
-
-  Widget _getAccountsWidget() {
-    return new InheritedAccounts(
-      key: _accountsKey,
-      child: new Column(
-        children: <Widget>[
-          ApplicationData.instance.accounts.isEmpty
-              ? new Container()
-              : new Material(
-                  color: Color(0xff377ad0),
-                  child: InkWell(
-                    onTap: () {
-                      getPresenter().addAction(new ApplicationAction(Router.ShowAccountsScreen));
-                    },
-                    child: new Container(
-                      padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
-                      child: new Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          new Expanded(
-                            child: new Text(
-                              SLUtil.getString(context, 'accounts'),
-                              style: TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                          ),
-                          new Container(
-                            child: new Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: _getAccounts(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-          ApplicationData.instance.accounts.isEmpty
-              ? new Container()
-              : new Container(
-                  height: 1,
-                  color: Color(0xffd9d9d9),
-                ),
-        ],
-      ),
-    );
-  }
-}
-
-class InheritedAccounts extends StatefulWidget {
-  Widget child;
-
-  InheritedAccounts({Key key, this.child}) : super(key: key);
-
-  @override
-  InheritedAccountsState createState() => new InheritedAccountsState();
-}
-
-class InheritedAccountsState extends State<InheritedAccounts> {
-  @override
-  Widget build(BuildContext context) {
-    return new _InheritedAccounts(
-      child: widget.child,
-    );
-  }
 }
 
 class _InheritedAccounts extends InheritedWidget {
-  _InheritedAccounts({Widget child}) : super(child: child);
+  final InheritedAccountsState data;
+
+  _InheritedAccounts({this.data, Widget child}) : super(child: child);
 
   @override
   bool updateShouldNotify(_InheritedAccounts old) {
