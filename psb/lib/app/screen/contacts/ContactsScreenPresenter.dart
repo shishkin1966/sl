@@ -33,7 +33,7 @@ class ContactsScreenPresenter<ContactsScreenState extends WidgetState> extends A
       switch (actionName) {
         case Actions.Refresh:
           _getContacts();
-          break;
+          return;
       }
     }
 
@@ -43,7 +43,7 @@ class ContactsScreenPresenter<ContactsScreenState extends WidgetState> extends A
         case ChangeFilter:
           _filter = action.getData();
           _getContacts();
-          break;
+          return;
       }
     }
   }
