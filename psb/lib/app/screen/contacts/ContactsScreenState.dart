@@ -1,7 +1,7 @@
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
-import 'package:psb/app/screen/contacts/ContactsScreenData.dart';
+import 'package:psb/app/common/DataWidget.dart';
 import 'package:psb/app/screen/contacts/ContactsScreenPresenter.dart';
 import 'package:psb/app/screen/contacts/ContactsScreenWidget.dart';
 import 'package:psb/sl/SLUtil.dart';
@@ -14,7 +14,8 @@ import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
-  ContactsScreenData _data = new ContactsScreenData();
+  GlobalKey _progressKey = new GlobalKey();
+  GlobalKey _contactsKey = new GlobalKey();
 
   @override
   Presenter<WidgetState<StatefulWidget>> createPresenter() {
@@ -31,7 +32,10 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
         key: getScaffoldKey(),
         backgroundColor: Color(0x00000000),
         body: new Builder(builder: (BuildContext context) {
-          return SafeArea(top: true, child: _getWidget());
+          return SafeArea(
+            top: true,
+            child: _getWidget(),
+          );
         }),
       ),
     );
@@ -52,7 +56,7 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
               children: <Widget>[
                 _showFilter(context, constraints),
                 new Expanded(
-                  child: _showContacts(context, constraints),
+                  child: new ContactsWidget(key: _contactsKey),
                   flex: 1,
                 ),
               ],
@@ -81,11 +85,93 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
     );
   }
 
-  Widget _showContacts(BuildContext context, BoxConstraints constraints) {
-    if (_data.contacts.isNotEmpty) {
+  Future<Null> _onRefresh() async {
+    (_contactsKey.currentState as ContactsWidgetState)?.onChange(new List());
+    getPresenter().addAction(new ApplicationAction(Actions.Refresh));
+    return null;
+  }
+
+  Widget _showHorizontalProgress(BuildContext context, BoxConstraints constraints) {
+    return new Positioned(
+      top: 0,
+      left: 0,
+      width: constraints.maxWidth,
+      child: new HorizontalProgressWidget(
+        key: _progressKey,
+      ),
+    );
+  }
+
+  @override
+  void onAction(final Action action) {
+    if (action is ApplicationAction) {
+      String actionName = action.getName();
+      switch (actionName) {
+        case Actions.ShowHorizontalProgress:
+          action.setStateNonChanged();
+          (_progressKey.currentState as HorizontalProgressWidgetState)?.onChange(true);
+          return;
+
+        case Actions.HideHorizontalProgress:
+          action.setStateNonChanged();
+          (_progressKey.currentState as HorizontalProgressWidgetState)?.onChange(false);
+          return;
+      }
+    }
+
+    if (action is DataAction) {
+      String actionName = action.getName();
+      switch (actionName) {
+        case Repository.GetContacts:
+          action.setStateNonChanged();
+          (_contactsKey.currentState as ContactsWidgetState)?.onChange(action.getData());
+          return;
+      }
+    }
+  }
+}
+
+class HorizontalProgressWidget extends DataWidget {
+  HorizontalProgressWidget({Key key}) : super(key: key);
+
+  @override
+  HorizontalProgressWidgetState createState() => new HorizontalProgressWidgetState(false);
+}
+
+class HorizontalProgressWidgetState extends DataWidgetState<bool> {
+  HorizontalProgressWidgetState(bool data) : super(data);
+
+  @override
+  Widget getWidget() {
+    if (getData()) {
+      return new LinearProgressIndicator(
+        backgroundColor: Color(0xffffffff),
+        valueColor: new AlwaysStoppedAnimation<Color>(
+          Color(0xff00ff00),
+        ),
+      );
+    } else {
+      return new Container();
+    }
+  }
+}
+
+class ContactsWidget extends DataWidget {
+  ContactsWidget({Key key}) : super(key: key);
+
+  @override
+  ContactsWidgetState createState() => new ContactsWidgetState(new List<Contact>());
+}
+
+class ContactsWidgetState extends DataWidgetState<List<Contact>> {
+  ContactsWidgetState(List<Contact> data) : super(data);
+
+  @override
+  Widget getWidget() {
+    if (getData().isNotEmpty) {
       return new ListView.builder(
           shrinkWrap: true,
-          itemCount: _data.contacts.length,
+          itemCount: getData().length,
           itemBuilder: (context, position) {
             return new Material(
               color: Color(0xffffffff),
@@ -112,7 +198,7 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
                                     child: new Container(
                                       padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
                                       child: new Text(
-                                        _data.contacts[position].displayName,
+                                        getData()[position].displayName,
                                         style: TextStyle(color: Colors.black, fontSize: 20),
                                       ),
                                     ),
@@ -138,60 +224,6 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
           });
     } else {
       return new Container();
-    }
-  }
-
-  Future<Null> _onRefresh() async {
-    getPresenter().addAction(new ApplicationAction(Actions.Refresh));
-    return null;
-  }
-
-  Widget _showHorizontalProgress(BuildContext context, BoxConstraints constraints) {
-    if (_data.progress) {
-      return new Positioned(
-        top: 0,
-        left: 0,
-        width: constraints.maxWidth,
-        child: new LinearProgressIndicator(
-          backgroundColor: Color(0xffffffff),
-          valueColor: new AlwaysStoppedAnimation<Color>(
-            Color(0xff00ff00),
-          ),
-        ),
-      );
-    } else {
-      return new Positioned(
-        top: 0,
-        left: 0,
-        height: 0,
-        width: constraints.maxWidth,
-        child: new Container(),
-      );
-    }
-  }
-
-  @override
-  void onAction(final Action action) {
-    if (action is ApplicationAction) {
-      String actionName = action.getName();
-      switch (actionName) {
-        case Actions.ShowHorizontalProgress:
-          _data.progress = true;
-          break;
-
-        case Actions.HideHorizontalProgress:
-          _data.progress = false;
-          break;
-      }
-    }
-
-    if (action is DataAction) {
-      String actionName = action.getName();
-      switch (actionName) {
-        case Repository.GetContacts:
-          _data.contacts = action.getData();
-          break;
-      }
     }
   }
 }

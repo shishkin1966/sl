@@ -143,21 +143,21 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
       switch (actionName) {
         case AddressScreenPresenter.LocationChanged:
           _data.location = action.getData();
-          LatLng l = new LatLng(_data.location.latitude, _data.location.longitude);
+          LatLng latlng = new LatLng(_data.location.latitude, _data.location.longitude);
           if (_mapController != null) {
-            _mapController.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(target: l, zoom: 12)));
+            _mapController.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latlng, zoom: 12)));
             if (_marker != null) {
-              _marker.copyWith(positionParam: l);
+              _marker.copyWith(positionParam: latlng);
             } else {
               _marker = new Marker(
                 markerId: new MarkerId("1"),
-                position: l,
+                position: latlng,
                 icon: BitmapDescriptor.fromAsset(AppUtils.getAssetImage(context, "pin.png")),
               );
               _markers[_marker.markerId] = _marker;
             }
           }
-          break;
+          return;
       }
     }
   }
