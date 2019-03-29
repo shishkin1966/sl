@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:psb/app/common/DataWidget.dart';
 import 'package:psb/app/data/Operation.dart';
 import 'package:psb/app/screen/drawer/ExtDrawerPresenter.dart';
 import 'package:psb/app/screen/drawer/ExtDrawerWidget.dart';
-import 'package:psb/app/screen/home/HomeScreenData.dart';
 import 'package:psb/app/screen/home/HomeScreenPresenter.dart';
 import 'package:psb/app/screen/home/HomeScreenWidget.dart';
 import 'package:psb/common/StringUtils.dart';
@@ -27,13 +27,12 @@ import 'package:psb/ui/WidgetState.dart';
 class HomeScreenState extends WidgetState<HomeScreenWidget> {
   static const double ExpandedBottomMenuHeight = 122;
   static const double RolledBottomMenuHeight = 42;
-  static const String WidgetHorizontalProgress = 'HorizontalProgress';
-  static const String WidgetRefreshOperations = 'WidgetRefreshOperations';
   static const String WidgetBottomMenu = 'WidgetBottomMenu';
 
-  HomeScreenData _data = new HomeScreenData();
   int _exitCount = 0;
   double _bottomPosition = RolledBottomMenuHeight;
+  GlobalKey _progressKey = new GlobalKey();
+  GlobalKey _operationsKey = new GlobalKey();
 
   HomeScreenState() : super();
 
@@ -43,12 +42,14 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
       String actionName = action.getName();
       switch (actionName) {
         case Actions.ShowHorizontalProgress:
-          setVisible(WidgetHorizontalProgress);
-          break;
+          action.setStateNonChanged();
+          (_progressKey.currentState as HorizontalProgressWidgetState)?.onChange(true);
+          return;
 
         case Actions.HideHorizontalProgress:
-          setUnvisible(WidgetHorizontalProgress);
-          break;
+          action.setStateNonChanged();
+          (_progressKey.currentState as HorizontalProgressWidgetState)?.onChange(false);
+          return;
       }
     }
 
@@ -56,13 +57,9 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
       String actionName = action.getName();
       switch (actionName) {
         case Repository.GetOperations:
-          _data.operations = action.getData();
-          if (_data.operations.isEmpty) {
-            setUnvisible(WidgetRefreshOperations);
-          } else {
-            setVisible(WidgetRefreshOperations);
-          }
-          break;
+          action.setStateNonChanged();
+          (_operationsKey.currentState as OperationsWidgetState)?.onChange(action.getData());
+          return;
       }
     }
   }
@@ -137,12 +134,8 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
     list.add(new Container(
       color: Color(0xffEEF5FF),
     ));
-    if (getVisible(WidgetRefreshOperations)) {
-      list.add(_showRefreshOperations(context, constraints));
-    }
-    if (getVisible(WidgetHorizontalProgress)) {
-      list.add(_showHorizontalProgress(context, constraints));
-    }
+    list.add(_showRefreshOperations(context, constraints));
+    list.add(_showHorizontalProgress(context, constraints));
     list.add(_showBottomMenu(context, constraints));
     return list;
   }
@@ -271,38 +264,49 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
         child: new Container(
           height: constraints.maxHeight - _bottomPosition,
           width: constraints.maxWidth,
-          child: _showOperations(context, constraints),
+          child: new OperationsWidget(key: _operationsKey),
         ),
       );
     });
   }
 
-  Widget _showOperations(BuildContext context, BoxConstraints constraints) {
+  Widget _showHorizontalProgress(BuildContext context, BoxConstraints constraints) {
+    return new Positioned(
+      top: 0,
+      left: 0,
+      width: constraints.maxWidth,
+      child: new HorizontalProgressWidget(
+        key: _progressKey,
+      ),
+    );
+  }
+}
+
+class OperationsWidget extends DataWidget {
+  OperationsWidget({Key key}) : super(key: key);
+
+  @override
+  OperationsWidgetState createState() => new OperationsWidgetState(new List<Operation>());
+}
+
+class OperationsWidgetState extends DataWidgetState<List<Operation>> {
+  OperationsWidgetState(List<Operation> data) : super(data);
+
+  @override
+  Widget getWidget() {
     return new ListView.builder(
-        itemCount: _data.operations.length,
+        itemCount: getData().length,
         itemBuilder: (context, position) {
           return new Material(
             color: Color(0xffffffff),
             child: InkWell(
               onTap: () {
-                _showEditOperationName(context, _data.operations[position]).then((onValue) {
+                _showEditOperationName(context, getData()[position]).then((onValue) {
                   if (!StringUtils.isNullOrEmpty(onValue)) {
-                    _data.operations[position].name = onValue;
+                    getData()[position].name = onValue;
                     setState(() {});
                   }
                 });
-                /*
-                SLUtil.getRouterSpecialist()
-                    .showWidgetWithResult(context, (context) => _showOperation(context, _data.operations[position]))
-                    .then((onValue) {
-                  if (!StringUtils.isNullOrEmpty(onValue)) {
-                    _data.operations[position].name = onValue;
-                    setState(() {});
-                  }
-                });
-                */
-                //SLUtil.getUISpecialist().showToast("OnTapOperation:" + _data.operations[position].name);
-                //SLUtil.getRouterSpecialist().showOperationScreen(context, _data.operations[position]);
               },
               child: new Column(
                 mainAxisSize: MainAxisSize.min,
@@ -327,31 +331,31 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                                 new Expanded(
                                   flex: 1,
                                   child: new Text(
-                                    DateFormat("dd.MM.yyyy").format(_data.operations[position].when),
+                                    DateFormat("dd.MM.yyyy").format(getData()[position].when),
                                     style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 new Container(
                                   padding: EdgeInsets.fromLTRB(Dimen.Dimen_8, 0, Dimen.Dimen_12, 0),
                                   child: new Text(
-                                    _data.operations[position].amount.toString(),
+                                    getData()[position].amount.toString(),
                                     style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ],
                             ),
                             new Text(
-                              DateFormat("HH:mm").format(_data.operations[position].when),
+                              DateFormat("HH:mm").format(getData()[position].when),
                               style: TextStyle(color: Color(0xff808080), fontSize: 16),
                             ),
                             new Text(
-                              _data.operations[position].status,
+                              getData()[position].status,
                               style: TextStyle(color: Color(0xff2E9E5F), fontSize: 14),
                             ),
                             new Container(
                               padding: EdgeInsets.fromLTRB(0, 0, Dimen.Dimen_12, 0),
                               child: new Text(
-                                _data.operations[position].name,
+                                getData()[position].name,
                                 style: TextStyle(color: Color(0xff427CB9), fontSize: 20),
                               ),
                             ),
@@ -372,20 +376,6 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
             ),
           );
         });
-  }
-
-  Widget _showHorizontalProgress(BuildContext context, BoxConstraints constraints) {
-    return new Positioned(
-      top: 0,
-      left: 0,
-      width: constraints.maxWidth,
-      child: new LinearProgressIndicator(
-        backgroundColor: Color(0xffffffff),
-        valueColor: new AlwaysStoppedAnimation<Color>(
-          Color(0xff00ff00),
-        ),
-      ),
-    );
   }
 
   Future _showEditOperationName(BuildContext context, Operation operation) async {
@@ -413,5 +403,30 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
         );
       },
     );
+  }
+}
+
+class HorizontalProgressWidget extends DataWidget {
+  HorizontalProgressWidget({Key key}) : super(key: key);
+
+  @override
+  HorizontalProgressWidgetState createState() => new HorizontalProgressWidgetState(false);
+}
+
+class HorizontalProgressWidgetState extends DataWidgetState<bool> {
+  HorizontalProgressWidgetState(bool data) : super(data);
+
+  @override
+  Widget getWidget() {
+    if (getData()) {
+      return new LinearProgressIndicator(
+        backgroundColor: Color(0xffffffff),
+        valueColor: new AlwaysStoppedAnimation<Color>(
+          Color(0xff00ff00),
+        ),
+      );
+    } else {
+      return new Container();
+    }
   }
 }
