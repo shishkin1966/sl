@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
+import 'package:psb/app/common/DataWidget.dart';
+import 'package:psb/app/data/Ticker.dart';
 import 'package:psb/app/screen/Rates/RatesScreenPresenter.dart';
 import 'package:psb/app/screen/Rates/RatesScreenWidget.dart';
-import 'package:psb/app/screen/rates/RatesScreenData.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/Actions.dart';
 import 'package:psb/sl/action/ApplicationAction.dart';
@@ -13,10 +14,8 @@ import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class RatesScreenState extends WidgetState<RatesScreenWidget> {
-  static const String WidgetHorizontalProgress = 'HorizontalProgress';
-  static const String WidgetRates = 'WidgetRates';
-
-  RatesScreenData _data = new RatesScreenData();
+  GlobalKey _ratesKey = new GlobalKey();
+  GlobalKey _progressKey = new GlobalKey();
 
   @override
   Presenter<WidgetState<StatefulWidget>> createPresenter() {
@@ -56,18 +55,84 @@ class RatesScreenState extends WidgetState<RatesScreenWidget> {
     list.add(new Container(
       color: Color(0xffEEF5FF),
     ));
-    if (getVisible(WidgetHorizontalProgress)) {
-      list.add(_showHorizontalProgress(context, constraints));
-    }
-    if (getVisible(WidgetRates)) {
-      list.add(_showRates(context, constraints));
-    }
+    list.add(_showHorizontalProgress(context, constraints));
+    list.add(_showRefreshRates(context, constraints));
     return list;
   }
 
-  Widget _showRates(BuildContext context, BoxConstraints constraints) {
+  Widget _showRefreshRates(BuildContext context, BoxConstraints constraints) {
+    return new LayoutBuilder(builder: (context, constraints) {
+      return new RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: new Container(
+          height: constraints.maxHeight,
+          width: constraints.maxWidth,
+          child: new RatesWidget(key: _ratesKey),
+        ),
+      );
+    });
+  }
+
+  Future<Null> _onRefresh() async {
+    (_ratesKey.currentState as RatesWidgetState)?.onChange(new List());
+    getPresenter().addAction(new ApplicationAction(Actions.Refresh));
+    return null;
+  }
+
+  Widget _showHorizontalProgress(BuildContext context, BoxConstraints constraints) {
+    return new Positioned(
+      top: 0,
+      left: 0,
+      width: constraints.maxWidth,
+      child: new HorizontalProgressWidget(
+        key: _progressKey,
+      ),
+    );
+  }
+
+  @override
+  void onAction(final Action action) {
+    if (action is ApplicationAction) {
+      String actionName = action.getName();
+      switch (actionName) {
+        case Actions.ShowHorizontalProgress:
+          action.setStateNonChanged();
+          (_progressKey.currentState as HorizontalProgressWidgetState)?.onChange(true);
+          break;
+
+        case Actions.HideHorizontalProgress:
+          action.setStateNonChanged();
+          (_progressKey.currentState as HorizontalProgressWidgetState)?.onChange(false);
+          break;
+      }
+    }
+
+    if (action is DataAction) {
+      String actionName = action.getName();
+      switch (actionName) {
+        case Repository.GetRates:
+          action.setStateNonChanged();
+          (_ratesKey.currentState as RatesWidgetState)?.onChange(action.getData());
+          break;
+      }
+    }
+  }
+}
+
+class RatesWidget extends DataWidget {
+  RatesWidget({Key key}) : super(key: key);
+
+  @override
+  RatesWidgetState createState() => new RatesWidgetState(new List<Ticker>());
+}
+
+class RatesWidgetState extends DataWidgetState<List<Ticker>> {
+  RatesWidgetState(List<Ticker> data) : super(data);
+
+  @override
+  Widget getWidget() {
     return new ListView.builder(
-        itemCount: _data.tickers.length,
+        itemCount: getData().length,
         itemBuilder: (context, position) {
           return new Material(
             color: Color(0xffffffff),
@@ -94,7 +159,7 @@ class RatesScreenState extends WidgetState<RatesScreenWidget> {
                                   child: new Container(
                                     padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
                                     child: new Text(
-                                      _data.tickers[position].name,
+                                      getData()[position].name,
                                       style: TextStyle(color: Colors.black, fontSize: 20),
                                     ),
                                   ),
@@ -119,53 +184,29 @@ class RatesScreenState extends WidgetState<RatesScreenWidget> {
           );
         });
   }
+}
 
-  Future<Null> _onRefresh() async {
-    getPresenter().addAction(new ApplicationAction(Actions.Refresh));
-    return null;
-  }
+class HorizontalProgressWidget extends DataWidget {
+  HorizontalProgressWidget({Key key}) : super(key: key);
 
-  Widget _showHorizontalProgress(BuildContext context, BoxConstraints constraints) {
-    return new Positioned(
-      top: 0,
-      left: 0,
-      width: constraints.maxWidth,
-      child: new LinearProgressIndicator(
+  @override
+  HorizontalProgressWidgetState createState() => new HorizontalProgressWidgetState(false);
+}
+
+class HorizontalProgressWidgetState extends DataWidgetState<bool> {
+  HorizontalProgressWidgetState(bool data) : super(data);
+
+  @override
+  Widget getWidget() {
+    if (getData()) {
+      return new LinearProgressIndicator(
         backgroundColor: Color(0xffffffff),
         valueColor: new AlwaysStoppedAnimation<Color>(
           Color(0xff00ff00),
         ),
-      ),
-    );
-  }
-
-  @override
-  void onAction(final Action action) {
-    if (action is ApplicationAction) {
-      String actionName = action.getName();
-      switch (actionName) {
-        case Actions.ShowHorizontalProgress:
-          setVisible(WidgetHorizontalProgress);
-          break;
-
-        case Actions.HideHorizontalProgress:
-          setUnvisible(WidgetHorizontalProgress);
-          break;
-      }
-    }
-
-    if (action is DataAction) {
-      String actionName = action.getName();
-      switch (actionName) {
-        case Repository.GetRates:
-          _data.tickers = action.getData();
-          if (_data.tickers.isNotEmpty) {
-            setVisible(WidgetRates);
-          } else {
-            setUnvisible(WidgetRates);
-          }
-          break;
-      }
+      );
+    } else {
+      return new Container();
     }
   }
 }
