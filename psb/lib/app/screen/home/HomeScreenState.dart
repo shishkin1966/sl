@@ -27,7 +27,6 @@ import 'package:psb/ui/WidgetState.dart';
 class HomeScreenState extends WidgetState<HomeScreenWidget> {
   static const double ExpandedBottomMenuHeight = 122;
   static const double RolledBottomMenuHeight = 42;
-  static const String WidgetBottomMenu = 'WidgetBottomMenu';
 
   int _exitCount = 0;
   double _bottomPosition = RolledBottomMenuHeight;
