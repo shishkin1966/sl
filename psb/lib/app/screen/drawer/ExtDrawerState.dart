@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:psb/app/ApplicationData.dart';
-import 'package:psb/app/common/AccountInheritedWidget.dart';
+import 'package:psb/app/common/DataWidget.dart';
 import 'package:psb/app/data/Account.dart';
 import 'package:psb/app/screen/drawer/ExtDrawerPresenter.dart';
 import 'package:psb/app/screen/drawer/ExtDrawerWidget.dart';
@@ -329,30 +329,18 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
   }
 }
 
-class AccountsWidget extends StatefulWidget {
+class AccountsWidget extends DataWidget {
   AccountsWidget({Key key}) : super(key: key);
 
   @override
-  AccountsWidgetState createState() => new AccountsWidgetState();
+  AccountsWidgetState createState() => new AccountsWidgetState(ApplicationData.instance.accounts);
 }
 
-class AccountsWidgetState extends State<AccountsWidget> {
-  List<Account> _accounts = ApplicationData.instance.accounts;
-
-  void onChange(List<Account> accounts) {
-    setState(() {
-      _accounts = accounts;
-    });
-  }
+class AccountsWidgetState extends DataWidgetState<List<Account>> {
+  AccountsWidgetState(List<Account> data) : super(data);
 
   @override
-  Widget build(BuildContext context) {
-    return new AccountInheritedWidget(
-      child: _getWidget(),
-    );
-  }
-
-  Widget _getWidget() {
+  Widget getWidget() {
     return new Column(
       children: <Widget>[
         ApplicationData.instance.accounts.isEmpty
@@ -399,8 +387,8 @@ class AccountsWidgetState extends State<AccountsWidget> {
 
   List<Widget> _getAccounts() {
     List<Widget> list = new List();
-    int length = _accounts.length;
-    for (Account account in _accounts) {
+    int length = getData().length;
+    for (Account account in getData()) {
       list.add(
         new Row(
           mainAxisSize: MainAxisSize.max,
