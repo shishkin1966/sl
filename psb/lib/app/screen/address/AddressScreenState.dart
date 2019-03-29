@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:psb/app/screen/address/AddressScreenData.dart';
+import 'package:location/location.dart';
+import 'package:psb/app/common/DataWidget.dart';
 import 'package:psb/app/screen/address/AddressScreenPresenter.dart';
 import 'package:psb/app/screen/address/AddressScreenWidget.dart';
 import 'package:psb/common/AppUtils.dart';
+import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
@@ -17,12 +19,8 @@ import 'package:psb/ui/WidgetState.dart';
 class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTickerProviderStateMixin {
   static const double RolledBottomMenuHeight = 65;
 
-  GoogleMapController _mapController;
   double _bottomPosition = RolledBottomMenuHeight;
-  AddressScreenData _data = new AddressScreenData();
-  Marker _marker;
-  Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
-  Timer _debounce;
+  GlobalKey _mapKey = new GlobalKey();
 
   @override
   Presenter<WidgetState<StatefulWidget>> createPresenter() {
@@ -68,17 +66,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
           ? constraints.maxHeight
           : constraints.maxHeight - _bottomPosition,
       width: constraints.maxWidth,
-      child: new GoogleMap(
-        myLocationEnabled: true,
-        compassEnabled: true,
-        mapType: MapType.normal,
-        initialCameraPosition: _getPosition(),
-        markers: Set<Marker>.of(_markers.values),
-        onCameraMove: _onCameraMove,
-        onMapCreated: (GoogleMapController controller) {
-          _mapController = controller;
-        },
-      ),
+      child: new GoogleMapWidget(key: _mapKey),
     );
   }
 
@@ -101,7 +89,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
               }
             } else if (notification is OverscrollNotification) {
               if (notification.dragDetails != null) {
-                _bottomPosition -= notification.dragDetails.delta.dy * 4;
+                _bottomPosition -= notification.dragDetails.delta.dy * 2;
                 if (_bottomPosition < RolledBottomMenuHeight) {
                   _bottomPosition = RolledBottomMenuHeight;
                 }
@@ -128,45 +116,64 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
     );
   }
 
-  CameraPosition _getPosition() {
-    LatLng l = new LatLng(55.7496, 37.6237); // Moscow
-    if (_data.location != null) {
-      l = new LatLng(_data.location.latitude, _data.location.longitude);
-    }
-    return new CameraPosition(target: l, zoom: 12);
-  }
-
   @override
   void onAction(final Action action) {
     if (action is DataAction) {
       String actionName = action.getName();
       switch (actionName) {
         case AddressScreenPresenter.LocationChanged:
-          _data.location = action.getData();
-          LatLng latlng = new LatLng(_data.location.latitude, _data.location.longitude);
-          if (_mapController != null) {
-            _mapController.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latlng, zoom: 12)));
-            if (_marker != null) {
-              _marker.copyWith(positionParam: latlng);
-            } else {
-              _marker = new Marker(
-                markerId: new MarkerId("1"),
-                position: latlng,
-                icon: BitmapDescriptor.fromAsset(AppUtils.getAssetImage(context, "pin.png")),
-              );
-              _markers[_marker.markerId] = _marker;
-            }
-          }
+          action.setStateNonChanged();
+          (_mapKey.currentState as GoogleMapWidgetState)?.onChange(action.getData());
           return;
       }
     }
+  }
+}
+
+class GoogleMapWidget extends DataWidget {
+  GoogleMapWidget({Key key}) : super(key: key);
+
+  @override
+  GoogleMapWidgetState createState() => new GoogleMapWidgetState(null);
+}
+
+class GoogleMapWidgetState extends DataWidgetState<LocationData> {
+  Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
+  Timer _debounce;
+  GoogleMapController _mapController;
+  Marker _marker;
+
+  GoogleMapWidgetState(LocationData data) : super(data);
+
+  CameraPosition _getPosition() {
+    LatLng latlng = new LatLng(55.7496, 37.6237); // Moscow
+    if (getData() != null) {
+      latlng = new LatLng(getData().latitude, getData().longitude);
+    }
+    return new CameraPosition(target: latlng, zoom: 12);
   }
 
   void _onCameraMove(CameraPosition position) {
     if (_debounce?.isActive ?? false) _debounce.cancel();
     _debounce = Timer(const Duration(seconds: 1), () {
-      getPresenter().addAction(new DataAction(AddressScreenPresenter.CameraMoved).setData(position.target));
+      SLUtil.getPresenterUnion()
+          .getPresenter(AddressScreenPresenter.NAME)
+          ?.addAction(new DataAction(AddressScreenPresenter.CameraMoved).setData(position.target));
     });
+  }
+
+  @override
+  Widget getWidget() {
+    return new GoogleMap(
+        myLocationEnabled: true,
+        compassEnabled: true,
+        mapType: MapType.normal,
+        initialCameraPosition: _getPosition(),
+        markers: Set<Marker>.of(_markers.values),
+        onCameraMove: _onCameraMove,
+        onMapCreated: (GoogleMapController controller) {
+          _mapController = controller;
+        });
   }
 
   @override
@@ -174,5 +181,25 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
     if (_debounce?.isActive ?? false) _debounce.cancel();
 
     super.dispose();
+  }
+
+  @override
+  void onChange(LocationData data) {
+    super.onChange(data);
+
+    LatLng latlng = new LatLng(getData().latitude, getData().longitude);
+    if (_mapController != null) {
+      _mapController.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latlng, zoom: 12)));
+      if (_marker != null) {
+        _marker.copyWith(positionParam: latlng);
+      } else {
+        _marker = new Marker(
+          markerId: new MarkerId("1"),
+          position: latlng,
+          icon: BitmapDescriptor.fromAsset(AppUtils.getAssetImage(context, "pin.png")),
+        );
+        _markers[_marker.markerId] = _marker;
+      }
+    }
   }
 }
