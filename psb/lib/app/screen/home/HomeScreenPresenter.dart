@@ -80,6 +80,28 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
   void onReady() {
     super.onReady();
 
+    /*
+    EventHandler handler = new EventHandler<String>();
+    var subscription = handler.onEvent.listen((onData) => print('$onData'));
+    handler.emit("1");
+    handler.emit("2");
+    subscription.cancel();
+
+    Delegate delegate = new Delegate();
+    delegate.addHandler((onData) {
+      if (onData.runtimeType == String) {
+        print('String:$onData');
+      } else if (onData.runtimeType == int) {
+        print('int:$onData');
+      } else {
+        print("Other type:$onData");
+      }
+    });
+    delegate.dispatch("3");
+    delegate.dispatch(4);
+    delegate.dispatch(5.03);
+    */
+
     SLUtil.getFingerprintSpecialist().hasBiometrics().then((hasBiometrics) {
       if (hasBiometrics) {
         SLUtil.getFingerprintSpecialist().authenticateWithBiometrics("Отпечаток пальца").then((result) {
