@@ -1,4 +1,5 @@
 import 'package:psb/sl/action/Action.dart';
+import 'package:psb/sl/action/ActionSubscriber.dart';
 import 'package:psb/sl/specialist/messager/MessengerSubscriber.dart';
 import 'package:psb/sl/state/StateListener.dart';
 import 'package:psb/ui/WidgetState.dart';
@@ -6,7 +7,7 @@ import 'package:psb/ui/WidgetState.dart';
 ///
 /// Презентер
 ///
-abstract class Presenter<M extends WidgetState> implements StateListener, MessengerSubscriber {
+abstract class Presenter<M extends WidgetState> implements StateListener, MessengerSubscriber, ActionSubscriber {
   ///
   /// Получить виджет презентера
   ///
