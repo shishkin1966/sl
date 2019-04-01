@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:psb/app/screen/home/HomeScreenPresenter.dart';
 import 'package:psb/sl/SL.dart';
+import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/Actions.dart';
 import 'package:psb/sl/action/ApplicationAction.dart';
@@ -9,6 +11,7 @@ import 'package:psb/sl/message/ActionMessage.dart';
 import 'package:psb/sl/message/Message.dart';
 import 'package:psb/sl/specialist/messager/MessengerSubscriber.dart';
 import 'package:psb/sl/specialist/messager/MessengerUnionImpl.dart';
+import 'package:psb/sl/specialist/router/Router.dart';
 import 'package:psb/sl/state/States.dart';
 
 class Application extends StatelessWidget implements MessengerSubscriber {
@@ -47,7 +50,20 @@ class Application extends StatelessWidget implements MessengerSubscriber {
         String actionName = action.getName();
         switch (actionName) {
           case Actions.ExitApplication:
-            SystemNavigator.pop();
+            HomeScreenPresenter presenter = SLUtil.getPresenterUnion().getPresenter(HomeScreenPresenter.NAME);
+            if (presenter != null) {
+              BuildContext context = presenter.getWidget().context;
+              Navigator.popUntil(context, (route) {
+                String name = route.settings.name;
+                switch (name) {
+                  case "/":
+                  case Router.ShowHomeScreen:
+                    return true;
+                }
+                return false;
+              });
+            }
+            SystemNavigator.pop(); // Exit only Android
             //exit(0);
             break;
         }
