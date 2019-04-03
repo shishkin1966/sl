@@ -13,7 +13,8 @@ class AppUtils {
     }
   }
 
-  static Widget getVectorImage(String file, {double width, double height, Color color}) {
+  static Widget getVectorImage(String file,
+      {double width, double height, Color color}) {
     return new SvgPicture.asset(
       'assets/vector/' + file,
       width: width,
