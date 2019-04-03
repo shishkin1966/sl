@@ -15,6 +15,7 @@ public class MainActivity extends FlutterActivity {
         super.onCreate(savedInstanceState);
 
         GeneratedPluginRegistrant.registerWith(this);
+
         new MethodChannel(getFlutterView(), CHANNEL_SECURE).setMethodCallHandler(
                 (call, result) -> {
                     if (call.method.equals("encode")) {
