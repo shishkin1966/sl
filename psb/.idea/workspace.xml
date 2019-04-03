@@ -9,12 +9,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="211cb228-e08a-416d-bd96-7d8fcb348b7d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/lib/app/screen/contacts/ContactsScreenPresenter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/screen/contacts/ContactsScreenPresenter.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/screen/home/HomeScreenPresenter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/screen/home/HomeScreenPresenter.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app/screen/rates/RatesScreenPresenter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app/screen/rates/RatesScreenPresenter.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/sl/message/ResultMessage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/sl/message/ResultMessage.dart" afterDir="false" />
-    </list>
+    <list default="true" id="211cb228-e08a-416d-bd96-7d8fcb348b7d" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
     <ignored path="$PROJECT_DIR$/.pub/" />
@@ -432,19 +427,19 @@
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="H:\flutter.sl\psb\lib\sl\specialist\router" />
-      <recent name="H:\flutter.sl\psb\lib\app" />
-      <recent name="H:\flutter.sl\psb\lib\sl\specialist\repository" />
-      <recent name="H:\flutter.psb\psb\lib\app\screen\address" />
-      <recent name="H:\flutter.psb\psb\lib\sl\specialist\ui" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="H:\flutter.sl\psb\lib\app\screen\contacts" />
       <recent name="H:\flutter.sl\psb\lib\app\screen\address" />
       <recent name="H:\flutter.psb\psb\lib\app\screen\accounts" />
       <recent name="H:\flutter.psb\psb\lib\app\screen\address" />
       <recent name="H:\flutter.psb\psb\lib\app\screen\rates" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="H:\flutter.sl\psb\lib\sl\specialist\router" />
+      <recent name="H:\flutter.sl\psb\lib\app" />
+      <recent name="H:\flutter.sl\psb\lib\sl\specialist\repository" />
+      <recent name="H:\flutter.psb\psb\lib\app\screen\address" />
+      <recent name="H:\flutter.psb\psb\lib\sl\specialist\ui" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -521,7 +516,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1528" height="998" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="Android Profiler" order="4" show_stripe_button="false" />
       <window_info id="Build Variants" order="4" side_tool="true" />
