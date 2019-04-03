@@ -42,12 +42,14 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
       switch (actionName) {
         case Actions.ShowHorizontalProgress:
           action.setStateNonChanged();
-          (_progressKey.currentState as HorizontalProgressWidgetState)?.onChange(true);
+          (_progressKey.currentState as HorizontalProgressWidgetState)
+              ?.onChange(true);
           return;
 
         case Actions.HideHorizontalProgress:
           action.setStateNonChanged();
-          (_progressKey.currentState as HorizontalProgressWidgetState)?.onChange(false);
+          (_progressKey.currentState as HorizontalProgressWidgetState)
+              ?.onChange(false);
           return;
       }
     }
@@ -57,7 +59,8 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
       switch (actionName) {
         case Repository.GetOperations:
           action.setStateNonChanged();
-          (_operationsKey.currentState as OperationsWidgetState)?.onChange(action.getData());
+          (_operationsKey.currentState as OperationsWidgetState)
+              ?.onChange(action.getData());
           return;
       }
     }
@@ -68,7 +71,8 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
     return new WillPopScope(
       onWillPop: () async {
         if (SLUtil.getPresenterUnion().hasSubscriber(ExtDrawerPresenter.NAME)) {
-          ExtDrawerPresenter presenter = SLUtil.getPresenterUnion().getPresenter(ExtDrawerPresenter.NAME);
+          ExtDrawerPresenter presenter =
+              SLUtil.getPresenterUnion().getPresenter(ExtDrawerPresenter.NAME);
           if (presenter.getState() == States.StateReady) {
             Navigator.pop(getScaffoldState().context);
             return false;
@@ -83,15 +87,17 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
             state.removeCurrentSnackBar();
             snackbar = null;
           }
-          snackbar = SLUtil.getUISpecialist()
-              .getSnackBar(text, actionText: actionName, action: new ApplicationAction(Actions.ExitApplication));
+          snackbar = SLUtil.getUISpecialist().getSnackBar(text,
+              actionText: actionName,
+              action: new ApplicationAction(Actions.ExitApplication));
           state.showSnackBar(snackbar);
           Future.delayed(const Duration(seconds: 4), () {
             _exitCount = 0;
             setConnectivityState();
           });
         } else {
-          SLUtil.addMessage(new ActionMessage.action(Application.NAME, new ApplicationAction(Actions.ExitApplication)));
+          SLUtil.addMessage(new ActionMessage.action(Application.NAME,
+              new ApplicationAction(Actions.ExitApplication)));
         }
         return false;
       },
@@ -187,7 +193,8 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                         setState(() {});
                       },
                       child: new Container(
-                        padding: EdgeInsets.fromLTRB(Dimen.Dimen_12, 0, Dimen.Dimen_12, 0),
+                        padding: EdgeInsets.fromLTRB(
+                            Dimen.Dimen_12, 0, Dimen.Dimen_12, 0),
                         height: Dimen.Dimen_40,
                         child: new Align(
                           alignment: Alignment.centerLeft,
@@ -237,7 +244,8 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                         setState(() {});
                       },
                       child: new Container(
-                        padding: EdgeInsets.fromLTRB(Dimen.Dimen_12, 0, Dimen.Dimen_12, 0),
+                        padding: EdgeInsets.fromLTRB(
+                            Dimen.Dimen_12, 0, Dimen.Dimen_12, 0),
                         height: Dimen.Dimen_40,
                         child: new Align(
                           alignment: Alignment.centerLeft,
@@ -256,7 +264,8 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
     );
   }
 
-  Widget _showRefreshOperations(BuildContext context, BoxConstraints constraints) {
+  Widget _showRefreshOperations(
+      BuildContext context, BoxConstraints constraints) {
     return new LayoutBuilder(builder: (context, constraints) {
       return new RefreshIndicator(
         onRefresh: _onRefresh,
@@ -269,7 +278,8 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
     });
   }
 
-  Widget _showHorizontalProgress(BuildContext context, BoxConstraints constraints) {
+  Widget _showHorizontalProgress(
+      BuildContext context, BoxConstraints constraints) {
     return new Positioned(
       top: 0,
       left: 0,
@@ -285,7 +295,8 @@ class OperationsWidget extends DataWidget {
   OperationsWidget({Key key}) : super(key: key);
 
   @override
-  OperationsWidgetState createState() => new OperationsWidgetState(new List<Operation>());
+  OperationsWidgetState createState() =>
+      new OperationsWidgetState(new List<Operation>());
 }
 
 class OperationsWidgetState extends DataWidgetState<List<Operation>> {
@@ -300,7 +311,8 @@ class OperationsWidgetState extends DataWidgetState<List<Operation>> {
             color: Color(0xffffffff),
             child: InkWell(
               onTap: () {
-                _showEditOperationName(context, getData()[position]).then((onValue) {
+                _showEditOperationName(context, getData()[position])
+                    .then((onValue) {
                   if (!StringUtils.isNullOrEmpty(onValue)) {
                     getData()[position].name = onValue;
                     setState(() {});
@@ -317,7 +329,8 @@ class OperationsWidgetState extends DataWidgetState<List<Operation>> {
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
                       new Container(
-                        padding: EdgeInsets.fromLTRB(Dimen.Dimen_12, 0, Dimen.Dimen_8, 0),
+                        padding: EdgeInsets.fromLTRB(
+                            Dimen.Dimen_12, 0, Dimen.Dimen_8, 0),
                         child: new Icon(Icons.message),
                       ),
                       new Expanded(
@@ -330,32 +343,45 @@ class OperationsWidgetState extends DataWidgetState<List<Operation>> {
                                 new Expanded(
                                   flex: 1,
                                   child: new Text(
-                                    DateFormat("dd.MM.yyyy").format(getData()[position].when),
-                                    style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+                                    DateFormat("dd.MM.yyyy")
+                                        .format(getData()[position].when),
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 new Container(
-                                  padding: EdgeInsets.fromLTRB(Dimen.Dimen_8, 0, Dimen.Dimen_12, 0),
+                                  padding: EdgeInsets.fromLTRB(
+                                      Dimen.Dimen_8, 0, Dimen.Dimen_12, 0),
                                   child: new Text(
                                     getData()[position].amount.toString(),
-                                    style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ],
                             ),
                             new Text(
-                              DateFormat("HH:mm").format(getData()[position].when),
-                              style: TextStyle(color: Color(0xff808080), fontSize: 16),
+                              DateFormat("HH:mm")
+                                  .format(getData()[position].when),
+                              style: TextStyle(
+                                  color: Color(0xff808080), fontSize: 16),
                             ),
                             new Text(
                               getData()[position].status,
-                              style: TextStyle(color: Color(0xff2E9E5F), fontSize: 14),
+                              style: TextStyle(
+                                  color: Color(0xff2E9E5F), fontSize: 14),
                             ),
                             new Container(
-                              padding: EdgeInsets.fromLTRB(0, 0, Dimen.Dimen_12, 0),
+                              padding:
+                                  EdgeInsets.fromLTRB(0, 0, Dimen.Dimen_12, 0),
                               child: new Text(
                                 getData()[position].name,
-                                style: TextStyle(color: Color(0xff427CB9), fontSize: 20),
+                                style: TextStyle(
+                                    color: Color(0xff427CB9), fontSize: 20),
                               ),
                             ),
                           ],
@@ -377,16 +403,21 @@ class OperationsWidgetState extends DataWidgetState<List<Operation>> {
         });
   }
 
-  Future _showEditOperationName(BuildContext context, Operation operation) async {
+  Future _showEditOperationName(
+      BuildContext context, Operation operation) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        TextEditingController controller = new TextEditingController(text: operation.name);
-        controller.selection =
-            new TextSelection(baseOffset: operation.name.length, extentOffset: operation.name.length);
+        TextEditingController controller =
+            new TextEditingController(text: operation.name);
+        controller.selection = new TextSelection(
+            baseOffset: operation.name.length,
+            extentOffset: operation.name.length);
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(Dimen.Dimen_12))),
-          contentPadding: EdgeInsets.fromLTRB(Dimen.Dimen_12, 0, Dimen.Dimen_12, 0),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(Dimen.Dimen_12))),
+          contentPadding:
+              EdgeInsets.fromLTRB(Dimen.Dimen_12, 0, Dimen.Dimen_12, 0),
           title: new Text(SLUtil.getString(context, "operation")),
           content: new TextFormField(
             controller: controller,
@@ -409,7 +440,8 @@ class HorizontalProgressWidget extends DataWidget {
   HorizontalProgressWidget({Key key}) : super(key: key);
 
   @override
-  HorizontalProgressWidgetState createState() => new HorizontalProgressWidgetState(false);
+  HorizontalProgressWidgetState createState() =>
+      new HorizontalProgressWidgetState(false);
 }
 
 class HorizontalProgressWidgetState extends DataWidgetState<bool> {
