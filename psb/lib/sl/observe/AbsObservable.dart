@@ -3,7 +3,8 @@ import 'package:psb/sl/SecretaryImpl.dart';
 import 'package:psb/sl/observe/Observable.dart';
 import 'package:psb/sl/specialist/observable/ObservableSubscriber.dart';
 
-abstract class AbsObservable<K extends ObservableSubscriber> implements Observable<K> {
+abstract class AbsObservable<K extends ObservableSubscriber>
+    implements Observable<K> {
   Secretary _secretary = new SecretaryImpl();
 
   @override
@@ -20,7 +21,6 @@ abstract class AbsObservable<K extends ObservableSubscriber> implements Observab
   @override
   List<K> getObservers<K extends ObservableSubscriber>() {
     return _secretary.values();
-    return null;
   }
 
   @override

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:psb/app/ApplicationData.dart';
 import 'package:psb/app/common/DataWidget.dart';
 import 'package:psb/app/data/Account.dart';
@@ -67,7 +66,9 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                         decoration: new BoxDecoration(
                             shape: BoxShape.circle,
                             image: new DecorationImage(
-                                fit: BoxFit.fill, image: AssetImage("assets/images/shishkin.png")))),
+                                fit: BoxFit.fill,
+                                image:
+                                    AssetImage("assets/images/shishkin.png")))),
                     new Container(
                       width: widthWidget * 0.6,
                       padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
@@ -107,11 +108,13 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                           children: <Widget>[
                             new Text(
                               'Покупка 65.38',
-                              style: TextStyle(color: Colors.white, fontSize: 14),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
                             ),
                             new Text(
                               'Продажа 65.75',
-                              style: TextStyle(color: Colors.white, fontSize: 14),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
                             ),
                           ],
                         ),
@@ -140,11 +143,13 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                           children: <Widget>[
                             new Text(
                               'Покупка 74.15',
-                              style: TextStyle(color: Colors.white, fontSize: 14),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
                             ),
                             new Text(
                               'Продажа 74.49',
-                              style: TextStyle(color: Colors.white, fontSize: 14),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
                             ),
                           ],
                         ),
@@ -181,7 +186,8 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
               color: Color(0xff377ad0),
               child: InkWell(
                 onTap: () {
-                  getPresenter().addAction(new ApplicationAction(Router.ShowSettingsScreen));
+                  getPresenter().addAction(
+                      new ApplicationAction(Router.ShowSettingsScreen));
                 },
                 child: new Container(
                   padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
@@ -210,7 +216,8 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                       color: Color(0xff377ad0),
                       child: InkWell(
                         onTap: () {
-                          getPresenter().addAction(new ApplicationAction(Router.ShowRatesScreen));
+                          getPresenter().addAction(
+                              new ApplicationAction(Router.ShowRatesScreen));
                         },
                         child: new Column(
                           mainAxisSize: MainAxisSize.max,
@@ -221,12 +228,14 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                               height: 48,
                               width: 48,
                               child: new Image(
-                                image: new AssetImage("assets/images/ic_rates_white.png"),
+                                image: new AssetImage(
+                                    "assets/images/ic_rates_white.png"),
                               ),
                             ),
                             new Text(
                               SLUtil.getString(context, 'currency_rates'),
-                              style: TextStyle(color: Colors.white, fontSize: 12),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 12),
                             ),
                           ],
                         ),
@@ -243,7 +252,8 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                       color: Color(0xff377ad0),
                       child: InkWell(
                         onTap: () {
-                          getPresenter().addAction(new ApplicationAction(Router.ShowAddressScreen));
+                          getPresenter().addAction(
+                              new ApplicationAction(Router.ShowAddressScreen));
                         },
                         child: new Column(
                           mainAxisSize: MainAxisSize.max,
@@ -254,12 +264,14 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                               height: 48,
                               width: 48,
                               child: new Image(
-                                image: new AssetImage("assets/images/ic_office_white.png"),
+                                image: new AssetImage(
+                                    "assets/images/ic_office_white.png"),
                               ),
                             ),
                             new Text(
                               SLUtil.getString(context, 'address'),
-                              style: TextStyle(color: Colors.white, fontSize: 12),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 12),
                             ),
                           ],
                         ),
@@ -276,7 +288,8 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                       color: Color(0xff377ad0),
                       child: InkWell(
                         onTap: () {
-                          getPresenter().addAction(new ApplicationAction(Router.ShowContactsScreen));
+                          getPresenter().addAction(
+                              new ApplicationAction(Router.ShowContactsScreen));
                         },
                         child: new Column(
                           mainAxisSize: MainAxisSize.max,
@@ -287,12 +300,14 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                               height: 48,
                               width: 48,
                               child: new Image(
-                                image: new AssetImage("assets/images/ic_contact_white.png"),
+                                image: new AssetImage(
+                                    "assets/images/ic_contact_white.png"),
                               ),
                             ),
                             new Text(
                               SLUtil.getString(context, 'communication'),
-                              style: TextStyle(color: Colors.white, fontSize: 12),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 12),
                             ),
                           ],
                         ),
@@ -316,7 +331,8 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
       switch (actionName) {
         case Actions.Refresh:
           action.setStateNonChanged();
-          (_accountsKey.currentState as AccountsWidgetState)?.onChange(ApplicationData.instance.accounts);
+          (_accountsKey.currentState as AccountsWidgetState)
+              ?.onChange(ApplicationData.instance.accounts);
           break;
       }
     }
@@ -333,7 +349,8 @@ class AccountsWidget extends DataWidget {
   AccountsWidget({Key key}) : super(key: key);
 
   @override
-  AccountsWidgetState createState() => new AccountsWidgetState(ApplicationData.instance.accounts);
+  AccountsWidgetState createState() =>
+      new AccountsWidgetState(ApplicationData.instance.accounts);
 }
 
 class AccountsWidgetState extends DataWidgetState<List<Account>> {
@@ -351,7 +368,8 @@ class AccountsWidgetState extends DataWidgetState<List<Account>> {
                   onTap: () {
                     SLUtil.getPresenterUnion()
                         .getPresenter(ExtDrawerPresenter.NAME)
-                        ?.addAction(new ApplicationAction(Router.ShowAccountsScreen));
+                        ?.addAction(
+                            new ApplicationAction(Router.ShowAccountsScreen));
                   },
                   child: new Container(
                     padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
@@ -395,7 +413,8 @@ class AccountsWidgetState extends DataWidgetState<List<Account>> {
           children: <Widget>[
             new Text(
               account.amount.toString() + ' ' + account.currency.iso,
-              style: TextStyle(color: Colors.white, fontSize: length == 1 ? 16 : 14),
+              style: TextStyle(
+                  color: Colors.white, fontSize: length == 1 ? 16 : 14),
               textAlign: TextAlign.end,
             ),
           ],

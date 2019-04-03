@@ -7,5 +7,5 @@ class ApplicationData {
 
   List<Account> accounts = new List();
 
-  ApplicationData._internal() {}
+  ApplicationData._internal();
 }

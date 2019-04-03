@@ -8,13 +8,14 @@ import 'package:psb/sl/specialist/ui/UISpecialistImpl.dart';
 class ErrorSpecialistImpl extends AbsSpecialist implements ErrorSpecialist {
   static const String NAME = "ErrorSpecialistImpl";
 
-  static final ErrorSpecialistImpl _errorSpecialistImpl = new ErrorSpecialistImpl._internal();
+  static final ErrorSpecialistImpl _errorSpecialistImpl =
+      new ErrorSpecialistImpl._internal();
 
   Logger _logger = Logger(NAME);
 
   static ErrorSpecialistImpl get instance => _errorSpecialistImpl;
 
-  ErrorSpecialistImpl._internal() {}
+  ErrorSpecialistImpl._internal();
 
   @override
   int compareTo(other) {
