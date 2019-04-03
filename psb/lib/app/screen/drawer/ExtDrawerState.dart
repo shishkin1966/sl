@@ -61,14 +61,16 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     new Container(
-                        width: 56.0,
-                        height: 56.0,
-                        decoration: new BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: new DecorationImage(
-                                fit: BoxFit.fill,
-                                image:
-                                    AssetImage("assets/images/shishkin.png")))),
+                      width: 56.0,
+                      height: 56.0,
+                      decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: new DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage("assets/images/shishkin.png"),
+                        ),
+                      ),
+                    ),
                     new Container(
                       width: widthWidget * 0.6,
                       padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
