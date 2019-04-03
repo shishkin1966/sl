@@ -15,8 +15,8 @@ import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/sl/specialist/router/Router.dart';
 import 'package:psb/ui/WidgetState.dart';
 
-class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresenter<HomeScreenState>
-    implements ResponseListener {
+class HomeScreenPresenter<HomeScreenState extends WidgetState>
+    extends AbsPresenter<HomeScreenState> implements ResponseListener {
   static const String NAME = "HomeScreenPresenenter";
   static const String CreateAccount = "CreateAccount";
   static const String SortBy = "SortBy";
@@ -36,23 +36,28 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
       BuildContext context = getWidget().getScaffoldState().context;
       switch (actionName) {
         case Router.ShowAccountsScreen:
-          SLUtil.getRouterSpecialist().showScreen(context, Router.ShowAccountsScreen);
+          SLUtil.getRouterSpecialist()
+              .showScreen(context, Router.ShowAccountsScreen);
           break;
 
         case Router.ShowSettingsScreen:
-          SLUtil.getRouterSpecialist().showScreen(context, Router.ShowSettingsScreen);
+          SLUtil.getRouterSpecialist()
+              .showScreen(context, Router.ShowSettingsScreen);
           break;
 
         case Router.ShowRatesScreen:
-          SLUtil.getRouterSpecialist().showScreen(context, Router.ShowRatesScreen);
+          SLUtil.getRouterSpecialist()
+              .showScreen(context, Router.ShowRatesScreen);
           break;
 
         case Router.ShowAddressScreen:
-          SLUtil.getRouterSpecialist().showScreen(context, Router.ShowAddressScreen);
+          SLUtil.getRouterSpecialist()
+              .showScreen(context, Router.ShowAddressScreen);
           break;
 
         case Router.ShowContactsScreen:
-          SLUtil.getRouterSpecialist().showScreen(context, Router.ShowContactsScreen);
+          SLUtil.getRouterSpecialist()
+              .showScreen(context, Router.ShowContactsScreen);
           break;
 
         case CreateAccount:
@@ -68,7 +73,8 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
           break;
 
         case Actions.Refresh:
-          getWidget().addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
+          getWidget()
+              .addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
           // Получим операции
           SLUtil.getRepositorySpecialist().getOperations(NAME);
           break;
@@ -104,9 +110,12 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
 
     SLUtil.getFingerprintSpecialist().hasBiometrics().then((hasBiometrics) {
       if (hasBiometrics) {
-        SLUtil.getFingerprintSpecialist().authenticateWithBiometrics("Отпечаток пальца").then((result) {
+        SLUtil.getFingerprintSpecialist()
+            .authenticateWithBiometrics("Отпечаток пальца")
+            .then((result) {
           if (result.hasError()) {
-            Flushbar flushbar = SLUtil.getUISpecialist().getErrorFlushbar(result.getErrorText());
+            Flushbar flushbar = SLUtil.getUISpecialist()
+                .getErrorFlushbar(result.getErrorText());
             flushbar.show(getWidget().context);
           } else {
             _getdata();
@@ -119,7 +128,8 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
   }
 
   void _getdata() {
-    getWidget().addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
+    getWidget()
+        .addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
     // Получим счета
     SLUtil.getRepositorySpecialist().getAccounts(NAME);
     // Получим операции
@@ -132,7 +142,8 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
       switch (result.getName()) {
         case Repository.GetAccounts:
           ApplicationData.instance.accounts = result.getData();
-          SLUtil.addMessage(new ActionMessage.action(ExtDrawerPresenter.NAME, new ApplicationAction(Actions.Refresh)));
+          SLUtil.addMessage(new ActionMessage.action(
+              ExtDrawerPresenter.NAME, new ApplicationAction(Actions.Refresh)));
           break;
 
         case Repository.GetOperations:
@@ -143,7 +154,8 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresen
           break;
       }
     } else {
-      getWidget().addAction(new ApplicationAction(Actions.HideHorizontalProgress));
+      getWidget()
+          .addAction(new ApplicationAction(Actions.HideHorizontalProgress));
       SLUtil.getUISpecialist().showErrorToast(result.getErrorText());
     }
   }
