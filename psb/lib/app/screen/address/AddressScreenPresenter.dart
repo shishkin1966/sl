@@ -1,6 +1,5 @@
-import 'package:location/location.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/presenter/AbsPresenter.dart';
@@ -11,8 +10,6 @@ class AddressScreenPresenter<AddressScreenState extends WidgetState>
   static const String NAME = "AddressScreenPresenter";
   static const String LocationChanged = "LocationChanged";
   static const String CameraMoved = "CameraMoved";
-
-  Location _location;
 
   AddressScreenPresenter(AddressScreenState lifecycleState)
       : super(lifecycleState);
@@ -37,37 +34,27 @@ class AddressScreenPresenter<AddressScreenState extends WidgetState>
   Future onReady() async {
     super.onReady();
 
-    try {
-      _location = new Location();
-
-      if (_location.hasPermission == false) {
+    PermissionHandler()
+        .checkPermissionStatus(PermissionGroup.locationAlways)
+        .then((permission) {
+      if (permission != PermissionStatus.granted) {
         PermissionHandler()
-            .checkPermissionStatus(PermissionGroup.locationAlways)
-            .then((permission) {
-          if (permission != PermissionStatus.granted) {
-            PermissionHandler().requestPermissions(
-                [PermissionGroup.locationAlways]).then((map) {
-              if (map[PermissionGroup.locationAlways] ==
-                  PermissionStatus.granted) {
-                _getLocation();
-              }
-            });
+            .requestPermissions([PermissionGroup.locationAlways]).then((map) {
+          if (map[PermissionGroup.locationAlways] == PermissionStatus.granted) {
+            _getLocation();
           }
         });
       } else {
         _getLocation();
-
-        //_location.onLocationChanged().listen((location) async {
-        //  getWidget().addAction(new DataAction(LocationChanged).setData(location));
-        //});
       }
-    } catch (e) {
-      SLUtil.onError(NAME, e);
-    }
+    });
   }
 
   void _getLocation() async {
-    LocationData data = await _location.getLocation();
-    getWidget().addAction(new DataAction(LocationChanged).setData(data));
+    Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((position) {
+      getWidget().addAction(new DataAction(LocationChanged).setData(position));
+    });
   }
 }

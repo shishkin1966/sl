@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 import 'package:psb/app/common/DataWidget.dart';
 import 'package:psb/app/screen/address/AddressScreenPresenter.dart';
 import 'package:psb/app/screen/address/AddressScreenWidget.dart';
@@ -16,7 +16,8 @@ import 'package:psb/sl/presenter/Presenter.dart';
 import 'package:psb/ui/AppColor.dart';
 import 'package:psb/ui/WidgetState.dart';
 
-class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTickerProviderStateMixin {
+class AddressScreenState extends WidgetState<AddressScreenWidget>
+    with SingleTickerProviderStateMixin {
   static const double RolledBottomMenuHeight = 65;
 
   double _bottomPosition = RolledBottomMenuHeight;
@@ -123,7 +124,8 @@ class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTic
       switch (actionName) {
         case AddressScreenPresenter.LocationChanged:
           action.setStateNonChanged();
-          (_mapKey.currentState as GoogleMapWidgetState)?.onChange(action.getData());
+          (_mapKey.currentState as GoogleMapWidgetState)
+              ?.onChange(action.getData());
           return;
       }
     }
@@ -137,13 +139,13 @@ class GoogleMapWidget extends DataWidget {
   GoogleMapWidgetState createState() => new GoogleMapWidgetState(null);
 }
 
-class GoogleMapWidgetState extends DataWidgetState<LocationData> {
+class GoogleMapWidgetState extends DataWidgetState<Position> {
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   Timer _debounce;
   GoogleMapController _mapController;
   Marker _marker;
 
-  GoogleMapWidgetState(LocationData data) : super(data);
+  GoogleMapWidgetState(dynamic data) : super(data);
 
   CameraPosition _getPosition() {
     LatLng latlng = new LatLng(55.7496, 37.6237); // Moscow
@@ -158,7 +160,8 @@ class GoogleMapWidgetState extends DataWidgetState<LocationData> {
     _debounce = Timer(const Duration(seconds: 1), () {
       SLUtil.getPresenterUnion()
           .getPresenter(AddressScreenPresenter.NAME)
-          ?.addAction(new DataAction(AddressScreenPresenter.CameraMoved).setData(position.target));
+          ?.addAction(new DataAction(AddressScreenPresenter.CameraMoved)
+              .setData(position.target));
     });
   }
 
@@ -184,19 +187,21 @@ class GoogleMapWidgetState extends DataWidgetState<LocationData> {
   }
 
   @override
-  void onChange(LocationData data) {
+  void onChange(Position data) {
     super.onChange(data);
 
-    LatLng latlng = new LatLng(getData().latitude, getData().longitude);
+    LatLng latlng = new LatLng(data.latitude, data.longitude);
     if (_mapController != null) {
-      _mapController.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latlng, zoom: 12)));
+      _mapController.moveCamera(CameraUpdate.newCameraPosition(
+          CameraPosition(target: latlng, zoom: 12)));
       if (_marker != null) {
         _marker.copyWith(positionParam: latlng);
       } else {
         _marker = new Marker(
           markerId: new MarkerId("1"),
           position: latlng,
-          icon: BitmapDescriptor.fromAsset(AppUtils.getAssetImage(context, "pin.png")),
+          icon: BitmapDescriptor.fromAsset(
+              AppUtils.getAssetImage(context, "pin.png")),
         );
         _markers[_marker.markerId] = _marker;
       }
