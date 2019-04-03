@@ -1,3 +1,10 @@
 psb/.idea/sonarlint/*
 psb/.idea/markdown-navigator/*
 
+psb/android/.idea/sonarlint/
+psb/android/.idea/libraries/
+psb/android/.idea/caches/build_file_checksums.ser
+psb/android/.idea/caches/
+psb/android/.idea/markdown-navigator/
+psb/.idea/libraries/
+psb/.idea/markdown-navigator.xml
