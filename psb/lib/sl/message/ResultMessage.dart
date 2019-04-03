@@ -1,7 +1,7 @@
 import 'package:psb/sl/data/Result.dart';
 import 'package:psb/sl/message/AbsMessage.dart';
 import 'package:psb/sl/message/Message.dart';
-import 'package:psb/sl/request/ResponseListener.dart';
+import 'package:psb/sl/message/ResponseListener.dart';
 import 'package:psb/sl/specialist/messager/MessengerSubscriber.dart';
 
 class ResultMessage extends AbsMessage {
