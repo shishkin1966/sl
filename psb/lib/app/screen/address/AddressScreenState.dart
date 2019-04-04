@@ -9,6 +9,7 @@ import 'package:psb/app/common/DataWidget.dart';
 import 'package:psb/app/screen/address/AddressScreenPresenter.dart';
 import 'package:psb/app/screen/address/AddressScreenWidget.dart';
 import 'package:psb/common/AppUtils.dart';
+import 'package:psb/common/StringUtils.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/DataAction.dart';
@@ -22,6 +23,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
 
   double _bottomPosition = RolledBottomMenuHeight;
   GlobalKey _mapKey = new GlobalKey();
+  GlobalKey _bottomKey = new GlobalKey();
 
   @override
   Presenter<WidgetState<StatefulWidget>> createPresenter() {
@@ -109,6 +111,10 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
               ),
               new Container(
                 height: _bottomPosition - 1,
+                margin: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                child: new Center(
+                  child: BottomWidget(key: _bottomKey),
+                ),
               )
             ],
           ),
@@ -125,6 +131,12 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
         case AddressScreenPresenter.LocationChanged:
           action.setStateNonChanged();
           (_mapKey.currentState as GoogleMapWidgetState)
+              ?.onChange(action.getData());
+          return;
+
+        case AddressScreenPresenter.GetAddress:
+          action.setStateNonChanged();
+          (_bottomKey.currentState as BottomWidgetState)
               ?.onChange(action.getData());
           return;
       }
@@ -206,5 +218,24 @@ class GoogleMapWidgetState extends DataWidgetState<Position> {
         _markers[_marker.markerId] = _marker;
       }
     }
+  }
+}
+
+class BottomWidget extends DataWidget {
+  BottomWidget({Key key}) : super(key: key);
+
+  @override
+  BottomWidgetState createState() => new BottomWidgetState(null);
+}
+
+class BottomWidgetState extends DataWidgetState<String> {
+  BottomWidgetState(String data) : super(data);
+
+  @override
+  Widget getWidget() {
+    return new Text(
+      StringUtils.isNullOrEmpty(getData()) ? "" : getData(),
+      style: TextStyle(color: Colors.black, fontSize: 16),
+    );
   }
 }
