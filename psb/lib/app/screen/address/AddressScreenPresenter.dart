@@ -14,10 +14,6 @@ class AddressScreenPresenter<AddressScreenState extends WidgetState>
   static const String CameraMoved = "CameraMoved";
   static const String GetAddress = "GetAddress";
 
-  var _geolocator = Geolocator();
-  var locationOptions =
-      LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
-
   AddressScreenPresenter(AddressScreenState lifecycleState)
       : super(lifecycleState);
 
@@ -72,7 +68,10 @@ class AddressScreenPresenter<AddressScreenState extends WidgetState>
       _getAddress(position);
     });
 
-    geolocator.getPositionStream(locationOptions).listen((position) {
+    geolocator
+        .getPositionStream(new LocationOptions(
+            accuracy: LocationAccuracy.high, distanceFilter: 10))
+        .listen((position) {
       getWidget().addAction(new DataAction(LocationChanged).setData(position));
       _getAddress(position);
     });
