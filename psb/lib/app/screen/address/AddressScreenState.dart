@@ -14,12 +14,12 @@ import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
-import 'package:psb/ui/AppColor.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class AddressScreenState extends WidgetState<AddressScreenWidget>
     with SingleTickerProviderStateMixin {
-  static const double RolledBottomMenuHeight = 65;
+  static const double RolledBottomMenuHeight = 64;
+  static const double ShadowHeight = 6;
 
   double _bottomPosition = RolledBottomMenuHeight;
   GlobalKey _mapKey = new GlobalKey();
@@ -66,8 +66,8 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
       top: 0,
       left: 0,
       height: constraints.maxHeight - _bottomPosition <= 0
-          ? constraints.maxHeight
-          : constraints.maxHeight - _bottomPosition + 4,
+          ? ShadowHeight
+          : constraints.maxHeight - _bottomPosition,
       width: constraints.maxWidth,
       child: new GoogleMapWidget(key: _mapKey),
     );
@@ -75,12 +75,11 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
 
   Widget _showBottomMenu(BuildContext context, BoxConstraints constraints) {
     return new Positioned(
-      top: constraints.maxHeight - _bottomPosition - 4,
-      height: _bottomPosition + 4,
+      top: constraints.maxHeight - _bottomPosition - ShadowHeight,
+      height: _bottomPosition + ShadowHeight,
       left: 0,
       width: constraints.maxWidth,
       child: new Container(
-        color: Colors.white,
         height: _bottomPosition,
         width: double.infinity,
         child: new NotificationListener(
@@ -96,8 +95,8 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
                 if (_bottomPosition < RolledBottomMenuHeight) {
                   _bottomPosition = RolledBottomMenuHeight;
                 }
-                if (_bottomPosition >= constraints.maxHeight) {
-                  _bottomPosition = constraints.maxHeight;
+                if (_bottomPosition >= constraints.maxHeight - ShadowHeight) {
+                  _bottomPosition = constraints.maxHeight - ShadowHeight;
                 }
                 setState(() {});
               }
@@ -106,7 +105,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
           child: new ListView(
             children: <Widget>[
               new Container(
-                height: 4,
+                height: ShadowHeight,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
@@ -116,11 +115,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
                 ),
               ),
               new Container(
-                height: 1,
-                color: Color(AppColor.DividerDark),
-              ),
-              new Container(
-                height: _bottomPosition - 5,
+                height: _bottomPosition - 4,
                 margin: EdgeInsets.fromLTRB(12, 0, 12, 0),
                 child: new Center(
                   child: BottomWidget(key: _bottomKey),
