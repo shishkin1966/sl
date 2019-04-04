@@ -51,16 +51,20 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
             new Container(
               color: Color(0xffEEF5FF),
             ),
-            _showHorizontalProgress(context, constraints),
             new Column(
               children: <Widget>[
                 _showFilter(context, constraints),
+                new Container(
+                  height: 1,
+                  color: Color(0xffd9d9d9),
+                ),
                 new Expanded(
                   child: new ContactsWidget(key: _contactsKey),
                   flex: 1,
                 ),
               ],
             ),
+            _showHorizontalProgress(context, constraints),
           ],
         ),
       );
@@ -69,16 +73,20 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
 
   Widget _showFilter(BuildContext context, BoxConstraints constraints) {
     return new Container(
+      color: Colors.white,
       padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
       height: 40,
       child: new TextField(
         decoration: InputDecoration(
+          border: InputBorder.none,
           hintText: SLUtil.getString(context, "search"),
           icon: Icon(Icons.search),
         ),
         keyboardType: TextInputType.text,
         onChanged: (text) {
-          getPresenter().addAction(new DataAction(ContactsScreenPresenter.ChangeFilter).setData(text));
+          getPresenter().addAction(
+              new DataAction(ContactsScreenPresenter.ChangeFilter)
+                  .setData(text));
         },
         maxLines: 1,
       ),
@@ -91,7 +99,8 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
     return null;
   }
 
-  Widget _showHorizontalProgress(BuildContext context, BoxConstraints constraints) {
+  Widget _showHorizontalProgress(
+      BuildContext context, BoxConstraints constraints) {
     return new Positioned(
       top: 0,
       left: 0,
@@ -109,12 +118,14 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
       switch (actionName) {
         case Actions.ShowHorizontalProgress:
           action.setStateNonChanged();
-          (_progressKey.currentState as HorizontalProgressWidgetState)?.onChange(true);
+          (_progressKey.currentState as HorizontalProgressWidgetState)
+              ?.onChange(true);
           return;
 
         case Actions.HideHorizontalProgress:
           action.setStateNonChanged();
-          (_progressKey.currentState as HorizontalProgressWidgetState)?.onChange(false);
+          (_progressKey.currentState as HorizontalProgressWidgetState)
+              ?.onChange(false);
           return;
       }
     }
@@ -124,7 +135,8 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
       switch (actionName) {
         case Repository.GetContacts:
           action.setStateNonChanged();
-          (_contactsKey.currentState as ContactsWidgetState)?.onChange(action.getData());
+          (_contactsKey.currentState as ContactsWidgetState)
+              ?.onChange(action.getData());
           return;
       }
     }
@@ -135,7 +147,8 @@ class HorizontalProgressWidget extends DataWidget {
   HorizontalProgressWidget({Key key}) : super(key: key);
 
   @override
-  HorizontalProgressWidgetState createState() => new HorizontalProgressWidgetState(false);
+  HorizontalProgressWidgetState createState() =>
+      new HorizontalProgressWidgetState(false);
 }
 
 class HorizontalProgressWidgetState extends DataWidgetState<bool> {
@@ -160,7 +173,8 @@ class ContactsWidget extends DataWidget {
   ContactsWidget({Key key}) : super(key: key);
 
   @override
-  ContactsWidgetState createState() => new ContactsWidgetState(new List<Contact>());
+  ContactsWidgetState createState() =>
+      new ContactsWidgetState(new List<Contact>());
 }
 
 class ContactsWidgetState extends DataWidgetState<List<Contact>> {
@@ -196,10 +210,12 @@ class ContactsWidgetState extends DataWidgetState<List<Contact>> {
                                   new Expanded(
                                     flex: 1,
                                     child: new Container(
-                                      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                                      padding:
+                                          EdgeInsets.fromLTRB(12, 0, 12, 0),
                                       child: new Text(
                                         getData()[position].displayName,
-                                        style: TextStyle(color: Colors.black, fontSize: 20),
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 20),
                                       ),
                                     ),
                                   ),

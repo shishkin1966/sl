@@ -67,7 +67,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
       left: 0,
       height: constraints.maxHeight - _bottomPosition <= 0
           ? constraints.maxHeight
-          : constraints.maxHeight - _bottomPosition,
+          : constraints.maxHeight - _bottomPosition + 4,
       width: constraints.maxWidth,
       child: new GoogleMapWidget(key: _mapKey),
     );
@@ -75,8 +75,8 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
 
   Widget _showBottomMenu(BuildContext context, BoxConstraints constraints) {
     return new Positioned(
-      top: constraints.maxHeight - _bottomPosition,
-      height: _bottomPosition,
+      top: constraints.maxHeight - _bottomPosition - 4,
+      height: _bottomPosition + 4,
       left: 0,
       width: constraints.maxWidth,
       child: new Container(
@@ -106,11 +106,21 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
           child: new ListView(
             children: <Widget>[
               new Container(
+                height: 4,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[Colors.transparent, Color(0x30000000)],
+                  ),
+                ),
+              ),
+              new Container(
                 height: 1,
                 color: Color(AppColor.DividerDark),
               ),
               new Container(
-                height: _bottomPosition - 1,
+                height: _bottomPosition - 5,
                 margin: EdgeInsets.fromLTRB(12, 0, 12, 0),
                 child: new Center(
                   child: BottomWidget(key: _bottomKey),
