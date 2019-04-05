@@ -8,7 +8,8 @@ abstract class UISpecialist extends Specialist {
 
   void showErrorToast(String text);
 
-  SnackBar getSnackBar(String text, {Duration duration, String actionText, Action action});
+  SnackBar getSnackBar(String text,
+      {Duration duration, String actionText, Action action});
 
   SnackBar getNoConnectivitySnackBar(String text);
 
@@ -22,6 +23,9 @@ abstract class UISpecialist extends Specialist {
     bool isDismissible,
   });
 
-  Flushbar getErrorFlushbar(
-    String text);
+  Flushbar getErrorFlushbar(String text);
+
+  void hideKeyboard(BuildContext context);
+
+  void showKeyboard(BuildContext context, FocusNode focusNode);
 }
