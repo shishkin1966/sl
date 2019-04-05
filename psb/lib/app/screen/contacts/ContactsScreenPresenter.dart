@@ -76,13 +76,6 @@ class ContactsScreenPresenter<ContactsScreenState extends WidgetState>
   }
 
   @override
-  void onDestroy() {
-    super.onDestroy();
-
-    SLUtil.getUISpecialist().hideKeyboard(getWidget().context);
-  }
-
-  @override
   void response(Result result) {
     getWidget()
         .addAction(new ApplicationAction(Actions.HideHorizontalProgress));
