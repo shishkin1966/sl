@@ -14,12 +14,12 @@ import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
+import 'package:psb/ui/Dimen.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class AddressScreenState extends WidgetState<AddressScreenWidget>
     with SingleTickerProviderStateMixin {
   static const double RolledBottomMenuHeight = 64;
-  static const double ShadowHeight = 6;
 
   double _bottomPosition = RolledBottomMenuHeight;
   GlobalKey _mapKey = new GlobalKey();
@@ -66,7 +66,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
       top: 0,
       left: 0,
       height: constraints.maxHeight - _bottomPosition <= 0
-          ? ShadowHeight
+          ? Dimen.ShadowHeight
           : constraints.maxHeight - _bottomPosition,
       width: constraints.maxWidth,
       child: new GoogleMapWidget(key: _mapKey),
@@ -75,8 +75,8 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
 
   Widget _showBottomMenu(BuildContext context, BoxConstraints constraints) {
     return new Positioned(
-      top: constraints.maxHeight - _bottomPosition - ShadowHeight,
-      height: _bottomPosition + ShadowHeight,
+      top: constraints.maxHeight - _bottomPosition - Dimen.ShadowHeight,
+      height: _bottomPosition + Dimen.ShadowHeight,
       left: 0,
       width: constraints.maxWidth,
       child: new Container(
@@ -95,8 +95,9 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
                 if (_bottomPosition < RolledBottomMenuHeight) {
                   _bottomPosition = RolledBottomMenuHeight;
                 }
-                if (_bottomPosition >= constraints.maxHeight - ShadowHeight) {
-                  _bottomPosition = constraints.maxHeight - ShadowHeight;
+                if (_bottomPosition >=
+                    constraints.maxHeight - Dimen.ShadowHeight) {
+                  _bottomPosition = constraints.maxHeight - Dimen.ShadowHeight;
                 }
                 setState(() {});
               }
@@ -105,7 +106,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
           child: new ListView(
             children: <Widget>[
               new Container(
-                height: ShadowHeight,
+                height: Dimen.ShadowHeight,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
