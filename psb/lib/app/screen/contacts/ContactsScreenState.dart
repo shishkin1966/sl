@@ -17,6 +17,7 @@ import 'package:psb/ui/WidgetState.dart';
 class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
   GlobalKey _progressKey = new GlobalKey();
   GlobalKey _contactsKey = new GlobalKey();
+  final TextEditingController _controller = new TextEditingController();
 
   @override
   Presenter<WidgetState<StatefulWidget>> createPresenter() {
@@ -70,21 +71,38 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
       width: constraints.maxWidth,
       child: new Container(
         color: Colors.white,
-        padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+        padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
         height: Dimen.FilterHeight,
-        child: new TextField(
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: SLUtil.getString(context, "search"),
-            icon: Icon(Icons.search),
-          ),
-          keyboardType: TextInputType.text,
-          onChanged: (text) {
-            getPresenter().addAction(
-                new DataAction(ContactsScreenPresenter.ChangeFilter)
-                    .setData(text));
-          },
-          maxLines: 1,
+        child: new Row(
+          children: <Widget>[
+            new Expanded(
+              child: new TextField(
+                controller: _controller,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: SLUtil.getString(context, "search"),
+                  icon: Icon(Icons.search),
+                ),
+                keyboardType: TextInputType.text,
+                onChanged: (text) {
+                  getPresenter().addAction(
+                      new DataAction(ContactsScreenPresenter.ChangeFilter)
+                          .setData(text));
+                },
+                maxLines: 1,
+              ),
+              flex: 1,
+            ),
+            new FlatButton(
+              onPressed: () {
+                _controller.clear();
+                getPresenter().addAction(
+                    new DataAction(ContactsScreenPresenter.ChangeFilter)
+                        .setData(""));
+              },
+              child: new Icon(Icons.clear),
+            ),
+          ],
         ),
       ),
     );
