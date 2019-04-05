@@ -11,11 +11,13 @@ import 'package:psb/sl/action/ApplicationAction.dart';
 import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';
+import 'package:psb/ui/Dimen.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
   GlobalKey _progressKey = new GlobalKey();
   GlobalKey _contactsKey = new GlobalKey();
+  final TextEditingController _controller = new TextEditingController();
 
   @override
   Presenter<WidgetState<StatefulWidget>> createPresenter() {
@@ -51,19 +53,9 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
             new Container(
               color: Color(0xffEEF5FF),
             ),
-            new Column(
-              children: <Widget>[
-                _showFilter(context, constraints),
-                new Container(
-                  height: 1,
-                  color: Color(0xffd9d9d9),
-                ),
-                new Expanded(
-                  child: new ContactsWidget(key: _contactsKey),
-                  flex: 1,
-                ),
-              ],
-            ),
+            _showFilter(context, constraints),
+            _showContacts(context, constraints),
+            _showFilterShadow(context, constraints),
             _showHorizontalProgress(context, constraints),
           ],
         ),
@@ -72,24 +64,76 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
   }
 
   Widget _showFilter(BuildContext context, BoxConstraints constraints) {
-    return new Container(
-      color: Colors.white,
-      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
-      height: 40,
-      child: new TextField(
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: SLUtil.getString(context, "search"),
-          icon: Icon(Icons.search),
+    return new Positioned(
+      top: 0,
+      left: 0,
+      height: Dimen.FilterHeight,
+      width: constraints.maxWidth,
+      child: new Container(
+        color: Colors.white,
+        padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
+        height: Dimen.FilterHeight,
+        child: new Row(
+          children: <Widget>[
+            new Expanded(
+              child: new TextField(
+                controller: _controller,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: SLUtil.getString(context, "search"),
+                  icon: Icon(Icons.search),
+                ),
+                keyboardType: TextInputType.text,
+                onChanged: (text) {
+                  getPresenter().addAction(
+                      new DataAction(ContactsScreenPresenter.ChangeFilter)
+                          .setData(text));
+                },
+                maxLines: 1,
+              ),
+              flex: 1,
+            ),
+            new FlatButton(
+              onPressed: () {
+                _controller.clear();
+                getPresenter().addAction(
+                    new DataAction(ContactsScreenPresenter.ChangeFilter)
+                        .setData(""));
+              },
+              child: new Icon(Icons.clear),
+            ),
+          ],
         ),
-        keyboardType: TextInputType.text,
-        onChanged: (text) {
-          getPresenter().addAction(
-              new DataAction(ContactsScreenPresenter.ChangeFilter)
-                  .setData(text));
-        },
-        maxLines: 1,
       ),
+    );
+  }
+
+  Widget _showFilterShadow(BuildContext context, BoxConstraints constraints) {
+    return new Positioned(
+      top: Dimen.FilterHeight,
+      left: 0,
+      height: Dimen.ShadowHeight,
+      width: constraints.maxWidth,
+      child: new Container(
+        height: Dimen.ShadowHeight,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: <Color>[Color(0x30000000), Colors.transparent],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _showContacts(BuildContext context, BoxConstraints constraints) {
+    return new Positioned(
+      top: Dimen.FilterHeight,
+      left: 0,
+      height: constraints.maxHeight - Dimen.FilterHeight,
+      width: constraints.maxWidth,
+      child: new ContactsWidget(key: _contactsKey),
     );
   }
 
