@@ -20,13 +20,14 @@ import 'package:psb/sl/message/ActionMessage.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/sl/state/States.dart';
+import 'package:psb/ui/AppColor.dart';
 import 'package:psb/ui/Application.dart';
 import 'package:psb/ui/Dimen.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class HomeScreenState extends WidgetState<HomeScreenWidget> {
-  static const double ExpandedBottomMenuHeight = 122;
-  static const double RolledBottomMenuHeight = 42;
+  static const double ExpandedBottomMenuHeight = 122.0 + Dimen.ShadowHeight;
+  static const double RolledBottomMenuHeight = 41.0 + Dimen.ShadowHeight;
 
   int _exitCount = 0;
   double _bottomPosition = RolledBottomMenuHeight;
@@ -157,7 +158,6 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
       left: 0,
       width: constraints.maxWidth,
       child: new Container(
-          color: Color(0xff074a80),
           height: _bottomPosition,
           width: double.infinity,
           child: NotificationListener(
@@ -184,6 +184,19 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
               behavior: new WithoutGlowBehavior(),
               child: new ListView(
                 children: <Widget>[
+                  new Container(
+                    height: Dimen.ShadowHeight,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: <Color>[
+                          Colors.transparent,
+                          Color(AppColor.Shadow)
+                        ],
+                      ),
+                    ),
+                  ),
                   new Material(
                     color: Color(0xff377ad0),
                     child: InkWell(
