@@ -20,13 +20,14 @@ import 'package:psb/sl/message/ActionMessage.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/sl/state/States.dart';
+import 'package:psb/ui/AppColor.dart';
 import 'package:psb/ui/Application.dart';
 import 'package:psb/ui/Dimen.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class HomeScreenState extends WidgetState<HomeScreenWidget> {
-  static const double ExpandedBottomMenuHeight = 122;
-  static const double RolledBottomMenuHeight = 42;
+  static const double ExpandedBottomMenuHeight = 122.0 + Dimen.ShadowHeight;
+  static const double RolledBottomMenuHeight = 41.0 + Dimen.ShadowHeight;
 
   int _exitCount = 0;
   double _bottomPosition = RolledBottomMenuHeight;
@@ -156,111 +157,134 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
       height: _bottomPosition,
       left: 0,
       width: constraints.maxWidth,
-      child: new Container(
-          color: Color(0xff074a80),
-          height: _bottomPosition,
-          width: double.infinity,
-          child: NotificationListener(
-            onNotification: (notification) {
-              if (notification is UserScrollNotification) {
-                if (notification.direction == ScrollDirection.forward) {
-                  _bottomPosition = RolledBottomMenuHeight;
-                  setState(() {});
-                }
-              } else if (notification is ScrollUpdateNotification) {
-                if (notification.dragDetails != null) {
-                  _bottomPosition -= notification.dragDetails.delta.dy * 4;
-                  if (_bottomPosition < RolledBottomMenuHeight) {
-                    _bottomPosition = RolledBottomMenuHeight;
-                  }
-                  if (_bottomPosition >= ExpandedBottomMenuHeight) {
-                    _bottomPosition = ExpandedBottomMenuHeight;
-                  }
-                  setState(() {});
-                }
-              }
-            },
-            child: new ScrollConfiguration(
-              behavior: new WithoutGlowBehavior(),
-              child: new ListView(
-                children: <Widget>[
-                  new Material(
-                    color: Color(0xff377ad0),
-                    child: InkWell(
-                      onTap: () {
-                        SLUtil.getUISpecialist().showToast('OnTapPayments');
-                        _bottomPosition = RolledBottomMenuHeight;
-                        setState(() {});
-                      },
-                      child: new Container(
-                        padding: EdgeInsets.fromLTRB(
-                            Dimen.Dimen_12, 0, Dimen.Dimen_12, 0),
-                        height: Dimen.Dimen_40,
-                        child: new Align(
-                          alignment: Alignment.centerLeft,
-                          child: new Text(
-                            SLUtil.getString(context, 'payments'),
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  new Container(
-                    height: 1,
-                    color: Color(0xffd9d9d9),
-                  ),
-                  new Material(
-                    color: Color(0xff377ad0),
-                    child: InkWell(
-                      onTap: () {
-                        SLUtil.getUISpecialist().showToast('OnTapSortBy');
-                        _bottomPosition = RolledBottomMenuHeight;
-                        setState(() {});
-                      },
-                      child: new Container(
-                        padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
-                        height: Dimen.Dimen_40,
-                        child: new Align(
-                          alignment: Alignment.centerLeft,
-                          child: new Text(
-                            SLUtil.getString(context, 'sort_by'),
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  new Container(
-                    height: 1,
-                    color: Color(0xffd9d9d9),
-                  ),
-                  new Material(
-                    color: Color(0xff377ad0),
-                    child: InkWell(
-                      onTap: () {
-                        SLUtil.getUISpecialist().showToast('OnTapSelectBy');
-                        _bottomPosition = RolledBottomMenuHeight;
-                        setState(() {});
-                      },
-                      child: new Container(
-                        padding: EdgeInsets.fromLTRB(
-                            Dimen.Dimen_12, 0, Dimen.Dimen_12, 0),
-                        height: Dimen.Dimen_40,
-                        child: new Align(
-                          alignment: Alignment.centerLeft,
-                          child: new Text(
-                            SLUtil.getString(context, 'select_by'),
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+      child: new Column(
+        children: <Widget>[
+          new Container(
+            height: Dimen.ShadowHeight,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: <Color>[Colors.transparent, Color(AppColor.Shadow)],
               ),
             ),
-          )),
+          ),
+          new Container(
+            color: Color(AppColor.Blue),
+            height: _bottomPosition - Dimen.ShadowHeight,
+            child: new Container(
+                height: _bottomPosition,
+                width: double.infinity,
+                child: NotificationListener(
+                  onNotification: (notification) {
+                    if (notification is UserScrollNotification) {
+                      if (notification.direction == ScrollDirection.forward) {
+                        _bottomPosition = RolledBottomMenuHeight;
+                        setState(() {});
+                      }
+                    } else if (notification is ScrollUpdateNotification) {
+                      if (notification.dragDetails != null) {
+                        _bottomPosition -=
+                            notification.dragDetails.delta.dy * 4;
+                        if (_bottomPosition < RolledBottomMenuHeight) {
+                          _bottomPosition = RolledBottomMenuHeight;
+                        }
+                        if (_bottomPosition >= ExpandedBottomMenuHeight) {
+                          _bottomPosition = ExpandedBottomMenuHeight;
+                        }
+                        setState(() {});
+                      }
+                    }
+                  },
+                  child: new ScrollConfiguration(
+                    behavior: new WithoutGlowBehavior(),
+                    child: new ListView(
+                      children: <Widget>[
+                        new Material(
+                          color: Color(AppColor.BlueMenu),
+                          child: InkWell(
+                            onTap: () {
+                              SLUtil.getUISpecialist()
+                                  .showToast('OnTapPayments');
+                              _bottomPosition = RolledBottomMenuHeight;
+                              setState(() {});
+                            },
+                            child: new Container(
+                              padding: EdgeInsets.fromLTRB(
+                                  Dimen.Dimen_12, 0, Dimen.Dimen_12, 0),
+                              height: Dimen.Dimen_40,
+                              child: new Align(
+                                alignment: Alignment.centerLeft,
+                                child: new Text(
+                                  SLUtil.getString(context, 'payments'),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        new Container(
+                          height: 1,
+                          color: Color(AppColor.DividerMenu),
+                        ),
+                        new Material(
+                          color: Color(AppColor.BlueMenu),
+                          child: InkWell(
+                            onTap: () {
+                              SLUtil.getUISpecialist().showToast('OnTapSortBy');
+                              _bottomPosition = RolledBottomMenuHeight;
+                              setState(() {});
+                            },
+                            child: new Container(
+                              padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                              height: Dimen.Dimen_40,
+                              child: new Align(
+                                alignment: Alignment.centerLeft,
+                                child: new Text(
+                                  SLUtil.getString(context, 'sort_by'),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        new Container(
+                          height: 1,
+                          color: Color(AppColor.DividerMenu),
+                        ),
+                        new Material(
+                          color: Color(AppColor.BlueMenu),
+                          child: InkWell(
+                            onTap: () {
+                              SLUtil.getUISpecialist()
+                                  .showToast('OnTapSelectBy');
+                              _bottomPosition = RolledBottomMenuHeight;
+                              setState(() {});
+                            },
+                            child: new Container(
+                              padding: EdgeInsets.fromLTRB(
+                                  Dimen.Dimen_12, 0, Dimen.Dimen_12, 0),
+                              height: Dimen.Dimen_40,
+                              child: new Align(
+                                alignment: Alignment.centerLeft,
+                                child: new Text(
+                                  SLUtil.getString(context, 'select_by'),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )),
+          )
+        ],
+      ),
     );
   }
 

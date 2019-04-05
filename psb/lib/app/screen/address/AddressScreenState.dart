@@ -14,6 +14,7 @@ import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
+import 'package:psb/ui/AppColor.dart';
 import 'package:psb/ui/Dimen.dart';
 import 'package:psb/ui/WidgetState.dart';
 
@@ -111,7 +112,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: <Color>[Colors.transparent, Color(0x30000000)],
+                    colors: <Color>[Colors.transparent, Color(AppColor.Shadow)],
                   ),
                 ),
               ),

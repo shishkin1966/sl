@@ -136,7 +136,7 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: <Color>[Color(0x30000000), Colors.transparent],
+            colors: <Color>[Color(AppColor.Shadow), Colors.transparent],
           ),
         ),
       ),
