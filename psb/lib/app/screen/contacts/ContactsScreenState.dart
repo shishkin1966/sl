@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:psb/app/common/DataWidget.dart';
 import 'package:psb/app/screen/contacts/ContactsScreenPresenter.dart';
 import 'package:psb/app/screen/contacts/ContactsScreenWidget.dart';
+import 'package:psb/common/StringUtils.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/Actions.dart';
@@ -11,6 +12,7 @@ import 'package:psb/sl/action/ApplicationAction.dart';
 import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';
+import 'package:psb/ui/AppColor.dart';
 import 'package:psb/ui/Dimen.dart';
 import 'package:psb/ui/WidgetState.dart';
 
@@ -18,6 +20,7 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
   GlobalKey _progressKey = new GlobalKey();
   GlobalKey _contactsKey = new GlobalKey();
   final TextEditingController _controller = new TextEditingController();
+  FocusNode _focusNode = new FocusNode();
 
   @override
   Presenter<WidgetState<StatefulWidget>> createPresenter() {
@@ -71,17 +74,21 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
       width: constraints.maxWidth,
       child: new Container(
         color: Colors.white,
-        padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
+        padding: EdgeInsets.fromLTRB(12, 0, 8, 0),
         height: Dimen.FilterHeight,
         child: new Row(
           children: <Widget>[
             new Expanded(
               child: new TextField(
+                focusNode: _focusNode,
                 controller: _controller,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: SLUtil.getString(context, "search"),
-                  icon: Icon(Icons.search),
+                  icon: Icon(
+                    Icons.search,
+                    color: Color(AppColor.Dark),
+                  ),
                 ),
                 keyboardType: TextInputType.text,
                 onChanged: (text) {
@@ -93,14 +100,23 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
               ),
               flex: 1,
             ),
-            new FlatButton(
-              onPressed: () {
-                _controller.clear();
-                getPresenter().addAction(
-                    new DataAction(ContactsScreenPresenter.ChangeFilter)
-                        .setData(""));
-              },
-              child: new Icon(Icons.clear),
+            new Container(
+              width: 48,
+              child: new FlatButton(
+                onPressed: () {
+                  if (!StringUtils.isNullOrEmpty(_controller.text)) {
+                    _controller.clear();
+                    SLUtil.getUISpecialist().hideKeyboard(context);
+                    getPresenter().addAction(
+                        new DataAction(ContactsScreenPresenter.ChangeFilter)
+                            .setData(""));
+                  }
+                },
+                child: Icon(
+                  Icons.clear,
+                  color: Color(AppColor.Dark),
+                ),
+              ),
             ),
           ],
         ),
@@ -170,6 +186,11 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
           action.setStateNonChanged();
           (_progressKey.currentState as HorizontalProgressWidgetState)
               ?.onChange(false);
+          return;
+
+        case Actions.ShowKeyboard:
+          action.setStateNonChanged();
+          SLUtil.getUISpecialist().showKeyboard(context, _focusNode);
           return;
       }
     }

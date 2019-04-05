@@ -6,4 +6,5 @@ class Actions {
   static const String HideProgress = "HideProgress";
   static const String ShowHorizontalProgress = "ShowHorizontalProgress";
   static const String HideHorizontalProgress = "HideHorizontalProgress";
+  static const String ShowKeyboard = "ShowKeyboard";
 }

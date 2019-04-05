@@ -51,7 +51,9 @@ class UISpecialistImpl extends AbsSpecialist implements UISpecialist {
 
   @override
   SnackBar getSnackBar(String text,
-      {Duration duration = const Duration(seconds: 4), String actionText, Action action}) {
+      {Duration duration = const Duration(seconds: 4),
+      String actionText,
+      Action action}) {
     if (StringUtils.isNullOrEmpty(actionText)) {
       return new SnackBar(
         backgroundColor: Color(0xff404040),
@@ -66,7 +68,8 @@ class UISpecialistImpl extends AbsSpecialist implements UISpecialist {
         action: SnackBarAction(
           label: actionText,
           onPressed: () {
-            SLUtil.addMessage(new ActionMessage.action(Application.NAME, action));
+            SLUtil.addMessage(
+                new ActionMessage.action(Application.NAME, action));
           },
         ),
       );
@@ -116,5 +119,15 @@ class UISpecialistImpl extends AbsSpecialist implements UISpecialist {
         "assets/vector/ic_error.svg",
       ),
     );
+  }
+
+  @override
+  void hideKeyboard(BuildContext context) {
+    FocusScope.of(context).detach();
+  }
+
+  @override
+  void showKeyboard(BuildContext context, FocusNode focusNode) {
+    FocusScope.of(context).requestFocus(focusNode);
   }
 }
