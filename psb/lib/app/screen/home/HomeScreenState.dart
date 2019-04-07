@@ -294,7 +294,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
       return new RefreshIndicator(
         onRefresh: _onRefresh,
         child: new Container(
-          height: constraints.maxHeight - _bottomPosition,
+          height: constraints.maxHeight - _bottomPosition + Dimen.ShadowHeight,
           width: constraints.maxWidth,
           child: new OperationsWidget(key: _operationsKey),
         ),
