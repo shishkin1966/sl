@@ -235,7 +235,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                           color: Color(AppColor.BlueMenu),
                           child: InkWell(
                             onTap: () {
-                              SLUtil.getUISpecialist().showToast('OnTapSortBy');
+                              _showSortMenu(context);
                               _bottomPosition = RolledBottomMenuHeight;
                               setState(() {});
                             },
@@ -261,8 +261,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                           color: Color(AppColor.BlueMenu),
                           child: InkWell(
                             onTap: () {
-                              SLUtil.getUISpecialist()
-                                  .showToast('OnTapSelectBy');
+                              _showSelectMenu(context);
                               _bottomPosition = RolledBottomMenuHeight;
                               setState(() {});
                             },
@@ -288,6 +287,100 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
           )
         ],
       ),
+    );
+  }
+
+  void _showSortMenu(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return Container(
+          child: new Wrap(
+            children: <Widget>[
+              new ListTile(
+                title: new Text(SLUtil.getString(bc, "default")),
+                onTap: () {
+                  Navigator.pop(bc);
+                  getPresenter()?.addAction(
+                      new ApplicationAction(HomeScreenPresenter.SortByDefault));
+                },
+              ),
+              new Container(
+                height: 1,
+                color: Color(AppColor.DividerMenu),
+              ),
+              new ListTile(
+                title: new Text(SLUtil.getString(bc, "sort_name")),
+                onTap: () {
+                  Navigator.pop(bc);
+                  getPresenter()?.addAction(
+                      new ApplicationAction(HomeScreenPresenter.SortByName));
+                },
+              ),
+              new Container(
+                height: 1,
+                color: Color(AppColor.DividerMenu),
+              ),
+              new ListTile(
+                title: new Text(SLUtil.getString(bc, "sort_currency")),
+                onTap: () {
+                  Navigator.pop(bc);
+                  getPresenter()?.addAction(new ApplicationAction(
+                      HomeScreenPresenter.SortByCurrency));
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showSelectMenu(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return Container(
+          child: new Wrap(
+            children: <Widget>[
+              new ListTile(
+                title: new Text(SLUtil.getString(bc, "all")),
+                onTap: () {
+                  Navigator.pop(bc);
+                  getPresenter()?.addAction(
+                      new ApplicationAction(HomeScreenPresenter.SortByDefault));
+                },
+              ),
+              new Container(
+                height: 1,
+                color: Color(AppColor.DividerMenu),
+              ),
+              new ListTile(
+                title: new Text("\$"),
+                onTap: () {
+                  Navigator.pop(bc);
+                  getPresenter()?.addAction(
+                      new DataAction(HomeScreenPresenter.SelectBy)
+                          .setData("\$"));
+                },
+              ),
+              new Container(
+                height: 1,
+                color: Color(AppColor.DividerMenu),
+              ),
+              new ListTile(
+                title: new Text("₽"),
+                onTap: () {
+                  Navigator.pop(bc);
+                  getPresenter()?.addAction(
+                      new DataAction(HomeScreenPresenter.SelectBy)
+                          .setData("₽"));
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

@@ -16,6 +16,10 @@
   "templates": "Templates",
   "contacts": "Contacts",
   "search": "Search",
-  "payments": "Payments and transfers"
+  "payments": "Payments and transfers",
+  "default": "Default",
+  "sort_name": "By name",
+  "sort_currency": "By currency",
+  "all": "All"
 
 }

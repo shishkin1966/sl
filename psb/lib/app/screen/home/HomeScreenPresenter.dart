@@ -19,7 +19,10 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState>
     extends AbsPresenter<HomeScreenState> implements ResponseListener {
   static const String NAME = "HomeScreenPresenenter";
   static const String CreateAccount = "CreateAccount";
-  static const String SortBy = "SortBy";
+  static const String SortByDefault = "SortByDefault";
+  static const String SortByName = "SortByName";
+  static const String SortByCurrency = "SortByCurrency";
+  static const String SelectAll = "SelectAll";
   static const String SelectBy = "SelectBy";
 
   HomeScreenPresenter(HomeScreenState lifecycleState) : super(lifecycleState);
@@ -31,53 +34,64 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState>
 
   @override
   void onAction(Action action) {
+    BuildContext context = getWidget().getScaffoldState().context;
     if (action is ApplicationAction) {
       String actionName = action.getName();
-      BuildContext context = getWidget().getScaffoldState().context;
       switch (actionName) {
         case Router.ShowAccountsScreen:
           SLUtil.getRouterSpecialist()
               .showScreen(context, Router.ShowAccountsScreen);
-          break;
+          return;
 
         case Router.ShowSettingsScreen:
           SLUtil.getRouterSpecialist()
               .showScreen(context, Router.ShowSettingsScreen);
-          break;
+          return;
 
         case Router.ShowRatesScreen:
           SLUtil.getRouterSpecialist()
               .showScreen(context, Router.ShowRatesScreen);
-          break;
+          return;
 
         case Router.ShowAddressScreen:
           SLUtil.getRouterSpecialist()
               .showScreen(context, Router.ShowAddressScreen);
-          break;
+          return;
 
         case Router.ShowContactsScreen:
           SLUtil.getRouterSpecialist()
               .showScreen(context, Router.ShowContactsScreen);
-          break;
+          return;
 
         case CreateAccount:
           _createAccount();
-          break;
+          return;
 
-        case SortBy:
-          _sortBy();
-          break;
+        case SortByDefault:
+        case SortByName:
+        case SortByCurrency:
+          _sortBy(actionName);
+          return;
 
-        case SelectBy:
-          _selectBy();
-          break;
+        case SelectAll:
+          _selectAll();
+          return;
 
         case Actions.Refresh:
           getWidget()
               .addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
           // Получим операции
           SLUtil.getRepositorySpecialist().getOperations(NAME);
-          break;
+          return;
+      }
+    }
+
+    if (action is DataAction) {
+      String actionName = action.getName();
+      switch (actionName) {
+        case SelectBy:
+          _selectBy(action.getData());
+          return;
       }
     }
   }
@@ -162,7 +176,9 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState>
 
   void _createAccount() {}
 
-  void _sortBy() {}
+  void _sortBy(String action) {}
 
-  void _selectBy() {}
+  void _selectAll() {}
+
+  void _selectBy(String currency) {}
 }
