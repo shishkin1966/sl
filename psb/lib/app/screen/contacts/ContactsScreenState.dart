@@ -35,7 +35,7 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
       },
       child: new Scaffold(
         key: getScaffoldKey(),
-        backgroundColor: Color(0x00000000),
+        backgroundColor: Colors.transparent,
         body: new Builder(builder: (BuildContext context) {
           return SafeArea(
             top: true,
@@ -54,7 +54,7 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
           fit: StackFit.expand,
           children: [
             new Container(
-              color: Color(0xffEEF5FF),
+              color: Color(AppColor.Background),
             ),
             _showFilter(context, constraints),
             _showContacts(context, constraints),

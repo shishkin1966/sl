@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:psb/app/screen/settings/SettingsScreenPresenter.dart';
 import 'package:psb/app/screen/settings/SettingsScreenWidget.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
+import 'package:psb/ui/AppColor.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class SettingsScreenState extends WidgetState<SettingsScreenWidget> {
@@ -19,9 +20,12 @@ class SettingsScreenState extends WidgetState<SettingsScreenWidget> {
       },
       child: new Scaffold(
         key: getScaffoldKey(),
-        backgroundColor: Color(0xfff0f0ff),
+        backgroundColor: Colors.transparent,
         body: new Builder(builder: (BuildContext context) {
-          return SafeArea(top: true, child: _getWidget());
+          return SafeArea(
+            top: true,
+            child: _getWidget(),
+          );
         }),
       ),
     );
@@ -29,7 +33,11 @@ class SettingsScreenState extends WidgetState<SettingsScreenWidget> {
 
   Widget _getWidget() {
     return new Stack(
-      children: [],
+      children: [
+        new Container(
+          color: Color(AppColor.Background),
+        ),
+      ],
     );
   }
 }

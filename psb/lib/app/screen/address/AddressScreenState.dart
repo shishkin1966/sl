@@ -39,9 +39,12 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
       },
       child: new Scaffold(
         key: getScaffoldKey(),
-        backgroundColor: Color(0x00000000),
+        backgroundColor: Colors.transparent,
         body: new Builder(builder: (BuildContext context) {
-          return SafeArea(top: true, child: _getWidget());
+          return SafeArea(
+            top: true,
+            child: _getWidget(),
+          );
         }),
       ),
     );
@@ -53,7 +56,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
         fit: StackFit.expand,
         children: [
           new Container(
-            color: Color(0xffEEF5FF),
+            color: Color(AppColor.Background),
           ),
           _showMap(context, constraints),
           _showBottomMenu(context, constraints),
