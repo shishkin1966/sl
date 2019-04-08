@@ -20,7 +20,7 @@ class AccountsScreenState extends WidgetState<AccountsScreenWidget> {
       },
       child: new Scaffold(
         key: getScaffoldKey(),
-        backgroundColor: Color(AppColor.Background),
+        backgroundColor: Colors.transparent,
         body: new Builder(builder: (BuildContext context) {
           return SafeArea(
             top: true,
@@ -33,7 +33,11 @@ class AccountsScreenState extends WidgetState<AccountsScreenWidget> {
 
   Widget _getWidget() {
     return new Stack(
-      children: [],
+      children: [
+        new Container(
+          color: Color(AppColor.Background),
+        ),
+      ],
     );
   }
 }

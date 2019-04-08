@@ -22,7 +22,10 @@ class SettingsScreenState extends WidgetState<SettingsScreenWidget> {
         key: getScaffoldKey(),
         backgroundColor: Colors.transparent,
         body: new Builder(builder: (BuildContext context) {
-          return SafeArea(top: true, child: _getWidget());
+          return SafeArea(
+            top: true,
+            child: _getWidget(),
+          );
         }),
       ),
     );
