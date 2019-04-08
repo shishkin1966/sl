@@ -104,10 +104,13 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
       },
       child: new Scaffold(
         key: getScaffoldKey(),
-        backgroundColor: Color(0x00000000),
+        backgroundColor: Colors.transparent,
         drawer: new ExtDrawerWidget(),
         body: new Builder(builder: (BuildContext context) {
-          return SafeArea(top: true, child: _getWidget());
+          return SafeArea(
+            top: true,
+            child: _getWidget(),
+          );
         }),
       ),
     );
@@ -138,7 +141,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
   List<Widget> _getChildren(BuildContext context, BoxConstraints constraints) {
     List<Widget> list = new List();
     list.add(new Container(
-      color: Color(0xffEEF5FF),
+      color: Color(AppColor.Background),
     ));
     list.add(_showRefreshOperations(context, constraints));
     list.add(_showHorizontalProgress(context, constraints));

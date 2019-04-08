@@ -5,4 +5,5 @@ class AppColor {
   static const int Shadow = 0x50000000;
   static const int Blue = 0xff074a80;
   static const int BlueMenu = 0xff377ad0;
+  static const int Background = 0xfff0f0ff;
 }

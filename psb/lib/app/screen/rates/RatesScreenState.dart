@@ -10,6 +10,7 @@ import 'package:psb/sl/action/ApplicationAction.dart';
 import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';
+import 'package:psb/ui/AppColor.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class RatesScreenState extends WidgetState<RatesScreenWidget> {
@@ -29,7 +30,7 @@ class RatesScreenState extends WidgetState<RatesScreenWidget> {
       },
       child: new Scaffold(
         key: getScaffoldKey(),
-        backgroundColor: Color(0x00000000),
+        backgroundColor: Colors.transparent,
         body: new Builder(builder: (BuildContext context) {
           return SafeArea(top: true, child: _getWidget());
         }),
@@ -51,9 +52,11 @@ class RatesScreenState extends WidgetState<RatesScreenWidget> {
 
   List<Widget> _getChildren(BuildContext context, BoxConstraints constraints) {
     List<Widget> list = new List();
-    list.add(new Container(
-      color: Color(0xffEEF5FF),
-    ));
+    list.add(
+      new Container(
+        color: Color(AppColor.Background),
+      ),
+    );
     list.add(_showHorizontalProgress(context, constraints));
     list.add(_showRefreshRates(context, constraints));
     return list;

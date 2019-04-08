@@ -10,6 +10,7 @@ import 'package:psb/sl/action/Actions.dart';
 import 'package:psb/sl/action/ApplicationAction.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
 import 'package:psb/sl/specialist/router/Router.dart';
+import 'package:psb/ui/AppColor.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
@@ -27,7 +28,7 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
       child: SafeArea(
         top: true,
         child: new Container(
-          color: Color(0xff074a80),
+          color: Color(AppColor.Blue),
           child: new Stack(
             children: _getWidget(),
           ),
@@ -47,7 +48,7 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           new Material(
-            color: Color(0xff377ad0),
+            color: Color(AppColor.BlueMenu),
             child: InkWell(
               onTap: () {
                 Navigator.pop(context);
@@ -86,7 +87,7 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
           ),
           new Container(
             height: 1,
-            color: Color(0xffd9d9d9),
+            color: Color(AppColor.DividerMenu),
           ),
           // Курсы валют
           new Container(
@@ -127,7 +128,7 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                 new Container(
                   width: 1,
                   margin: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                  color: Color(0xffd9d9d9),
+                  color: Color(AppColor.DividerMenu),
                 ),
                 new Expanded(
                   flex: 1,
@@ -164,7 +165,7 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
           ),
           new Container(
             height: 1,
-            color: Color(0xffd9d9d9),
+            color: Color(AppColor.DividerMenu),
           ),
           // Счета
           _getAccountsWidget(),
@@ -181,11 +182,11 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
           children: <Widget>[
             new Container(
               height: 1,
-              color: Color(0xffd9d9d9),
+              color: Color(AppColor.DividerMenu),
             ),
             // Настройки
             new Material(
-              color: Color(0xff377ad0),
+              color: Color(AppColor.BlueMenu),
               child: InkWell(
                 onTap: () {
                   getPresenter().addAction(
@@ -206,7 +207,7 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
             ),
             new Container(
               height: 1,
-              color: Color(0xffd9d9d9),
+              color: Color(AppColor.DividerMenu),
             ),
             new Container(
               height: 80,
@@ -215,7 +216,7 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                   new Expanded(
                     flex: 1,
                     child: new Material(
-                      color: Color(0xff377ad0),
+                      color: Color(AppColor.BlueMenu),
                       child: InkWell(
                         onTap: () {
                           getPresenter().addAction(
@@ -246,12 +247,12 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                   ),
                   new Container(
                     width: 1,
-                    color: Color(0xffd9d9d9),
+                    color: Color(AppColor.DividerMenu),
                   ),
                   new Expanded(
                     flex: 1,
                     child: new Material(
-                      color: Color(0xff377ad0),
+                      color: Color(AppColor.BlueMenu),
                       child: InkWell(
                         onTap: () {
                           getPresenter().addAction(
@@ -282,12 +283,12 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                   ),
                   new Container(
                     width: 1,
-                    color: Color(0xffd9d9d9),
+                    color: Color(AppColor.DividerMenu),
                   ),
                   new Expanded(
                     flex: 1,
                     child: new Material(
-                      color: Color(0xff377ad0),
+                      color: Color(AppColor.BlueMenu),
                       child: InkWell(
                         onTap: () {
                           getPresenter().addAction(
@@ -365,7 +366,7 @@ class AccountsWidgetState extends DataWidgetState<List<Account>> {
         ApplicationData.instance.accounts.isEmpty
             ? new Container()
             : new Material(
-                color: Color(0xff377ad0),
+                color: Color(AppColor.BlueMenu),
                 child: InkWell(
                   onTap: () {
                     SLUtil.getPresenterUnion()
@@ -399,7 +400,7 @@ class AccountsWidgetState extends DataWidgetState<List<Account>> {
             ? new Container()
             : new Container(
                 height: 1,
-                color: Color(0xffd9d9d9),
+                color: Color(AppColor.DividerMenu),
               ),
       ],
     );

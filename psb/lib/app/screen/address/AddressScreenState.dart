@@ -18,8 +18,7 @@ import 'package:psb/ui/AppColor.dart';
 import 'package:psb/ui/Dimen.dart';
 import 'package:psb/ui/WidgetState.dart';
 
-class AddressScreenState extends WidgetState<AddressScreenWidget>
-    with SingleTickerProviderStateMixin {
+class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTickerProviderStateMixin {
   static const double RolledBottomMenuHeight = 64;
 
   double _bottomPosition = RolledBottomMenuHeight;
@@ -39,7 +38,6 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
       },
       child: new Scaffold(
         key: getScaffoldKey(),
-        backgroundColor: Color(0x00000000),
         body: new Builder(builder: (BuildContext context) {
           return SafeArea(top: true, child: _getWidget());
         }),
@@ -66,9 +64,8 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
     return new Positioned(
       top: 0,
       left: 0,
-      height: constraints.maxHeight - _bottomPosition <= 0
-          ? Dimen.ShadowHeight
-          : constraints.maxHeight - _bottomPosition,
+      height:
+          constraints.maxHeight - _bottomPosition <= 0 ? Dimen.ShadowHeight : constraints.maxHeight - _bottomPosition,
       width: constraints.maxWidth,
       child: new GoogleMapWidget(key: _mapKey),
     );
@@ -96,8 +93,7 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
                 if (_bottomPosition < RolledBottomMenuHeight) {
                   _bottomPosition = RolledBottomMenuHeight;
                 }
-                if (_bottomPosition >=
-                    constraints.maxHeight - Dimen.ShadowHeight) {
+                if (_bottomPosition >= constraints.maxHeight - Dimen.ShadowHeight) {
                   _bottomPosition = constraints.maxHeight - Dimen.ShadowHeight;
                 }
                 setState(() {});
@@ -137,14 +133,12 @@ class AddressScreenState extends WidgetState<AddressScreenWidget>
       switch (actionName) {
         case AddressScreenPresenter.LocationChanged:
           action.setStateNonChanged();
-          (_mapKey.currentState as GoogleMapWidgetState)
-              ?.onChange(action.getData());
+          (_mapKey.currentState as GoogleMapWidgetState)?.onChange(action.getData());
           return;
 
         case AddressScreenPresenter.GetAddress:
           action.setStateNonChanged();
-          (_bottomKey.currentState as BottomWidgetState)
-              ?.onChange(action.getData());
+          (_bottomKey.currentState as BottomWidgetState)?.onChange(action.getData());
           return;
       }
     }
@@ -179,8 +173,7 @@ class GoogleMapWidgetState extends DataWidgetState<Position> {
     _debounce = Timer(const Duration(seconds: 1), () {
       SLUtil.getPresenterUnion()
           .getPresenter(AddressScreenPresenter.NAME)
-          ?.addAction(new DataAction(AddressScreenPresenter.CameraMoved)
-              .setData(position.target));
+          ?.addAction(new DataAction(AddressScreenPresenter.CameraMoved).setData(position.target));
     });
   }
 
@@ -211,16 +204,14 @@ class GoogleMapWidgetState extends DataWidgetState<Position> {
 
     LatLng latlng = new LatLng(data.latitude, data.longitude);
     if (_mapController != null) {
-      _mapController.moveCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(target: latlng, zoom: 12)));
+      _mapController.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latlng, zoom: 12)));
       if (_marker != null) {
         _marker.copyWith(positionParam: latlng);
       } else {
         _marker = new Marker(
           markerId: new MarkerId("1"),
           position: latlng,
-          icon: BitmapDescriptor.fromAsset(
-              AppUtils.getAssetImage(context, "pin.png")),
+          icon: BitmapDescriptor.fromAsset(AppUtils.getAssetImage(context, "pin.png")),
         );
         _markers[_marker.markerId] = _marker;
       }

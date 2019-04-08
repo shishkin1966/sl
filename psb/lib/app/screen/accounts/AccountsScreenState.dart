@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:psb/app/screen/accounts/AccountsScreenPresenter.dart';
 import 'package:psb/app/screen/accounts/AccountsScreenWidget.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
+import 'package:psb/ui/AppColor.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class AccountsScreenState extends WidgetState<AccountsScreenWidget> {
@@ -19,9 +20,12 @@ class AccountsScreenState extends WidgetState<AccountsScreenWidget> {
       },
       child: new Scaffold(
         key: getScaffoldKey(),
-        backgroundColor: Color(0xfff0f0ff),
+        backgroundColor: Color(AppColor.Background),
         body: new Builder(builder: (BuildContext context) {
-          return SafeArea(top: true, child: _getWidget());
+          return SafeArea(
+            top: true,
+            child: _getWidget(),
+          );
         }),
       ),
     );
