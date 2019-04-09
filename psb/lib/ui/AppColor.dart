@@ -6,4 +6,5 @@ class AppColor {
   static const int Blue = 0xff074a80;
   static const int BlueMenu = 0xff377ad0;
   static const int Background = 0xfff0f0ff;
+  static const int BlueMenuPressed = 0xff2e303b;
 }

@@ -206,6 +206,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                         new Material(
                           color: Color(AppColor.BlueMenu),
                           child: InkWell(
+                            highlightColor: Color(AppColor.BlueMenuPressed),
                             onTap: () {
                               SLUtil.getUISpecialist()
                                   .showToast('OnTapPayments');
@@ -234,6 +235,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                         new Material(
                           color: Color(AppColor.BlueMenu),
                           child: InkWell(
+                            highlightColor: Color(AppColor.BlueMenuPressed),
                             onTap: () {
                               _showSortMenu(context);
                               _bottomPosition = RolledBottomMenuHeight;
@@ -260,6 +262,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                         new Material(
                           color: Color(AppColor.BlueMenu),
                           child: InkWell(
+                            highlightColor: Color(AppColor.BlueMenuPressed),
                             onTap: () {
                               _showSelectMenu(context);
                               _bottomPosition = RolledBottomMenuHeight;
@@ -428,7 +431,7 @@ class OperationsWidgetState extends DataWidgetState<List<Operation>> {
         itemCount: getData().length,
         itemBuilder: (context, position) {
           return new Material(
-            color: Color(0xffffffff),
+            color: Colors.white,
             child: InkWell(
               onTap: () {
                 _showEditOperationName(context, getData()[position])
