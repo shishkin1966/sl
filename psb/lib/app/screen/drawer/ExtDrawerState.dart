@@ -50,6 +50,7 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
           new Material(
             color: Color(AppColor.BlueMenu),
             child: InkWell(
+              highlightColor: Color(AppColor.BlueMenuPressed),
               onTap: () {
                 Navigator.pop(context);
                 SLUtil.getUISpecialist().showToast('OnTapUser');
@@ -188,6 +189,7 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
             new Material(
               color: Color(AppColor.BlueMenu),
               child: InkWell(
+                highlightColor: Color(AppColor.BlueMenuPressed),
                 onTap: () {
                   getPresenter().addAction(
                       new ApplicationAction(Router.ShowSettingsScreen));
@@ -218,6 +220,7 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                     child: new Material(
                       color: Color(AppColor.BlueMenu),
                       child: InkWell(
+                        highlightColor: Color(AppColor.BlueMenuPressed),
                         onTap: () {
                           getPresenter().addAction(
                               new ApplicationAction(Router.ShowRatesScreen));
@@ -254,6 +257,7 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                     child: new Material(
                       color: Color(AppColor.BlueMenu),
                       child: InkWell(
+                        highlightColor: Color(AppColor.BlueMenuPressed),
                         onTap: () {
                           getPresenter().addAction(
                               new ApplicationAction(Router.ShowAddressScreen));
@@ -290,6 +294,7 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                     child: new Material(
                       color: Color(AppColor.BlueMenu),
                       child: InkWell(
+                        highlightColor: Color(AppColor.BlueMenuPressed),
                         onTap: () {
                           getPresenter().addAction(
                               new ApplicationAction(Router.ShowContactsScreen));
@@ -368,6 +373,7 @@ class AccountsWidgetState extends DataWidgetState<List<Account>> {
             : new Material(
                 color: Color(AppColor.BlueMenu),
                 child: InkWell(
+                  highlightColor: Color(AppColor.BlueMenuPressed),
                   onTap: () {
                     SLUtil.getPresenterUnion()
                         .getPresenter(ExtDrawerPresenter.NAME)
