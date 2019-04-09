@@ -85,7 +85,9 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
       List<Contact> list = new List();
       Iterable<Contact> data;
       if (StringUtils.isNullOrEmpty(filter)) {
-        data = await ContactsService.getContacts();
+        data = await ContactsService.getContacts(
+          withThumbnails: true,
+        );
       } else {
         data = await ContactsService.getContacts(
           query: filter,
