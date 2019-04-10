@@ -78,7 +78,7 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                       padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
                       child: new Text(
                         SLUtil.getString(context, 'user'),
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
                   ],
