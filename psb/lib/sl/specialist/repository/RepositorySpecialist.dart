@@ -5,7 +5,7 @@ abstract class RepositorySpecialist extends Specialist {
 
   void getOperations(String subscriber);
 
-  void getRates(String subscriber);
+  Future getRates(String subscriber, {String id});
 
   Future getContacts(String subscriber, String filter, {String id});
 }

@@ -9,6 +9,7 @@ import 'package:psb/sl/message/ResponseListener.dart';
 import 'package:psb/sl/presenter/AbsPresenter.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/ui/WidgetState.dart';
+import 'package:uuid/uuid.dart';
 
 class RatesScreenPresenter<RatesScreenState extends WidgetState> extends AbsPresenter<RatesScreenState>
     implements ResponseListener {
@@ -35,7 +36,7 @@ class RatesScreenPresenter<RatesScreenState extends WidgetState> extends AbsPres
 
   void _getRates() {
     getWidget().addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
-    SLUtil.getRepositorySpecialist().getRates(NAME);
+    SLUtil.getRepositorySpecialist().getRates(NAME, id: new Uuid().v4());
   }
 
   @override
