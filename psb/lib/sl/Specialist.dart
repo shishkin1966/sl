@@ -4,6 +4,7 @@ import 'package:psb/sl/specialist/desktop/DesktopSpecialistImpl.dart';
 import 'package:psb/sl/specialist/error/ErrorSpecialistImpl.dart';
 import 'package:psb/sl/specialist/finger/FingerprintSpecialistImpl.dart';
 import 'package:psb/sl/specialist/messager/MessengerUnionImpl.dart';
+import 'package:psb/sl/specialist/notification/NotificationSpecialistImpl.dart';
 import 'package:psb/sl/specialist/observable/ObservableUnionImpl.dart';
 import 'package:psb/sl/specialist/preferences/PreferencesSpecialistImpl.dart';
 import 'package:psb/sl/specialist/presenter/PresenterUnionImpl.dart';
@@ -72,6 +73,9 @@ abstract class Specialist implements Subscriber, Validated, Comparable {
 
       case FingerprintSpecialistImpl.NAME:
         return new FingerprintSpecialistImpl();
+
+      case NotificationSpecialistImpl.NAME:
+        return new NotificationSpecialistImpl();
     }
     return null;
   }
