@@ -12,6 +12,7 @@ import 'package:psb/sl/presenter/Presenter.dart';
 import 'package:psb/sl/specialist/router/Router.dart';
 import 'package:psb/ui/AppColor.dart';
 import 'package:psb/ui/WidgetState.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
   GlobalKey _accountsKey = new GlobalKey();
@@ -74,11 +75,14 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                       ),
                     ),
                     new Container(
-                      width: widthWidget * 0.5,
+                      width: widthWidget * 0.5 > 200 ? 200 : widthWidget * 0.5,
                       padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                      child: new Text(
+                      child: new AutoSizeText(
                         SLUtil.getString(context, 'user'),
-                        style: TextStyle(color: Colors.white, fontSize: 18),
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        minFontSize: 16.0,
                       ),
                     ),
                   ],
