@@ -11,6 +11,8 @@ import 'package:psb/sl/specialist/finger/FingerPrintSpecialist.dart';
 import 'package:psb/sl/specialist/finger/FingerprintSpecialistImpl.dart';
 import 'package:psb/sl/specialist/messager/MessengerUnion.dart';
 import 'package:psb/sl/specialist/messager/MessengerUnionImpl.dart';
+import 'package:psb/sl/specialist/notification/NotificationSpecialist.dart';
+import 'package:psb/sl/specialist/notification/NotificationSpecialistImpl.dart';
 import 'package:psb/sl/specialist/observable/ObservableUnion.dart';
 import 'package:psb/sl/specialist/observable/ObservableUnionImpl.dart';
 import 'package:psb/sl/specialist/preferences/PreferencesSpecialist.dart';
@@ -65,6 +67,10 @@ class SLUtil {
 
   static FingerprintSpecialist getFingerprintSpecialist() {
     return SL.instance.get(FingerprintSpecialistImpl.NAME);
+  }
+
+  static NotificationSpecialist getNotificationSpecialist() {
+    return SL.instance.get(NotificationSpecialistImpl.NAME);
   }
 
   static void onChange(String object) {
