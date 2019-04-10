@@ -49,7 +49,7 @@ abstract class AbsServiceLocator implements ServiceLocator {
 
   @override
   bool registerSpecialistByName(final String name) {
-    final Specialist specialist = getSpecialistFactory().create(name);
+    final Specialist specialist = Specialist.get(name);
     if (specialist != null) {
       return registerSpecialist(specialist);
     }

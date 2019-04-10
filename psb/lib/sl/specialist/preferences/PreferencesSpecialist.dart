@@ -1,6 +1,6 @@
-import 'package:psb/sl/Specialist.dart';
+import 'package:psb/sl/AbsSpecialist.dart';
 
-abstract class PreferencesSpecialist extends Specialist {
+abstract class PreferencesSpecialist extends AbsSpecialist {
   setInt(String name, int value);
 
   setString(String name, String value);
