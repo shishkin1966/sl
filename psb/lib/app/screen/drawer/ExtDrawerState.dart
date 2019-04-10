@@ -74,11 +74,11 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
                       ),
                     ),
                     new Container(
-                      width: widthWidget * 0.6,
+                      width: widthWidget * 0.5,
                       padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
                       child: new Text(
                         SLUtil.getString(context, 'user'),
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     ),
                   ],
