@@ -11,9 +11,13 @@ import 'package:psb/sl/data/Result.dart';
 import 'package:psb/sl/message/ResultMessage.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/sl/specialist/repository/RepositorySpecialist.dart';
+import 'package:synchronized/synchronized.dart' as Synchronized;
 
 class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecialist {
   static const String NAME = "RepositorySpecialistImpl";
+
+  Synchronized.Lock _lock = new Synchronized.Lock();
+  Map<String, String> _map = new Map();
 
   @override
   void getAccounts(String subscriber) {
@@ -80,7 +84,9 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   }
 
   @override
-  void getContacts(String subscriber, String filter) async {
+  Future getContacts(String subscriber, String filter, {String id}) async {
+    await _add(Repository.GetContacts, id);
+
     try {
       List<Contact> list = new List();
       Iterable<Contact> data;
@@ -94,15 +100,55 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
           withThumbnails: true,
         );
       }
-      list.addAll(data);
-      Result<List<Contact>> result = new Result<List<Contact>>(list).setName(Repository.GetContacts);
-      ResultMessage message = new ResultMessage.result(subscriber, result);
-      SLUtil.addNotMandatoryMessage(message);
+      bool found = await _check(Repository.GetContacts, id);
+      if (found) {
+        list.addAll(data);
+        Result<List<Contact>> result = new Result<List<Contact>>(list).setName(Repository.GetContacts);
+        ResultMessage message = new ResultMessage.result(subscriber, result);
+        SLUtil.addNotMandatoryMessage(message);
+      }
     } catch (e) {
+      await _remove(Repository.GetContacts, id);
       Result result = new Result(null).addError(subscriber, e.toString()).setName(Repository.GetContacts);
       ResultMessage message = new ResultMessage.result(subscriber, result);
       SLUtil.addNotMandatoryMessage(message);
     }
+  }
+
+  Future _add(String key, String id) async {
+    if (!StringUtils.isNullOrEmpty(id)) {
+      await _lock.synchronized(() async {
+        if (_map.containsKey(key)) {
+          _map.remove(key);
+        }
+        _map[key] = id;
+      });
+    }
+  }
+
+  Future _remove(String key, String id) async {
+    if (!StringUtils.isNullOrEmpty(id)) {
+      await _lock.synchronized(() async {
+        if (_map.containsKey(key) && _map[key] == id) {
+          _map.remove(key);
+        }
+      });
+    }
+  }
+
+  Future<bool> _check(String key, String id) async {
+    return await _lock.synchronized(() async {
+      if (!StringUtils.isNullOrEmpty(id)) {
+        if (_map.containsKey(key) && _map[key] == id) {
+          _map.remove(key);
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
+    });
   }
 
   @override
