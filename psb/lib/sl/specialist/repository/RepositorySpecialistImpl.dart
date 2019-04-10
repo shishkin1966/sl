@@ -63,7 +63,9 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   }
 
   @override
-  void getRates(String subscriber) async {
+  Future getRates(String subscriber, {String id}) async {
+    await _add(Repository.GetRates, id);
+
     try {
       List<Ticker> list = new List();
       Response response = await Dio().get("https://api.coinmarketcap.com/v1/ticker/");
@@ -73,10 +75,14 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
         ticker.name = rate["name"];
         list.add(ticker);
       }
-      Result<List<Ticker>> result = new Result<List<Ticker>>(list).setName(Repository.GetRates);
-      ResultMessage message = new ResultMessage.result(subscriber, result);
-      SLUtil.addNotMandatoryMessage(message);
+      bool found = await _check(Repository.GetRates, id);
+      if (found) {
+        Result<List<Ticker>> result = new Result<List<Ticker>>(list).setName(Repository.GetRates);
+        ResultMessage message = new ResultMessage.result(subscriber, result);
+        SLUtil.addNotMandatoryMessage(message);
+      }
     } catch (e) {
+      await _remove(Repository.GetRates, id);
       Result result = new Result(null).addError(subscriber, e.toString()).setName(Repository.GetRates);
       ResultMessage message = new ResultMessage.result(subscriber, result);
       SLUtil.addNotMandatoryMessage(message);
