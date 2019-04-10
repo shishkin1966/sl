@@ -1,6 +1,6 @@
-import 'package:psb/sl/Specialist.dart';
+import 'package:psb/sl/AbsSpecialist.dart';
 
-abstract class RepositorySpecialist extends Specialist {
+abstract class RepositorySpecialist extends AbsSpecialist {
   void getAccounts(String subscriber);
 
   void getOperations(String subscriber);

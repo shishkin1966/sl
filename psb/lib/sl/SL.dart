@@ -1,6 +1,4 @@
 import 'package:psb/sl/AbsServiceLocator.dart';
-import 'package:psb/sl/ServiceLocatorSpecialistFactory.dart';
-import 'package:psb/sl/SpecialistFactory.dart';
 import 'package:psb/sl/observe/ObjectObservable.dart';
 import 'package:psb/sl/specialist/desktop/DesktopSpecialistImpl.dart';
 import 'package:psb/sl/specialist/error/ErrorSpecialistImpl.dart';
@@ -17,13 +15,10 @@ import 'package:psb/sl/specialist/ui/UISpecialistImpl.dart';
 
 class SL extends AbsServiceLocator {
   static const String NAME = "SL";
-  SpecialistFactory _specialistFactory;
 
   static final SL _sl = new SL._internal();
 
   SL._internal() {
-    _specialistFactory = new ServiceLocatorSpecialistFactory();
-
     // Специалист вывода Toast
     registerSpecialistByName(UISpecialistImpl.NAME);
 
@@ -62,11 +57,6 @@ class SL extends AbsServiceLocator {
   }
 
   static SL get instance => _sl;
-
-  @override
-  SpecialistFactory getSpecialistFactory() {
-    return _specialistFactory;
-  }
 
   @override
   String getName() {

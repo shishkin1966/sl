@@ -1,5 +1,4 @@
 import 'package:psb/sl/Specialist.dart';
-import 'package:psb/sl/SpecialistFactory.dart';
 import 'package:psb/sl/SpecialistSubscriber.dart';
 import 'package:psb/sl/Subscriber.dart';
 
@@ -71,13 +70,6 @@ abstract class ServiceLocator implements Subscriber {
   /// @return true - операция завершена удачно
   ///
   bool setCurrentSubscriber(SpecialistSubscriber subscriber);
-
-  ///
-  /// Получить фабрику специалистов
-  ///
-  /// @return фабрика специалистов
-  ///
-  SpecialistFactory getSpecialistFactory();
 
   ///
   /// Получить полный список специалистов
