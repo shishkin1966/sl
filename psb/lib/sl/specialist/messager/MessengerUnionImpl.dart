@@ -7,7 +7,8 @@ import 'package:psb/sl/specialist/messager/MessengerSubscriber.dart';
 import 'package:psb/sl/specialist/messager/MessengerUnion.dart';
 import 'package:psb/sl/state/States.dart';
 
-class MessengerUnionImpl extends AbsSmallUnion<MessengerSubscriber> implements MessengerUnion {
+class MessengerUnionImpl extends AbsSmallUnion<MessengerSubscriber>
+    implements MessengerUnion {
   static const String NAME = "MessagerUnionImpl";
 
   Map<int, Message> _messages = new Map();
@@ -54,8 +55,9 @@ class MessengerUnionImpl extends AbsSmallUnion<MessengerSubscriber> implements M
       final String name = subscriber.getName();
       final int currentTime = new DateTime.now().millisecondsSinceEpoch;
       List<Message> list = _messages.values
-          .where(
-              (message) => (message.contains(name) && message.getEndTime() != -1 && message.getEndTime() < currentTime))
+          .where((message) => (message.contains(name) &&
+              message.getEndTime() != -1 &&
+              message.getEndTime() < currentTime))
           .toList();
       if (list.isNotEmpty) {
         for (Message message in list) {
@@ -68,7 +70,9 @@ class MessengerUnionImpl extends AbsSmallUnion<MessengerSubscriber> implements M
       list = _messages.values
           .where((message) =>
               message.contains(name) &&
-              (message.getEndTime() == -1 || (message.getEndTime() != -1 && message.getEndTime() > currentTime)))
+              (message.getEndTime() == -1 ||
+                  (message.getEndTime() != -1 &&
+                      message.getEndTime() > currentTime)))
           .toList();
       list.sort((a, b) => a.getId().compareTo(b.getId()));
       return list;
@@ -90,7 +94,8 @@ class MessengerUnionImpl extends AbsSmallUnion<MessengerSubscriber> implements M
     if (_messages.isEmpty) return;
 
     final String name = subscriber.getName();
-    final List<Message> list = _messages.values.where((message) => message.contains(name)).toList();
+    final List<Message> list =
+        _messages.values.where((message) => message.contains(name)).toList();
     if (list.isNotEmpty) {
       for (Message message in list) {
         _messages.remove(message.getId());
@@ -170,7 +175,8 @@ class MessengerUnionImpl extends AbsSmallUnion<MessengerSubscriber> implements M
         !StringUtils.isNullOrEmpty(message.getAddress())) {
       for (Message tmpMail in _messages.values) {
         if (tmpMail != null) {
-          if (message.getName() == (tmpMail.getName()) && message.getAddress() == (tmpMail.getAddress())) {
+          if (message.getName() == (tmpMail.getName()) &&
+              message.getAddress() == (tmpMail.getAddress())) {
             removeMessage(tmpMail);
           }
         }
@@ -226,7 +232,7 @@ class MessengerUnionImpl extends AbsSmallUnion<MessengerSubscriber> implements M
   }
 
   @override
-  void stop() {
+  void clear() {
     _messages.clear();
   }
 }

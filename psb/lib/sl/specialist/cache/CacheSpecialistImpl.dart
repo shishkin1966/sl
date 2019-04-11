@@ -14,7 +14,7 @@ class CacheSpecialistImpl extends AbsSpecialist implements CacheSpecialist {
 
   @override
   void onUnRegister() {
-    clearAll();
+    clear();
   }
 
   @override
@@ -33,7 +33,8 @@ class CacheSpecialistImpl extends AbsSpecialist implements CacheSpecialist {
   }
 
   @override
-  void put(String key, data, {Duration duration = const Duration(minutes: 10)}) {
+  void put(String key, data,
+      {Duration duration = const Duration(minutes: 10)}) {
     _cache.put(key, data, duration);
   }
 
@@ -43,17 +44,17 @@ class CacheSpecialistImpl extends AbsSpecialist implements CacheSpecialist {
   }
 
   @override
-  void clear(String key) {
-    _cache.clear(key);
+  void remove(String key) {
+    _cache.remove(key);
   }
 
   @override
-  void clearAll() {
-    _cache.clearAll();
+  void clear() {
+    _cache.clear();
   }
 
   @override
   void stop() {
-    clearAll();
+    clear();
   }
 }

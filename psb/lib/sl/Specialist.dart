@@ -40,6 +40,11 @@ abstract class Specialist implements Subscriber, Validated, Comparable {
   ///
   void stop();
 
+  ///
+  /// Очистить
+  ///
+  void clear();
+
   factory Specialist.get(String name) {
     switch (name) {
       case ErrorSpecialistImpl.NAME:

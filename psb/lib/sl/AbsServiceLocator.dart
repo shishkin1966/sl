@@ -34,7 +34,8 @@ abstract class AbsServiceLocator implements ServiceLocator {
 
   @override
   bool registerSpecialist(final Specialist specialist) {
-    if (specialist != null && !StringUtils.isNullOrEmpty(specialist.getName())) {
+    if (specialist != null &&
+        !StringUtils.isNullOrEmpty(specialist.getName())) {
       if (_secretary.containsKey(specialist.getName())) {
         if (!unregisterSpecialist(specialist.getName())) {
           return false;
@@ -82,18 +83,21 @@ abstract class AbsServiceLocator implements ServiceLocator {
 
   @override
   bool registerSubscriber(final SpecialistSubscriber subscriber) {
-    if (subscriber != null && !StringUtils.isNullOrEmpty(subscriber.getName())) {
+    if (subscriber != null &&
+        !StringUtils.isNullOrEmpty(subscriber.getName())) {
       final List<String> types = subscriber.getSpecialistSubscription();
       if (types != null) {
         // регистрируемся subscriber у специалистов
         for (String specialistName in types) {
           if (!StringUtils.isNullOrEmpty(specialistName)) {
             if (_secretary.containsKey(specialistName)) {
-              (_secretary.get(specialistName) as SmallUnion).registerSubscriber(subscriber);
+              (_secretary.get(specialistName) as SmallUnion)
+                  .registerSubscriber(subscriber);
             } else {
               registerSpecialistByName(specialistName);
               if (_secretary.containsKey(specialistName)) {
-                (_secretary.get(specialistName) as SmallUnion).registerSubscriber(subscriber);
+                (_secretary.get(specialistName) as SmallUnion)
+                    .registerSubscriber(subscriber);
               } else {
                 return false;
               }
@@ -113,7 +117,8 @@ abstract class AbsServiceLocator implements ServiceLocator {
         for (Specialist specialist in _secretary.values()) {
           if (specialist is SmallUnion) {
             final String specialistName = specialist.getName();
-            if (!StringUtils.isNullOrEmpty(specialistName) && types.contains(specialistName)) {
+            if (!StringUtils.isNullOrEmpty(specialistName) &&
+                types.contains(specialistName)) {
               specialist.unregisterSubscriber(subscriber);
             }
           }
@@ -152,6 +157,13 @@ abstract class AbsServiceLocator implements ServiceLocator {
   void stop() {
     for (Specialist specialist in _secretary.values()) {
       specialist.stop();
+    }
+  }
+
+  @override
+  void clear() {
+    for (Specialist specialist in _secretary.values()) {
+      specialist.clear();
     }
   }
 }
