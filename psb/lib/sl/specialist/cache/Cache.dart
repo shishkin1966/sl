@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:psb/sl/specialist/cache/CacheRecord.dart';
 import 'package:synchronized/synchronized.dart' as Synchronized;
+import 'package:system_info/system_info.dart';
 
 class Cache {
+  static const int MinFreeMemory = 4 * 1024 * 1024;
+
   Map<String, CacheRecord> _map = new Map();
   Synchronized.Lock _lock = new Synchronized.Lock();
 
@@ -28,6 +31,9 @@ class Cache {
   }
 
   Future put(String key, dynamic data, Duration duration) async {
+    if (SysInfo.getFreePhysicalMemory() < MinFreeMemory) {
+      return;
+    }
     await _lock.synchronized(() async {
       if (_map.containsKey(key)) {
         _map.remove(key);
