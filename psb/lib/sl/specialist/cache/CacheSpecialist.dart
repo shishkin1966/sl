@@ -6,4 +6,6 @@ abstract class CacheSpecialist extends AbsSpecialist {
   Future get(String key);
 
   void check();
+
+  void clear(String key);
 }

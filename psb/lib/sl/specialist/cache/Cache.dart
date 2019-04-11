@@ -45,4 +45,12 @@ class Cache {
       }
     });
   }
+
+  Future clear(String key) async {
+    await _lock.synchronized(() async {
+      if (_map.containsKey(key)) {
+        _map.remove(key);
+      }
+    });
+  }
 }

@@ -101,6 +101,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
               new Result<List<Contact>>(cache as List<Contact>).setName(Repository.GetContacts);
           ResultMessage message = new ResultMessage.result(subscriber, result);
           SLUtil.addNotMandatoryMessage(message);
+          return;
         }
       }
       List<Contact> list = new List();

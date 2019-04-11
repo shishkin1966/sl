@@ -33,6 +33,7 @@ class ContactsScreenPresenter<ContactsScreenState extends WidgetState> extends A
       String actionName = action.getName();
       switch (actionName) {
         case Actions.Refresh:
+          SLUtil.getCacheSpecialist().clear(Repository.GetContacts);
           _getContacts();
           return;
       }

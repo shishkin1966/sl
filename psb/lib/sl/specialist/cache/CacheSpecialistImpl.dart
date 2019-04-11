@@ -36,4 +36,9 @@ class CacheSpecialistImpl extends AbsSpecialist implements CacheSpecialist {
   void check() {
     _cache.check();
   }
+
+  @override
+  void clear(String key) {
+    _cache.clear(key);
+  }
 }
