@@ -54,7 +54,7 @@ class ExtDrawerState extends WidgetState<ExtDrawerWidget> {
               highlightColor: Color(AppColor.BlueMenuPressed),
               onTap: () {
                 Navigator.pop(context);
-                SLUtil.UISpecialist.showToast('OnTapUser');
+                SLUtil.uiSpecialist.showToast('OnTapUser');
               },
               child: new Container(
                 height: 72,
@@ -363,7 +363,8 @@ class AccountsWidgetState extends DataWidgetState<List<Account>> {
                 child: InkWell(
                   highlightColor: Color(AppColor.BlueMenuPressed),
                   onTap: () {
-                    SLUtil.PresenterUnion.getPresenter(ExtDrawerPresenter.NAME)
+                    SLUtil.presenterUnion
+                        .getPresenter(ExtDrawerPresenter.NAME)
                         ?.addAction(new ApplicationAction(Router.ShowAccountsScreen));
                   },
                   child: new Container(
