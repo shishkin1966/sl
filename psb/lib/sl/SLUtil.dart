@@ -31,56 +31,56 @@ import 'package:psb/sl/specialist/ui/UISpecialist.dart';
 import 'package:psb/sl/specialist/ui/UISpecialistImpl.dart';
 
 class SLUtil {
-  static get PresenterUnion {
+  static PresenterUnion get presenterUnion {
     return SL.instance.get(PresenterUnionImpl.NAME);
   }
 
-  static get MessengerUnion {
+  static MessengerUnion get messengerUnion {
     return SL.instance.get(MessengerUnionImpl.NAME);
   }
 
-  static get ObservableUnion {
+  static ObservableUnion get observableUnion {
     return SL.instance.get(ObservableUnionImpl.NAME);
   }
 
-  static get DesktopSpecialist {
+  static DesktopSpecialist get desktopSpecialist {
     return SL.instance.get(DesktopSpecialistImpl.NAME);
   }
 
-  static get UISpecialist {
+  static UISpecialist get uiSpecialist {
     return SL.instance.get(UISpecialistImpl.NAME);
   }
 
-  static get PreferencesSpecialist {
+  static PreferencesSpecialist get preferencesSpecialist {
     return SL.instance.get(PreferencesSpecialistImpl.NAME);
   }
 
-  static get RepositorySpecialist {
+  static RepositorySpecialist get repositorySpecialist {
     return SL.instance.get(RepositorySpecialistImpl.NAME);
   }
 
-  static get SecureSpecialist {
+  static SecureSpecialist get secureSpecialist {
     return SL.instance.get(SecureSpecialistImpl.NAME);
   }
 
-  static get RouterSpecialist {
+  static RouterSpecialist get routerSpecialist {
     return SL.instance.get(RouterSpecialistImpl.NAME);
   }
 
-  static get FingerprintSpecialist {
+  static FingerprintSpecialist get fingerprintSpecialist {
     return SL.instance.get(FingerprintSpecialistImpl.NAME);
   }
 
-  static get NotificationSpecialist {
+  static NotificationSpecialist get notificationSpecialist {
     return SL.instance.get(NotificationSpecialistImpl.NAME);
   }
 
-  static get CacheSpecialist {
+  static CacheSpecialist get cacheSpecialist {
     return SL.instance.get(CacheSpecialistImpl.NAME);
   }
 
   static void onChange(String object) {
-    ObservableUnion.getObservable(ObjectObservable.NAME)?.onChange(object);
+    observableUnion.getObservable(ObjectObservable.NAME)?.onChange(object);
   }
 
   static void onError(String sender, Exception e) {
@@ -88,11 +88,11 @@ class SLUtil {
   }
 
   static void addMessage(Message message) {
-    MessengerUnion.addMessage(message);
+    messengerUnion.addMessage(message);
   }
 
   static void addNotMandatoryMessage(Message message) {
-    MessengerUnion.addNotMandatoryMessage(message);
+    messengerUnion.addNotMandatoryMessage(message);
   }
 
   static void registerSubscriber(SpecialistSubscriber subscriber) {

@@ -82,4 +82,9 @@ abstract class ServiceLocator implements Subscriber {
   /// Остановить работу специалистов
   ///
   void stop();
+
+  ///
+  /// Очистить
+  ///
+  void clear();
 }

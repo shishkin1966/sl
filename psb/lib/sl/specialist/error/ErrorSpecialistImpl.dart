@@ -8,8 +8,7 @@ import 'package:psb/sl/specialist/ui/UISpecialistImpl.dart';
 class ErrorSpecialistImpl extends AbsSpecialist implements ErrorSpecialist {
   static const String NAME = "ErrorSpecialistImpl";
 
-  static final ErrorSpecialistImpl _errorSpecialistImpl =
-      new ErrorSpecialistImpl._internal();
+  static final ErrorSpecialistImpl _errorSpecialistImpl = new ErrorSpecialistImpl._internal();
 
   Logger _logger = Logger(NAME);
 
@@ -31,7 +30,7 @@ class ErrorSpecialistImpl extends AbsSpecialist implements ErrorSpecialist {
   void onError(String source, Exception e) {
     _logger.severe(source, e, StackTrace.current);
     if (SL.instance.exists(UISpecialistImpl.NAME)) {
-      SLUtil.UISpecialist?.showErrorToast(e.toString());
+      SLUtil.uiSpecialist?.showErrorToast(e.toString());
     }
   }
 
@@ -39,7 +38,7 @@ class ErrorSpecialistImpl extends AbsSpecialist implements ErrorSpecialist {
   void onErrorMessage(String source, String message) {
     _logger.severe(source, message, StackTrace.current);
     if (SL.instance.exists(UISpecialistImpl.NAME)) {
-      SLUtil.UISpecialist?.showErrorToast(message);
+      SLUtil.uiSpecialist?.showErrorToast(message);
     }
   }
 
@@ -47,7 +46,7 @@ class ErrorSpecialistImpl extends AbsSpecialist implements ErrorSpecialist {
   void onErrorDisplay(String source, Exception e, String message) {
     _logger.severe(source, e, StackTrace.current);
     if (SL.instance.exists(UISpecialistImpl.NAME)) {
-      SLUtil.UISpecialist?.showErrorToast(message);
+      SLUtil.uiSpecialist?.showErrorToast(message);
     }
   }
 }

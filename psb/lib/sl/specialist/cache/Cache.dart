@@ -52,7 +52,7 @@ class Cache {
     });
   }
 
-  Future clear(String key) async {
+  Future remove(String key) async {
     await _lock.synchronized(() async {
       if (_map.containsKey(key)) {
         _map.remove(key);
@@ -60,7 +60,7 @@ class Cache {
     });
   }
 
-  Future clearAll() async {
+  Future clear() async {
     await _lock.synchronized(() async {
       _map.clear();
     });

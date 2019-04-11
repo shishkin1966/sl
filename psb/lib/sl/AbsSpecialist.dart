@@ -27,6 +27,9 @@ abstract class AbsSpecialist implements Specialist {
   void stop() {}
 
   @override
+  void clear() {}
+
+  @override
   String getPassport() {
     return this.getName();
   }

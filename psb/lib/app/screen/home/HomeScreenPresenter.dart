@@ -1,4 +1,3 @@
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:psb/app/ApplicationData.dart';
 import 'package:psb/app/screen/drawer/ExtDrawerPresenter.dart';
@@ -15,8 +14,8 @@ import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/sl/specialist/router/Router.dart';
 import 'package:psb/ui/WidgetState.dart';
 
-class HomeScreenPresenter<HomeScreenState extends WidgetState>
-    extends AbsPresenter<HomeScreenState> implements ResponseListener {
+class HomeScreenPresenter<HomeScreenState extends WidgetState> extends AbsPresenter<HomeScreenState>
+    implements ResponseListener {
   static const String NAME = "HomeScreenPresenenter";
   static const String CreateAccount = "CreateAccount";
   static const String SortByDefault = "SortByDefault";
@@ -39,26 +38,23 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState>
       String actionName = action.getName();
       switch (actionName) {
         case Router.ShowAccountsScreen:
-          SLUtil.RouterSpecialist.showScreen(
-              context, Router.ShowAccountsScreen);
+          SLUtil.routerSpecialist.showScreen(context, Router.ShowAccountsScreen);
           return;
 
         case Router.ShowSettingsScreen:
-          SLUtil.RouterSpecialist.showScreen(
-              context, Router.ShowSettingsScreen);
+          SLUtil.routerSpecialist.showScreen(context, Router.ShowSettingsScreen);
           return;
 
         case Router.ShowRatesScreen:
-          SLUtil.RouterSpecialist.showScreen(context, Router.ShowRatesScreen);
+          SLUtil.routerSpecialist.showScreen(context, Router.ShowRatesScreen);
           return;
 
         case Router.ShowAddressScreen:
-          SLUtil.RouterSpecialist.showScreen(context, Router.ShowAddressScreen);
+          SLUtil.routerSpecialist.showScreen(context, Router.ShowAddressScreen);
           return;
 
         case Router.ShowContactsScreen:
-          SLUtil.RouterSpecialist.showScreen(
-              context, Router.ShowContactsScreen);
+          SLUtil.routerSpecialist.showScreen(context, Router.ShowContactsScreen);
           return;
 
         case CreateAccount:
@@ -76,10 +72,9 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState>
           return;
 
         case Actions.Refresh:
-          getWidget()
-              .addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
+          getWidget().addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
           // Получим операции
-          SLUtil.RepositorySpecialist.getOperations(NAME);
+          SLUtil.repositorySpecialist.getOperations(NAME);
           return;
       }
     }
@@ -147,12 +142,11 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState>
   }
 
   void _getdata() {
-    getWidget()
-        .addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
+    getWidget().addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
     // Получим счета
-    SLUtil.RepositorySpecialist.getAccounts(NAME);
+    SLUtil.repositorySpecialist.getAccounts(NAME);
     // Получим операции
-    SLUtil.RepositorySpecialist.getOperations(NAME);
+    SLUtil.repositorySpecialist.getOperations(NAME);
   }
 
   @override
@@ -161,8 +155,7 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState>
       switch (result.getName()) {
         case Repository.GetAccounts:
           ApplicationData.instance.accounts = result.getData();
-          SLUtil.addMessage(new ActionMessage.action(
-              ExtDrawerPresenter.NAME, new ApplicationAction(Actions.Refresh)));
+          SLUtil.addMessage(new ActionMessage.action(ExtDrawerPresenter.NAME, new ApplicationAction(Actions.Refresh)));
           break;
 
         case Repository.GetOperations:
@@ -173,9 +166,8 @@ class HomeScreenPresenter<HomeScreenState extends WidgetState>
           break;
       }
     } else {
-      getWidget()
-          .addAction(new ApplicationAction(Actions.HideHorizontalProgress));
-      SLUtil.UISpecialist.showErrorToast(result.getErrorText());
+      getWidget().addAction(new ApplicationAction(Actions.HideHorizontalProgress));
+      SLUtil.uiSpecialist.showErrorToast(result.getErrorText());
     }
   }
 
