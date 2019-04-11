@@ -77,4 +77,9 @@ abstract class ServiceLocator implements Subscriber {
   /// @return список специалистов
   ///
   List<Specialist> getSpecialists();
+
+  ///
+  /// Остановить работу специалистов
+  ///
+  void stop();
 }

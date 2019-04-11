@@ -19,12 +19,4 @@ class PresenterUnionImpl extends AbsSmallUnion<Presenter> implements PresenterUn
   C getPresenter<C>(String name) {
     return this.getSubscriber(name);
   }
-
-  @override
-  void stop() {
-    for (Presenter presenter in getSubscribers()) {
-      unregisterSubscriber(presenter);
-    }
-    super.stop();
-  }
 }

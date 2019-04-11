@@ -59,4 +59,10 @@ class Cache {
       }
     });
   }
+
+  Future clearAll() async {
+    await _lock.synchronized(() async {
+      _map.clear();
+    });
+  }
 }
