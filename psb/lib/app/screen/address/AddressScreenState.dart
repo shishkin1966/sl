@@ -180,8 +180,7 @@ class GoogleMapWidgetState extends DataWidgetState<Position> {
   void _onCameraMove(CameraPosition position) {
     if (_debounce?.isActive ?? false) _debounce.cancel();
     _debounce = Timer(const Duration(seconds: 1), () {
-      SLUtil.getPresenterUnion()
-          .getPresenter(AddressScreenPresenter.NAME)
+      SLUtil.PresenterUnion.getPresenter(AddressScreenPresenter.NAME)
           ?.addAction(new DataAction(AddressScreenPresenter.CameraMoved)
               .setData(position.target));
     });

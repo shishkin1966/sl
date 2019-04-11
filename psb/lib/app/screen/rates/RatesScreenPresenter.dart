@@ -11,8 +11,8 @@ import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/ui/WidgetState.dart';
 import 'package:uuid/uuid.dart';
 
-class RatesScreenPresenter<RatesScreenState extends WidgetState> extends AbsPresenter<RatesScreenState>
-    implements ResponseListener {
+class RatesScreenPresenter<RatesScreenState extends WidgetState>
+    extends AbsPresenter<RatesScreenState> implements ResponseListener {
   static const String NAME = "RatesScreenPresenter";
 
   RatesScreenPresenter(RatesScreenState lifecycleState) : super(lifecycleState);
@@ -35,8 +35,9 @@ class RatesScreenPresenter<RatesScreenState extends WidgetState> extends AbsPres
   }
 
   void _getRates() {
-    getWidget().addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
-    SLUtil.getRepositorySpecialist().getRates(NAME, id: new Uuid().v4());
+    getWidget()
+        .addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
+    SLUtil.RepositorySpecialist.getRates(NAME, id: new Uuid().v4());
   }
 
   @override
@@ -48,7 +49,8 @@ class RatesScreenPresenter<RatesScreenState extends WidgetState> extends AbsPres
 
   @override
   void response(Result result) {
-    getWidget().addAction(new ApplicationAction(Actions.HideHorizontalProgress));
+    getWidget()
+        .addAction(new ApplicationAction(Actions.HideHorizontalProgress));
     if (!result.hasError()) {
       switch (result.getName()) {
         case Repository.GetRates:
@@ -60,7 +62,7 @@ class RatesScreenPresenter<RatesScreenState extends WidgetState> extends AbsPres
           break;
       }
     } else {
-      SLUtil.getUISpecialist().showErrorToast(result.getErrorText());
+      SLUtil.UISpecialist.showErrorToast(result.getErrorText());
     }
   }
 }

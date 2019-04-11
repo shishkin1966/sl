@@ -10,7 +10,8 @@ import 'package:psb/sl/state/StateObservable.dart';
 import 'package:psb/sl/state/Stateable.dart';
 import 'package:psb/sl/state/States.dart';
 
-abstract class WidgetState<T extends StatefulWidget> extends State<T> with WidgetsBindingObserver {
+abstract class WidgetState<T extends StatefulWidget> extends State<T>
+    with WidgetsBindingObserver {
   StateObservable _lifecycle = new StateObservable();
   List<Action> _actions = new List<Action>();
   Presenter _presenter;
@@ -43,7 +44,9 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
   void initState() {
     super.initState();
 
-    _subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+    _subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
       setConnectivityState();
     });
 
@@ -75,8 +78,8 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
       snackbar = null;
     }
     if (snackbar == null) {
-      snackbar = SLUtil.getUISpecialist()
-          .getNoConnectivitySnackBar(SLUtil.getString(getScaffoldState().context, 'no_connectivity'));
+      snackbar = SLUtil.UISpecialist.getNoConnectivitySnackBar(
+          SLUtil.getString(getScaffoldState().context, 'no_connectivity'));
       state.showSnackBar(snackbar);
     }
   }

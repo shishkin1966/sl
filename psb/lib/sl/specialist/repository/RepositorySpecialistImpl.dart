@@ -13,7 +13,8 @@ import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/sl/specialist/repository/RepositorySpecialist.dart';
 import 'package:synchronized/synchronized.dart' as Synchronized;
 
-class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecialist {
+class RepositorySpecialistImpl extends AbsSpecialist
+    implements RepositorySpecialist {
   static const String NAME = "RepositorySpecialistImpl";
 
   Synchronized.Lock _lock = new Synchronized.Lock();
@@ -25,8 +26,8 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
       List<Account> list = new List();
       list.add(new Account(new Currency("RUB"), 364500));
       list.add(new Account(new Currency("USD"), 11500));
-      ResultMessage message =
-          new ResultMessage.result(subscriber, new Result<List<Account>>(list).setName(Repository.GetAccounts));
+      ResultMessage message = new ResultMessage.result(subscriber,
+          new Result<List<Account>>(list).setName(Repository.GetAccounts));
       SLUtil.addMessage(message);
     });
   }
@@ -56,8 +57,8 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
       operation.status = "Обработано";
       list.add(operation);
 
-      ResultMessage message =
-          new ResultMessage.result(subscriber, new Result<List<Operation>>(list).setName(Repository.GetOperations));
+      ResultMessage message = new ResultMessage.result(subscriber,
+          new Result<List<Operation>>(list).setName(Repository.GetOperations));
       SLUtil.addNotMandatoryMessage(message);
     });
   }
@@ -68,7 +69,8 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
 
     try {
       List<Ticker> list = new List();
-      Response response = await Dio().get("https://api.coinmarketcap.com/v1/ticker/");
+      Response response =
+          await Dio().get("https://api.coinmarketcap.com/v1/ticker/");
       List<dynamic> data = response.data;
       for (Map<String, dynamic> rate in data) {
         Ticker ticker = new Ticker();
@@ -77,13 +79,16 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
       }
       bool found = await _check(Repository.GetRates, id);
       if (found) {
-        Result<List<Ticker>> result = new Result<List<Ticker>>(list).setName(Repository.GetRates);
+        Result<List<Ticker>> result =
+            new Result<List<Ticker>>(list).setName(Repository.GetRates);
         ResultMessage message = new ResultMessage.result(subscriber, result);
         SLUtil.addNotMandatoryMessage(message);
       }
     } catch (e) {
       await _remove(Repository.GetRates, id);
-      Result result = new Result(null).addError(subscriber, e.toString()).setName(Repository.GetRates);
+      Result result = new Result(null)
+          .addError(subscriber, e.toString())
+          .setName(Repository.GetRates);
       ResultMessage message = new ResultMessage.result(subscriber, result);
       SLUtil.addNotMandatoryMessage(message);
     }
@@ -95,10 +100,11 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
 
     try {
       if (StringUtils.isNullOrEmpty(filter)) {
-        var cache = await SLUtil.getCacheSpecialist().get(Repository.GetContacts);
+        var cache = await SLUtil.CacheSpecialist.get(Repository.GetContacts);
         if (cache != null) {
           Result<List<Contact>> result =
-              new Result<List<Contact>>(cache as List<Contact>).setName(Repository.GetContacts);
+              new Result<List<Contact>>(cache as List<Contact>)
+                  .setName(Repository.GetContacts);
           ResultMessage message = new ResultMessage.result(subscriber, result);
           SLUtil.addNotMandatoryMessage(message);
           return;
@@ -119,16 +125,19 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
       bool found = await _check(Repository.GetContacts, id);
       if (found) {
         list.addAll(data);
-        Result<List<Contact>> result = new Result<List<Contact>>(list).setName(Repository.GetContacts);
+        Result<List<Contact>> result =
+            new Result<List<Contact>>(list).setName(Repository.GetContacts);
         ResultMessage message = new ResultMessage.result(subscriber, result);
         SLUtil.addNotMandatoryMessage(message);
         if (StringUtils.isNullOrEmpty(filter)) {
-          SLUtil.getCacheSpecialist().put(Repository.GetContacts, list);
+          SLUtil.CacheSpecialist.put(Repository.GetContacts, list);
         }
       }
     } catch (e) {
       await _remove(Repository.GetContacts, id);
-      Result result = new Result(null).addError(subscriber, e.toString()).setName(Repository.GetContacts);
+      Result result = new Result(null)
+          .addError(subscriber, e.toString())
+          .setName(Repository.GetContacts);
       ResultMessage message = new ResultMessage.result(subscriber, result);
       SLUtil.addNotMandatoryMessage(message);
     }

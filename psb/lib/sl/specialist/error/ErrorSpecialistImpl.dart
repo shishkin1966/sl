@@ -31,7 +31,7 @@ class ErrorSpecialistImpl extends AbsSpecialist implements ErrorSpecialist {
   void onError(String source, Exception e) {
     _logger.severe(source, e, StackTrace.current);
     if (SL.instance.exists(UISpecialistImpl.NAME)) {
-      SLUtil.getUISpecialist().showErrorToast(e.toString());
+      SLUtil.UISpecialist?.showErrorToast(e.toString());
     }
   }
 
@@ -39,7 +39,7 @@ class ErrorSpecialistImpl extends AbsSpecialist implements ErrorSpecialist {
   void onErrorMessage(String source, String message) {
     _logger.severe(source, message, StackTrace.current);
     if (SL.instance.exists(UISpecialistImpl.NAME)) {
-      SLUtil.getUISpecialist().showErrorToast(message);
+      SLUtil.UISpecialist?.showErrorToast(message);
     }
   }
 
@@ -47,7 +47,7 @@ class ErrorSpecialistImpl extends AbsSpecialist implements ErrorSpecialist {
   void onErrorDisplay(String source, Exception e, String message) {
     _logger.severe(source, e, StackTrace.current);
     if (SL.instance.exists(UISpecialistImpl.NAME)) {
-      SLUtil.getUISpecialist().showErrorToast(message);
+      SLUtil.UISpecialist?.showErrorToast(message);
     }
   }
 }
