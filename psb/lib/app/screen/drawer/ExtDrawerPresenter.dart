@@ -8,7 +8,8 @@ import 'package:psb/sl/presenter/AbsPresenter.dart';
 import 'package:psb/sl/specialist/router/Router.dart';
 import 'package:psb/ui/WidgetState.dart';
 
-class ExtDrawerPresenter<ExtDrawerState extends WidgetState> extends AbsPresenter<ExtDrawerState> {
+class ExtDrawerPresenter<ExtDrawerState extends WidgetState>
+    extends AbsPresenter<ExtDrawerState> {
   static const String NAME = "ExtDrawerPresenter";
 
   ExtDrawerPresenter(ExtDrawerState lifecycleState) : super(lifecycleState);
@@ -33,7 +34,8 @@ class ExtDrawerPresenter<ExtDrawerState extends WidgetState> extends AbsPresente
         case Router.ShowAddressScreen:
         case Router.ShowContactsScreen:
           Navigator.pop(getWidget().context);
-          SLUtil.getPresenterUnion().getPresenter(HomeScreenPresenter.NAME)?.addAction(action);
+          SLUtil.PresenterUnion.getPresenter(HomeScreenPresenter.NAME)
+              ?.addAction(action);
           break;
       }
     }

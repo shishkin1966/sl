@@ -71,9 +71,9 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
   Widget build(BuildContext context) {
     return new WillPopScope(
       onWillPop: () async {
-        if (SLUtil.getPresenterUnion().hasSubscriber(ExtDrawerPresenter.NAME)) {
+        if (SLUtil.PresenterUnion.hasSubscriber(ExtDrawerPresenter.NAME)) {
           ExtDrawerPresenter presenter =
-              SLUtil.getPresenterUnion().getPresenter(ExtDrawerPresenter.NAME);
+              SLUtil.PresenterUnion.getPresenter(ExtDrawerPresenter.NAME);
           if (presenter.getState() == States.StateReady) {
             Navigator.pop(getScaffoldState().context);
             return false;
@@ -88,7 +88,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
             state.removeCurrentSnackBar();
             snackbar = null;
           }
-          snackbar = SLUtil.getUISpecialist().getSnackBar(text,
+          snackbar = SLUtil.UISpecialist.getSnackBar(text,
               actionText: actionName,
               action: new ApplicationAction(Actions.ExitApplication));
           state.showSnackBar(snackbar);
@@ -208,8 +208,7 @@ class HomeScreenState extends WidgetState<HomeScreenWidget> {
                           child: InkWell(
                             highlightColor: Color(AppColor.BlueMenuPressed),
                             onTap: () {
-                              SLUtil.getUISpecialist()
-                                  .showToast('OnTapPayments');
+                              SLUtil.UISpecialist.showToast('OnTapPayments');
                               _bottomPosition = RolledBottomMenuHeight;
                               setState(() {});
                             },

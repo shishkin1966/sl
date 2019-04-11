@@ -106,7 +106,7 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
                 onPressed: () {
                   if (!StringUtils.isNullOrEmpty(_controller.text)) {
                     _controller.clear();
-                    SLUtil.getUISpecialist().hideKeyboard(context);
+                    SLUtil.UISpecialist.hideKeyboard(context);
                     getPresenter().addAction(
                         new DataAction(ContactsScreenPresenter.ChangeFilter)
                             .setData(""));
@@ -190,7 +190,7 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
 
         case Actions.ShowKeyboard:
           action.setStateNonChanged();
-          SLUtil.getUISpecialist().showKeyboard(context, _focusNode);
+          SLUtil.UISpecialist.showKeyboard(context, _focusNode);
           return;
       }
     }
