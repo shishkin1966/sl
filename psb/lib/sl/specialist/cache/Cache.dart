@@ -11,7 +11,7 @@ class Cache {
   Synchronized.Lock _lock = new Synchronized.Lock();
 
   Cache() {
-    Timer.periodic(const Duration(minutes: 10), (timer) {
+    Timer.periodic(const Duration(minutes: 4), (timer) {
       check();
     });
   }
