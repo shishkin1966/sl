@@ -94,6 +94,15 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
     await _add(Repository.GetContacts, id);
 
     try {
+      if (StringUtils.isNullOrEmpty(filter)) {
+        var cache = await SLUtil.getCacheSpecialist().get(Repository.GetContacts);
+        if (cache != null) {
+          Result<List<Contact>> result =
+              new Result<List<Contact>>(cache as List<Contact>).setName(Repository.GetContacts);
+          ResultMessage message = new ResultMessage.result(subscriber, result);
+          SLUtil.addNotMandatoryMessage(message);
+        }
+      }
       List<Contact> list = new List();
       Iterable<Contact> data;
       if (StringUtils.isNullOrEmpty(filter)) {
@@ -112,6 +121,9 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
         Result<List<Contact>> result = new Result<List<Contact>>(list).setName(Repository.GetContacts);
         ResultMessage message = new ResultMessage.result(subscriber, result);
         SLUtil.addNotMandatoryMessage(message);
+        if (StringUtils.isNullOrEmpty(filter)) {
+          SLUtil.getCacheSpecialist().put(Repository.GetContacts, list);
+        }
       }
     } catch (e) {
       await _remove(Repository.GetContacts, id);

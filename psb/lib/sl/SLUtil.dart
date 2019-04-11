@@ -4,6 +4,8 @@ import 'package:psb/sl/SL.dart';
 import 'package:psb/sl/SpecialistSubscriber.dart';
 import 'package:psb/sl/message/Message.dart';
 import 'package:psb/sl/observe/ObjectObservable.dart';
+import 'package:psb/sl/specialist/cache/CacheSpecialist.dart';
+import 'package:psb/sl/specialist/cache/CacheSpecialistImpl.dart';
 import 'package:psb/sl/specialist/desktop/DesktopSpecialist.dart';
 import 'package:psb/sl/specialist/desktop/DesktopSpecialistImpl.dart';
 import 'package:psb/sl/specialist/error/ErrorSpecialistImpl.dart';
@@ -71,6 +73,10 @@ class SLUtil {
 
   static NotificationSpecialist getNotificationSpecialist() {
     return SL.instance.get(NotificationSpecialistImpl.NAME);
+  }
+
+  static CacheSpecialist getCacheSpecialist() {
+    return SL.instance.get(CacheSpecialistImpl.NAME);
   }
 
   static void onChange(String object) {
