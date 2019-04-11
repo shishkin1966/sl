@@ -13,6 +13,11 @@ class CacheSpecialistImpl extends AbsSpecialist implements CacheSpecialist {
   }
 
   @override
+  void onUnRegister() {
+    clearAll();
+  }
+
+  @override
   String getName() {
     return NAME;
   }
@@ -40,5 +45,15 @@ class CacheSpecialistImpl extends AbsSpecialist implements CacheSpecialist {
   @override
   void clear(String key) {
     _cache.clear(key);
+  }
+
+  @override
+  void clearAll() {
+    _cache.clearAll();
+  }
+
+  @override
+  void stop() {
+    clearAll();
   }
 }

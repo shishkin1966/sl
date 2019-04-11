@@ -224,4 +224,9 @@ class MessengerUnionImpl extends AbsSmallUnion<MessengerSubscriber> implements M
     }
     return null;
   }
+
+  @override
+  void stop() {
+    _messages.clear();
+  }
 }

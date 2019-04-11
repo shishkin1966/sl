@@ -147,4 +147,11 @@ abstract class AbsServiceLocator implements ServiceLocator {
   List<Specialist> getSpecialists() {
     return _secretary.values();
   }
+
+  @override
+  void stop() {
+    for (Specialist specialist in _secretary.values()) {
+      specialist.stop();
+    }
+  }
 }

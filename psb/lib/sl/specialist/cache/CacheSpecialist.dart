@@ -8,4 +8,6 @@ abstract class CacheSpecialist extends AbsSpecialist {
   void check();
 
   void clear(String key);
+
+  void clearAll();
 }
