@@ -1,7 +1,6 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:psb/app/common/DataWidget.dart';
 import 'package:psb/app/screen/contacts/ContactsScreenPresenter.dart';
 import 'package:psb/app/screen/contacts/ContactsScreenWidget.dart';
 import 'package:psb/common/StringUtils.dart';
@@ -13,6 +12,7 @@ import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/ui/AppColor.dart';
+import 'package:psb/ui/DataWidget.dart';
 import 'package:psb/ui/Dimen.dart';
 import 'package:psb/ui/WidgetState.dart';
 
@@ -92,9 +92,7 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
                 ),
                 keyboardType: TextInputType.text,
                 onChanged: (text) {
-                  getPresenter().addAction(
-                      new DataAction(ContactsScreenPresenter.ChangeFilter)
-                          .setData(text));
+                  getPresenter().addAction(new DataAction(ContactsScreenPresenter.ChangeFilter).setData(text));
                 },
                 maxLines: 1,
               ),
@@ -107,9 +105,7 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
                   if (!StringUtils.isNullOrEmpty(_controller.text)) {
                     _controller.clear();
                     SLUtil.UISpecialist.hideKeyboard(context);
-                    getPresenter().addAction(
-                        new DataAction(ContactsScreenPresenter.ChangeFilter)
-                            .setData(""));
+                    getPresenter().addAction(new DataAction(ContactsScreenPresenter.ChangeFilter).setData(""));
                   }
                 },
                 child: Icon(
@@ -159,8 +155,7 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
     return null;
   }
 
-  Widget _showHorizontalProgress(
-      BuildContext context, BoxConstraints constraints) {
+  Widget _showHorizontalProgress(BuildContext context, BoxConstraints constraints) {
     return new Positioned(
       top: 0,
       left: 0,
@@ -178,14 +173,12 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
       switch (actionName) {
         case Actions.ShowHorizontalProgress:
           action.setStateNonChanged();
-          (_progressKey.currentState as HorizontalProgressWidgetState)
-              ?.onChange(true);
+          (_progressKey.currentState as HorizontalProgressWidgetState)?.onChange(true);
           return;
 
         case Actions.HideHorizontalProgress:
           action.setStateNonChanged();
-          (_progressKey.currentState as HorizontalProgressWidgetState)
-              ?.onChange(false);
+          (_progressKey.currentState as HorizontalProgressWidgetState)?.onChange(false);
           return;
 
         case Actions.ShowKeyboard:
@@ -200,8 +193,7 @@ class ContactsScreenState extends WidgetState<ContactsScreenWidget> {
       switch (actionName) {
         case Repository.GetContacts:
           action.setStateNonChanged();
-          (_contactsKey.currentState as ContactsWidgetState)
-              ?.onChange(action.getData());
+          (_contactsKey.currentState as ContactsWidgetState)?.onChange(action.getData());
           return;
       }
     }
@@ -212,8 +204,7 @@ class HorizontalProgressWidget extends DataWidget {
   HorizontalProgressWidget({Key key}) : super(key: key);
 
   @override
-  HorizontalProgressWidgetState createState() =>
-      new HorizontalProgressWidgetState(false);
+  HorizontalProgressWidgetState createState() => new HorizontalProgressWidgetState(false);
 }
 
 class HorizontalProgressWidgetState extends DataWidgetState<bool> {
@@ -238,8 +229,7 @@ class ContactsWidget extends DataWidget {
   ContactsWidget({Key key}) : super(key: key);
 
   @override
-  ContactsWidgetState createState() =>
-      new ContactsWidgetState(new List<Contact>());
+  ContactsWidgetState createState() => new ContactsWidgetState(new List<Contact>());
 }
 
 class ContactsWidgetState extends DataWidgetState<List<Contact>> {
@@ -275,12 +265,10 @@ class ContactsWidgetState extends DataWidgetState<List<Contact>> {
                                   new Expanded(
                                     flex: 1,
                                     child: new Container(
-                                      padding:
-                                          EdgeInsets.fromLTRB(12, 0, 12, 0),
+                                      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
                                       child: new Text(
                                         getData()[position].displayName,
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 20),
+                                        style: TextStyle(color: Colors.black, fontSize: 20),
                                       ),
                                     ),
                                   ),
