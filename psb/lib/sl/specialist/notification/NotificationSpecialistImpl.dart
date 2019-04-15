@@ -22,10 +22,8 @@ class NotificationSpecialistImpl extends AbsSpecialist
     _plugin = new FlutterLocalNotificationsPlugin();
     var initializationSettingsAndroid =
         new AndroidInitializationSettings('app');
-    var initializationSettingsIOS = new IOSInitializationSettings(
-        onDidReceiveLocalNotification: onDidRecieveLocationLocation);
     var initializationSettings = new InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
+        initializationSettingsAndroid, null);
     _plugin.initialize(initializationSettings,
         onSelectNotification: onSelectNotification);
 
@@ -70,9 +68,6 @@ class NotificationSpecialistImpl extends AbsSpecialist
   Future clear() async {
     await _plugin.cancelAll();
   }
-
-  Future onDidRecieveLocationLocation(
-      int id, String title, String body, String payload) {}
 
   Future onSelectNotification(String payload) async {}
 

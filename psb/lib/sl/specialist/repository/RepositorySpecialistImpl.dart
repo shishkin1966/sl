@@ -71,8 +71,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
       Response response = await Dio().get("https://api.coinmarketcap.com/v1/ticker/");
       List<dynamic> data = response.data;
       for (Map<String, dynamic> rate in data) {
-        Ticker ticker = new Ticker();
-        ticker.name = rate["name"];
+        Ticker ticker = new Ticker.from(rate);
         list.add(ticker);
       }
       bool found = await _check(Repository.GetRates, id);
