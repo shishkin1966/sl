@@ -3,7 +3,6 @@ import 'package:psb/querybuilder/criteria/BetweenCriteria.dart';
 import 'package:psb/querybuilder/projection/Projection.dart';
 
 abstract class Criteria {
-  // Null
   static Criteria isNull(dynamic object) {
     if (object is Projection) {
       return new BasicCriteria(object, Operators.IS_NULL, null);

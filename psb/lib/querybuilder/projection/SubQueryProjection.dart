@@ -1,6 +1,6 @@
 import 'package:psb/querybuilder/QueryBuilderUtils.dart';
+import 'package:psb/querybuilder/SqliteQueryBuilder.dart';
 import 'package:psb/querybuilder/projection/Projection.dart';
-import 'package:psb/querybuilder/projection/SqliteQueryBuilder.dart';
 
 class SubQueryProjection extends Projection {
   SqliteQueryBuilder _subQuery;
