@@ -16,7 +16,7 @@ class Ticker {
 
   Ticker();
 
-  Ticker.from(Map map) : super() {
+  Ticker.from(Map map) {
     id = map["id"];
     name = map["name"];
     symbol = map["symbol"];
@@ -31,5 +31,24 @@ class Ticker {
     percentChange1h = map["percentChange1h"];
     percentChange24h = map["percentChange24h"];
     percentChange7d = map["percentChange7d"];
+  }
+
+  Map toMap() {
+    Map map = new Map();
+    map["id"] = id;
+    map["name"] = name;
+    map["symbol"] = symbol;
+    map["rank"] = rank;
+    map["priceUsd"] = priceUsd;
+    map["priceBtc"] = priceBtc;
+    map["volumeUsd"] = volumeUsd;
+    map["marketCapUsd"] = marketCapUsd;
+    map["availableSupply"] = availableSupply;
+    map["totalSupply"] = totalSupply;
+    map["maxSupply"] = maxSupply;
+    map["percentChange1h"] = percentChange1h;
+    map["percentChange24h"] = percentChange24h;
+    map["percentChange7d"] = percentChange7d;
+    return map;
   }
 }
