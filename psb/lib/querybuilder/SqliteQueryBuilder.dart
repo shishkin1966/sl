@@ -1,6 +1,23 @@
+import 'package:intl/intl.dart';
 import 'package:psb/querybuilder/QueryBuilder.dart';
+import 'package:psb/querybuilder/criteria/Criteria.dart';
+import 'package:psb/querybuilder/from/From.dart';
+import 'package:psb/querybuilder/projection/Projection.dart';
 
 class SqliteQueryBuilder implements QueryBuilder {
+  List<Projection> _projections;
+  From _from;
+  Criteria _criteria;
+  List<Projection> _groupBy;
+  List<Order> _orderBy;
+  int _skip;
+  int _take;
+  bool _distinct;
+  List<SqliteQueryBuilder> _unionQueries;
+  bool _unionAll;
+  DateFormat _dateFormat;
+  DateFormat _dateTimeFormat;
+
   @override
   QueryBuilder distinct() {
     // TODO: implement distinct

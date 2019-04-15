@@ -1,5 +1,13 @@
+import 'package:psb/querybuilder/SqliteQueryBuilder.dart';
+import 'package:psb/querybuilder/criteria/AndCriteria.dart';
 import 'package:psb/querybuilder/criteria/BasicCriteria.dart';
 import 'package:psb/querybuilder/criteria/BetweenCriteria.dart';
+import 'package:psb/querybuilder/criteria/ExistsCriteria.dart';
+import 'package:psb/querybuilder/criteria/InCriteria.dart';
+import 'package:psb/querybuilder/criteria/NotExistsCriteria.dart';
+import 'package:psb/querybuilder/criteria/NotInCriteria.dart';
+import 'package:psb/querybuilder/criteria/OrCriteria.dart';
+import 'package:psb/querybuilder/criteria/ValueBetweenCriteria.dart';
 import 'package:psb/querybuilder/projection/Projection.dart';
 
 abstract class Criteria {
@@ -121,6 +129,46 @@ abstract class Criteria {
     } else {
       return new BetweenCriteria(Projection.column(object), valueMin, valueMax);
     }
+  }
+
+  static Criteria valueBetween(dynamic value, dynamic columnMin, dynamic columnMax) {
+    if (columnMin is Projection && columnMax is Projection) {
+      return new ValueBetweenCriteria(value, columnMin, columnMax);
+    } else {
+      return new ValueBetweenCriteria(value, Projection.column(columnMin), Projection.column(columnMax));
+    }
+  }
+
+  static Criteria exists(SqliteQueryBuilder subQuery) {
+    return new ExistsCriteria(subQuery);
+  }
+
+  static Criteria notExists(SqliteQueryBuilder subQuery) {
+    return new NotExistsCriteria(subQuery);
+  }
+
+  static Criteria inValues(dynamic object, List values) {
+    if (object is Projection) {
+      return new InCriteria(object, values);
+    } else {
+      return new InCriteria(Projection.column(object), values);
+    }
+  }
+
+  static Criteria notInValues(dynamic object, List values) {
+    if (object is Projection) {
+      return new NotInCriteria(object, values);
+    } else {
+      return new NotInCriteria(Projection.column(object), values);
+    }
+  }
+
+  AndCriteria and(Criteria criteria) {
+    return new AndCriteria(this, criteria);
+  }
+
+  OrCriteria or(Criteria criteria) {
+    return new OrCriteria(this, criteria);
   }
 
   String build();
