@@ -31,9 +31,9 @@ abstract class QueryBuilder {
 
   QueryBuilder whereOr(Criteria criteria);
 
-  QueryBuilder withDateFormat(String format);
+  QueryBuilder withDateFormat(dynamic format);
 
-  QueryBuilder withDateTimeFormat(String format);
+  QueryBuilder withDateTimeFormat(dynamic format);
 
   QueryBuilder offset(int skip);
 
