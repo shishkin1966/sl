@@ -64,14 +64,14 @@ class BasicCriteria extends Criteria {
 }
 
 class Operators {
-  static final String IS_NULL = "IS NULL";
-  static final String IS_NOT_NULL = "IS NOT NULL";
-  static final String EQUALS = "=";
-  static final String NOT_EQUALS = "<>";
-  static final String GREATER = ">";
-  static final String LESSER = "<";
-  static final String GREATER_OR_EQUALS = ">=";
-  static final String LESSER_OR_EQUALS = "<=";
-  static final String LIKE = "LIKE";
-  static final String NOT_LIKE = "NOT LIKE";
+  static const String IS_NULL = "IS NULL";
+  static const String IS_NOT_NULL = "IS NOT NULL";
+  static const String EQUALS = "=";
+  static const String NOT_EQUALS = "<>";
+  static const String GREATER = ">";
+  static const String LESSER = "<";
+  static const String GREATER_OR_EQUALS = ">=";
+  static const String LESSER_OR_EQUALS = "<=";
+  static const String LIKE = "LIKE";
+  static const String NOT_LIKE = "NOT LIKE";
 }

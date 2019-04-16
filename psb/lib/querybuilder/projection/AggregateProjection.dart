@@ -38,9 +38,9 @@ class AggregateProjection extends Projection {
 }
 
 class Type {
-  static final int MIN = 1;
-  static final int MAX = 2;
-  static final int SUM = 3;
-  static final int AVG = 4;
-  static final int COUNT = 5;
+  static const int MIN = 1;
+  static const int MAX = 2;
+  static const int SUM = 3;
+  static const int AVG = 4;
+  static const int COUNT = 5;
 }
