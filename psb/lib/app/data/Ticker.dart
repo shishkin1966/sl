@@ -21,16 +21,16 @@ class Ticker {
     name = map["name"];
     symbol = map["symbol"];
     rank = map["rank"];
-    priceUsd = map["priceUsd"];
-    priceBtc = map["priceBtc"];
-    volumeUsd = map["volumeUsd"];
-    marketCapUsd = map["marketCapUsd"];
-    availableSupply = map["availableSupply"];
-    totalSupply = map["totalSupply"];
-    maxSupply = map["maxSupply"];
-    percentChange1h = map["percentChange1h"];
-    percentChange24h = map["percentChange24h"];
-    percentChange7d = map["percentChange7d"];
+    priceUsd = map["price_usd"];
+    priceBtc = map["price_btc"];
+    volumeUsd = map["24h_volume_usd"];
+    marketCapUsd = map["market_cap_usd"];
+    availableSupply = map["available_supply"];
+    totalSupply = map["total_supply"];
+    maxSupply = map["max_supply"];
+    percentChange1h = map["percent_change_1h"];
+    percentChange24h = map["percent_change_24h"];
+    percentChange7d = map["percent_change_7d"];
   }
 
   Map toMap() {
@@ -39,16 +39,16 @@ class Ticker {
     map["name"] = name;
     map["symbol"] = symbol;
     map["rank"] = rank;
-    map["priceUsd"] = priceUsd;
-    map["priceBtc"] = priceBtc;
-    map["volumeUsd"] = volumeUsd;
-    map["marketCapUsd"] = marketCapUsd;
-    map["availableSupply"] = availableSupply;
-    map["totalSupply"] = totalSupply;
-    map["maxSupply"] = maxSupply;
-    map["percentChange1h"] = percentChange1h;
-    map["percentChange24h"] = percentChange24h;
-    map["percentChange7d"] = percentChange7d;
+    map["price_usd"] = priceUsd;
+    map["price_btc"] = priceBtc;
+    map["24h_volume_usd"] = volumeUsd;
+    map["market_cap_usd"] = marketCapUsd;
+    map["available_supply"] = availableSupply;
+    map["total_supply"] = totalSupply;
+    map["max_supply"] = maxSupply;
+    map["percent_change_1h"] = percentChange1h;
+    map["percent_change_24h"] = percentChange24h;
+    map["percent_change_7d"] = percentChange7d;
     return map;
   }
 

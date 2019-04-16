@@ -15,8 +15,6 @@ class RatesScreenPresenter<RatesScreenState extends WidgetState>
     extends AbsPresenter<RatesScreenState> implements ResponseListener {
   static const String NAME = "RatesScreenPresenter";
 
-  List<Ticker> _list = new List();
-
   RatesScreenPresenter(RatesScreenState lifecycleState) : super(lifecycleState);
 
   @override
@@ -30,7 +28,6 @@ class RatesScreenPresenter<RatesScreenState extends WidgetState>
       String actionName = action.getName();
       switch (actionName) {
         case Actions.Refresh:
-          _list.clear();
           SLUtil.repositorySpecialist.cleanRates(NAME).then((onValue) {
             _getRates();
           });
@@ -59,33 +56,30 @@ class RatesScreenPresenter<RatesScreenState extends WidgetState>
 
   @override
   void response(Result result) {
-    getWidget()
-        .addAction(new ApplicationAction(Actions.HideHorizontalProgress));
     if (!result.hasError()) {
       switch (result.getName()) {
         case Repository.GetRates:
+          getWidget()
+              .addAction(new ApplicationAction(Actions.HideHorizontalProgress));
           List<Ticker> list = result.getData();
           list.sort((a, b) {
             return a.name.toLowerCase().compareTo(b.name.toLowerCase());
           });
-          _list = list;
           getWidget().addAction(new DataAction(result.getName()).setData(list));
           SLUtil.repositorySpecialist.saveRates(NAME, list);
           break;
 
         case Repository.GetRatesDb:
-          if (_list.isEmpty) {
-            List<Ticker> list = result.getData();
-            list.sort((a, b) {
-              return a.name.toLowerCase().compareTo(b.name.toLowerCase());
-            });
-            _list = list;
-            getWidget()
-                .addAction(new DataAction(result.getName()).setData(list));
-          }
+          List<Ticker> list = result.getData();
+          list.sort((a, b) {
+            return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+          });
+          getWidget().addAction(new DataAction(result.getName()).setData(list));
           break;
       }
     } else {
+      getWidget()
+          .addAction(new ApplicationAction(Actions.HideHorizontalProgress));
       SLUtil.uiSpecialist.showErrorToast(result.getErrorText());
     }
   }
