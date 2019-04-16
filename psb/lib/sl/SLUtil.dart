@@ -8,6 +8,7 @@ import 'package:psb/sl/specialist/cache/CacheSpecialist.dart';
 import 'package:psb/sl/specialist/cache/CacheSpecialistImpl.dart';
 import 'package:psb/sl/specialist/desktop/DesktopSpecialist.dart';
 import 'package:psb/sl/specialist/desktop/DesktopSpecialistImpl.dart';
+import 'package:psb/sl/specialist/error/ErrorSpecialist.dart';
 import 'package:psb/sl/specialist/error/ErrorSpecialistImpl.dart';
 import 'package:psb/sl/specialist/finger/FingerPrintSpecialist.dart';
 import 'package:psb/sl/specialist/finger/FingerprintSpecialistImpl.dart';
@@ -31,6 +32,10 @@ import 'package:psb/sl/specialist/ui/UISpecialist.dart';
 import 'package:psb/sl/specialist/ui/UISpecialistImpl.dart';
 
 class SLUtil {
+  static ErrorSpecialist get errorSpecialist {
+    return SL.instance.get(ErrorSpecialistImpl.NAME);
+  }
+
   static PresenterUnion get presenterUnion {
     return SL.instance.get(PresenterUnionImpl.NAME);
   }
