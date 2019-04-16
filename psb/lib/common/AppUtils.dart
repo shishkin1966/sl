@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class AppUtils {
   static String getAssetImage(BuildContext context, String file) {
@@ -21,5 +22,9 @@ class AppUtils {
       height: height,
       color: color,
     );
+  }
+
+  static Future<String> getSQL(String file) async {
+    return await rootBundle.loadString('assets/sql/' + file);
   }
 }
