@@ -31,8 +31,8 @@ class RepositorySpecialistImpl extends AbsSpecialist
 
   @override
   Future connectDb(BuildContext context) async {
-    var databasesPath = await getDatabasesPath();
-    String path = databasesPath + "psb.db";
+    String databasesPath = await getDatabasesPath();
+    String path = databasesPath + "/psb.db";
     _database = await openDatabase(
       path,
       version: 1,
