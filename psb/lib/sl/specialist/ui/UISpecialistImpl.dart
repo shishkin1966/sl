@@ -31,7 +31,7 @@ class UISpecialistImpl extends AbsSpecialist implements UISpecialist {
         msg: text,
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.CENTER,
-        timeInSecForIos: 3,
+        timeInSecForIos: 6,
         backgroundColor: Colors.red,
         textColor: Colors.white);
   }

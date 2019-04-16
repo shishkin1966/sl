@@ -1,0 +1,2 @@
+INSERT INTO Ticker(id, name, symbol, rank, priceUsd, priceBtc, volumeUsd, marketCapUsd, availableSupply, totalSupply, maxSupply, percentChange1h, percentChange24h, percentChange7d) 
+VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);

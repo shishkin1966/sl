@@ -13,7 +13,8 @@ import 'package:psb/sl/specialist/router/Router.dart';
 import 'package:psb/ui/Application.dart';
 
 void main() {
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
     runApp(EasyLocalization(child: MyApp()));
   });
 }
@@ -31,6 +32,7 @@ class MyApp extends Application {
   @override
   Widget build(BuildContext context) {
     SLUtil.registerSubscriber(this);
+    SLUtil.repositorySpecialist.connectDb(context);
 
     var data = EasyLocalizationProvider.of(context).data;
     return EasyLocalizationProvider(
@@ -41,7 +43,8 @@ class MyApp extends Application {
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           //app-specific localization
-          EasylocaLizationDelegate(locale: data.locale ?? Locale('ru'), path: 'assets/langs'),
+          EasylocaLizationDelegate(
+              locale: data.locale ?? Locale('ru'), path: 'assets/langs'),
         ],
         supportedLocales: [Locale('en'), Locale('ru')],
         locale: data.locale,

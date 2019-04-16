@@ -52,7 +52,8 @@ class Application extends StatelessWidget implements MessengerSubscriber {
           case Actions.ExitApplication:
             SL.instance.clear();
 
-            HomeScreenPresenter presenter = SLUtil.presenterUnion.getPresenter(HomeScreenPresenter.NAME);
+            HomeScreenPresenter presenter =
+                SLUtil.presenterUnion.getPresenter(HomeScreenPresenter.NAME);
             if (presenter != null) {
               BuildContext context = presenter.getWidget().context;
               Navigator.popUntil(context, (route) {
