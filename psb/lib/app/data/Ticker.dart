@@ -51,4 +51,23 @@ class Ticker {
     map["percentChange7d"] = percentChange7d;
     return map;
   }
+
+  List toList() {
+    List list = List();
+    list.add(id);
+    list.add(name);
+    list.add(symbol);
+    list.add(rank);
+    list.add(priceUsd);
+    list.add(priceBtc);
+    list.add(volumeUsd);
+    list.add(marketCapUsd);
+    list.add(availableSupply);
+    list.add(totalSupply);
+    list.add(maxSupply);
+    list.add(percentChange1h);
+    list.add(percentChange24h);
+    list.add(percentChange7d);
+    return list;
+  }
 }
