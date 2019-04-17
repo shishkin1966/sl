@@ -70,19 +70,22 @@ abstract class WidgetState<T extends StatefulWidget> extends State<T> with Widge
 
   void showConnectivitySnackBar() {
     ScaffoldState state = getScaffoldState();
+    if (state == null) return;
+
     if (snackbar != null) {
       getScaffoldState().removeCurrentSnackBar();
       snackbar = null;
     }
     if (snackbar == null) {
-      snackbar = SLUtil.uiSpecialist
-          .getNoConnectivitySnackBar(SLUtil.getString(getScaffoldState().context, 'no_connectivity'));
+      snackbar = SLUtil.uiSpecialist.getNoConnectivitySnackBar(SLUtil.getString(state.context, 'no_connectivity'));
       state.showSnackBar(snackbar);
     }
   }
 
   void hideConnectivitySnackBar() {
     ScaffoldState state = getScaffoldState();
+    if (state == null) return;
+
     if (snackbar != null) {
       state.removeCurrentSnackBar();
     }

@@ -1,6 +1,7 @@
 import 'package:psb/sl/Subscriber.dart';
 import 'package:psb/sl/Validated.dart';
 import 'package:psb/sl/specialist/cache/CacheSpecialistImpl.dart';
+import 'package:psb/sl/specialist/connectivity/ConnectivitySpecialistImpl.dart';
 import 'package:psb/sl/specialist/desktop/DesktopSpecialistImpl.dart';
 import 'package:psb/sl/specialist/error/ErrorSpecialistImpl.dart';
 import 'package:psb/sl/specialist/finger/FingerprintSpecialistImpl.dart';
@@ -85,6 +86,9 @@ abstract class Specialist implements Subscriber, Validated, Comparable {
 
       case CacheSpecialistImpl.NAME:
         return new CacheSpecialistImpl();
+
+      case ConnectivitySpecialistImpl.NAME:
+        return new ConnectivitySpecialistImpl();
     }
     return null;
   }

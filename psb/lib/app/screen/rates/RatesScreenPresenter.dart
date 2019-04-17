@@ -11,8 +11,8 @@ import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/ui/WidgetState.dart';
 import 'package:uuid/uuid.dart';
 
-class RatesScreenPresenter<RatesScreenState extends WidgetState>
-    extends AbsPresenter<RatesScreenState> implements ResponseListener {
+class RatesScreenPresenter<RatesScreenState extends WidgetState> extends AbsPresenter<RatesScreenState>
+    implements ResponseListener {
   static const String NAME = "RatesScreenPresenter";
 
   RatesScreenPresenter(RatesScreenState lifecycleState) : super(lifecycleState);
@@ -37,8 +37,7 @@ class RatesScreenPresenter<RatesScreenState extends WidgetState>
   }
 
   void _getRates() async {
-    getWidget()
-        .addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
+    getWidget().addAction(new ApplicationAction(Actions.ShowHorizontalProgress));
     SLUtil.repositorySpecialist.countRates(NAME).then((cnt) {
       if (cnt > 0) {
         SLUtil.repositorySpecialist.getRatesDb(NAME);
@@ -56,11 +55,10 @@ class RatesScreenPresenter<RatesScreenState extends WidgetState>
 
   @override
   void response(Result result) {
+    getWidget().addAction(new ApplicationAction(Actions.HideHorizontalProgress));
     if (!result.hasError()) {
       switch (result.getName()) {
         case Repository.GetRates:
-          getWidget()
-              .addAction(new ApplicationAction(Actions.HideHorizontalProgress));
           List<Ticker> list = result.getData();
           list.sort((a, b) {
             return a.name.toLowerCase().compareTo(b.name.toLowerCase());
@@ -78,8 +76,6 @@ class RatesScreenPresenter<RatesScreenState extends WidgetState>
           break;
       }
     } else {
-      getWidget()
-          .addAction(new ApplicationAction(Actions.HideHorizontalProgress));
       SLUtil.uiSpecialist.showErrorToast(result.getErrorText());
     }
   }

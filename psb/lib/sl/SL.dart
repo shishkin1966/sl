@@ -1,6 +1,7 @@
 import 'package:psb/sl/AbsServiceLocator.dart';
 import 'package:psb/sl/observe/ObjectObservable.dart';
 import 'package:psb/sl/specialist/cache/CacheSpecialistImpl.dart';
+import 'package:psb/sl/specialist/connectivity/ConnectivitySpecialistImpl.dart';
 import 'package:psb/sl/specialist/desktop/DesktopSpecialistImpl.dart';
 import 'package:psb/sl/specialist/error/ErrorSpecialistImpl.dart';
 import 'package:psb/sl/specialist/finger/FingerprintSpecialistImpl.dart';
@@ -62,6 +63,9 @@ class SL extends AbsServiceLocator {
 
     // Специалист Cache
     registerSpecialistByName(CacheSpecialistImpl.NAME);
+
+    // Специалист Connectivity
+    registerSpecialistByName(ConnectivitySpecialistImpl.NAME);
   }
 
   static SL get instance => _sl;
