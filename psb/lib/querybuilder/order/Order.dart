@@ -28,7 +28,7 @@ abstract class Order {
     if (object is Projection) {
       return new OrderAscending(object);
     } else {
-      return new OrderAscending(Projection.column(object));
+      return new OrderAscending(Projection.column(object.toString()));
     }
   }
 
@@ -36,7 +36,7 @@ abstract class Order {
     if (object is Projection) {
       return new OrderDescending(object);
     } else {
-      return new OrderDescending(Projection.column(object));
+      return new OrderDescending(Projection.column(object.toString()));
     }
   }
 
@@ -44,7 +44,7 @@ abstract class Order {
     if (object is Projection) {
       return new OrderAscendingIgnoreCase(object);
     } else {
-      return new OrderAscendingIgnoreCase(Projection.column(object));
+      return new OrderAscendingIgnoreCase(Projection.column(object.toString()));
     }
   }
 
@@ -52,7 +52,8 @@ abstract class Order {
     if (object is Projection) {
       return new OrderDescendingIgnoreCase(object);
     } else {
-      return new OrderDescendingIgnoreCase(Projection.column(object));
+      return new OrderDescendingIgnoreCase(
+          Projection.column(object.toString()));
     }
   }
 }

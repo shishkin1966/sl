@@ -15,7 +15,8 @@ abstract class Criteria {
     if (object is Projection) {
       return new BasicCriteria(object, Operators.IS_NULL, null);
     } else {
-      return new BasicCriteria(Projection.column(object), Operators.IS_NULL, null);
+      return new BasicCriteria(
+          Projection.column(object.toString()), Operators.IS_NULL, null);
     }
   }
 
@@ -23,7 +24,8 @@ abstract class Criteria {
     if (object is Projection) {
       return new BasicCriteria(object, Operators.IS_NOT_NULL, null);
     } else {
-      return new BasicCriteria(Projection.column(object), Operators.IS_NOT_NULL, null);
+      return new BasicCriteria(
+          Projection.column(object.toString()), Operators.IS_NOT_NULL, null);
     }
   }
 
@@ -31,7 +33,8 @@ abstract class Criteria {
     if (object is Projection) {
       return new BasicCriteria(object, Operators.EQUALS, value);
     } else {
-      return new BasicCriteria(Projection.column(object), Operators.EQUALS, value);
+      return new BasicCriteria(
+          Projection.column(object.toString()), Operators.EQUALS, value);
     }
   }
 
@@ -39,7 +42,8 @@ abstract class Criteria {
     if (object is Projection) {
       return new BasicCriteria(object, Operators.NOT_EQUALS, value);
     } else {
-      return new BasicCriteria(Projection.column(object), Operators.NOT_EQUALS, value);
+      return new BasicCriteria(
+          Projection.column(object.toString()), Operators.NOT_EQUALS, value);
     }
   }
 
@@ -47,7 +51,8 @@ abstract class Criteria {
     if (object is Projection) {
       return new BasicCriteria(object, Operators.GREATER, value);
     } else {
-      return new BasicCriteria(Projection.column(object), Operators.GREATER, value);
+      return new BasicCriteria(
+          Projection.column(object.toString()), Operators.GREATER, value);
     }
   }
 
@@ -55,7 +60,8 @@ abstract class Criteria {
     if (object is Projection) {
       return new BasicCriteria(object, Operators.LESSER, value);
     } else {
-      return new BasicCriteria(Projection.column(object), Operators.LESSER, value);
+      return new BasicCriteria(
+          Projection.column(object.toString()), Operators.LESSER, value);
     }
   }
 
@@ -63,7 +69,8 @@ abstract class Criteria {
     if (object is Projection) {
       return new BasicCriteria(object, Operators.GREATER_OR_EQUALS, value);
     } else {
-      return new BasicCriteria(Projection.column(object), Operators.GREATER_OR_EQUALS, value);
+      return new BasicCriteria(Projection.column(object.toString()),
+          Operators.GREATER_OR_EQUALS, value);
     }
   }
 
@@ -71,7 +78,8 @@ abstract class Criteria {
     if (object is Projection) {
       return new BasicCriteria(object, Operators.LESSER_OR_EQUALS, value);
     } else {
-      return new BasicCriteria(Projection.column(object), Operators.LESSER_OR_EQUALS, value);
+      return new BasicCriteria(Projection.column(object.toString()),
+          Operators.LESSER_OR_EQUALS, value);
     }
   }
 
@@ -79,7 +87,8 @@ abstract class Criteria {
     if (object is Projection) {
       return new BasicCriteria(object, Operators.LIKE, value + "%");
     } else {
-      return new BasicCriteria(Projection.column(object), Operators.LIKE, value + "%");
+      return new BasicCriteria(
+          Projection.column(object.toString()), Operators.LIKE, value + "%");
     }
   }
 
@@ -87,7 +96,8 @@ abstract class Criteria {
     if (object is Projection) {
       return new BasicCriteria(object, Operators.NOT_LIKE, value + "%");
     } else {
-      return new BasicCriteria(Projection.column(object), Operators.NOT_LIKE, value + "%");
+      return new BasicCriteria(Projection.column(object.toString()),
+          Operators.NOT_LIKE, value + "%");
     }
   }
 
@@ -95,7 +105,8 @@ abstract class Criteria {
     if (object is Projection) {
       return new BasicCriteria(object, Operators.LIKE, "%" + value);
     } else {
-      return new BasicCriteria(Projection.column(object), Operators.LIKE, "%" + value);
+      return new BasicCriteria(
+          Projection.column(object.toString()), Operators.LIKE, "%" + value);
     }
   }
 
@@ -103,7 +114,8 @@ abstract class Criteria {
     if (object is Projection) {
       return new BasicCriteria(object, Operators.NOT_LIKE, "%" + value);
     } else {
-      return new BasicCriteria(Projection.column(object), Operators.NOT_LIKE, "%" + value);
+      return new BasicCriteria(Projection.column(object.toString()),
+          Operators.NOT_LIKE, "%" + value);
     }
   }
 
@@ -111,7 +123,8 @@ abstract class Criteria {
     if (object is Projection) {
       return new BasicCriteria(object, Operators.LIKE, "%" + value + "%");
     } else {
-      return new BasicCriteria(Projection.column(object), Operators.LIKE, "%" + value + "%");
+      return new BasicCriteria(Projection.column(object.toString()),
+          Operators.LIKE, "%" + value + "%");
     }
   }
 
@@ -119,7 +132,8 @@ abstract class Criteria {
     if (object is Projection) {
       return new BasicCriteria(object, Operators.NOT_LIKE, "%" + value + "%");
     } else {
-      return new BasicCriteria(Projection.column(object), Operators.NOT_LIKE, "%" + value + "%");
+      return new BasicCriteria(Projection.column(object.toString()),
+          Operators.NOT_LIKE, "%" + value + "%");
     }
   }
 
@@ -127,15 +141,20 @@ abstract class Criteria {
     if (object is Projection) {
       return new BetweenCriteria(object, valueMin, valueMax);
     } else {
-      return new BetweenCriteria(Projection.column(object), valueMin, valueMax);
+      return new BetweenCriteria(
+          Projection.column(object.toString()), valueMin, valueMax);
     }
   }
 
-  static Criteria valueBetween(dynamic value, dynamic columnMin, dynamic columnMax) {
+  static Criteria valueBetween(
+      dynamic value, dynamic columnMin, dynamic columnMax) {
     if (columnMin is Projection && columnMax is Projection) {
       return new ValueBetweenCriteria(value, columnMin, columnMax);
     } else {
-      return new ValueBetweenCriteria(value, Projection.column(columnMin), Projection.column(columnMax));
+      return new ValueBetweenCriteria(
+          value,
+          Projection.column(columnMin.toString()),
+          Projection.column(columnMax.toString()));
     }
   }
 
@@ -151,7 +170,7 @@ abstract class Criteria {
     if (object is Projection) {
       return new InCriteria(object, values);
     } else {
-      return new InCriteria(Projection.column(object), values);
+      return new InCriteria(Projection.column(object.toString()), values);
     }
   }
 
@@ -159,7 +178,7 @@ abstract class Criteria {
     if (object is Projection) {
       return new NotInCriteria(object, values);
     } else {
-      return new NotInCriteria(Projection.column(object), values);
+      return new NotInCriteria(Projection.column(object.toString()), values);
     }
   }
 

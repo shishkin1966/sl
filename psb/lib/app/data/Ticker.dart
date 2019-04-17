@@ -1,4 +1,6 @@
 class Ticker {
+  static const String Table = "Ticker";
+
   String id;
   String name;
   String symbol;
@@ -70,4 +72,21 @@ class Ticker {
     list.add(percentChange7d);
     return list;
   }
+}
+
+class Columns {
+  static const String id = "id";
+  static const String name = "name";
+  static const String symbol = "symbol";
+  static const String rank = "rank";
+  static const String priceUsd = "priceUsd";
+  static const String priceBtc = "priceBtc";
+  static const String volumeUsd = "volumeUsd";
+  static const String marketCapUsd = "marketCapUsd";
+  static const String availableSupply = "availableSupply";
+  static const String totalSupply = "totalSupply";
+  static const String maxSupply = "maxSupply";
+  static const String percentChange1h = "percentChange1h";
+  static const String percentChange24h = "percentChange24h";
+  static const String percentChange7d = "percentChange7d";
 }

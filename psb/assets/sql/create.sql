@@ -1,4 +1,4 @@
-﻿CREATE TABLE "Ticker" (
+﻿CREATE TABLE IF NOT EXISTS "Ticker" (
 	"id"	TEXT,
 	"name"	TEXT,
 	"symbol"	TEXT,

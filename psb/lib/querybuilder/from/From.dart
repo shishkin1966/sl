@@ -20,7 +20,7 @@ abstract class From {
     } else if (object is From) {
       return new PartialJoin(this, object, "INNER JOIN");
     } else {
-      return innerJoin(From.table(object));
+      return innerJoin(From.table(object.toString()));
     }
   }
 
@@ -30,7 +30,7 @@ abstract class From {
     } else if (object is From) {
       return new PartialJoin(this, object, "LEFT JOIN");
     } else {
-      return leftJoin(From.table(object));
+      return leftJoin(From.table(object.toString()));
     }
   }
 
@@ -52,7 +52,8 @@ class PartialJoin {
 
   JoinFrom on({Criteria criteria, String leftColumn, String rightColumn}) {
     if (criteria == null) {
-      criteria = Criteria.equals(Projection.column(leftColumn), Projection.column(rightColumn));
+      criteria = Criteria.equals(
+          Projection.column(leftColumn), Projection.column(rightColumn));
     }
     return new JoinFrom(_left, _right, _joinType, criteria);
   }
