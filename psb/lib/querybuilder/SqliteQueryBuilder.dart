@@ -13,11 +13,11 @@ class SqliteQueryBuilder implements QueryBuilder {
   Criteria _criteria;
   List<Projection> _groupBy = new List();
   List<Order> _orderBy = new List();
-  int _skip;
-  int _take;
-  bool _distinct;
+  int _skip = 0;
+  int _take = 0;
+  bool _distinct = false;
   List<SqliteQueryBuilder> _unionQueries = new List();
-  bool _unionAll;
+  bool _unionAll = false;
   DateFormat _dateFormat;
   DateFormat _dateTimeFormat;
 
@@ -109,7 +109,8 @@ class SqliteQueryBuilder implements QueryBuilder {
       }
       return this;
     } else {
-      return orderByAscendingIgnoreCase(QueryBuilderUtils.buildColumnProjections(object));
+      return orderByAscendingIgnoreCase(
+          QueryBuilderUtils.buildColumnProjections(object));
     }
   }
 
@@ -123,7 +124,8 @@ class SqliteQueryBuilder implements QueryBuilder {
       }
       return this;
     } else {
-      return orderByDescending(QueryBuilderUtils.buildColumnProjections(object));
+      return orderByDescending(
+          QueryBuilderUtils.buildColumnProjections(object));
     }
   }
 
@@ -137,7 +139,8 @@ class SqliteQueryBuilder implements QueryBuilder {
       }
       return this;
     } else {
-      return orderByDescendingIgnoreCase(QueryBuilderUtils.buildColumnProjections(object));
+      return orderByDescendingIgnoreCase(
+          QueryBuilderUtils.buildColumnProjections(object));
     }
   }
 
@@ -272,7 +275,7 @@ class SqliteQueryBuilder implements QueryBuilder {
         if (p == null)
           saida = saida.replaceFirst("\\?", "NULL");
         else
-          saida = saida.replaceFirst("\\?", _escapeSQLString(QueryBuilderUtils.toString(p)));
+          saida = saida.replaceFirst("\\?", _escapeSQLString(p.toString()));
       }
     }
 
@@ -288,7 +291,8 @@ class SqliteQueryBuilder implements QueryBuilder {
 
       if (value is DateTime) {
         values.remove(index);
-        values.insert(index, QueryBuilderUtils.dateToString(value, format: _dateTimeFormat));
+        values.insert(index,
+            QueryBuilderUtils.dateToString(value, format: _dateTimeFormat));
       }
 
       index++;

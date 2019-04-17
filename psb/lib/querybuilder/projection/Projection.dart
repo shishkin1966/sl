@@ -42,48 +42,53 @@ abstract class Projection {
   }
 
   // Aggregate functions
-  static AggregateProjection min(String column) {
-    return minProjection(Projection.column(column));
+  static AggregateProjection min(dynamic object) {
+    if (object is Projection) {
+      return new AggregateProjection(object, Type.MIN);
+    } else {
+      return AggregateProjection(
+          Projection.column(object.toString()), Type.MIN);
+    }
   }
 
-  static AggregateProjection max(String column) {
-    return maxProjection(Projection.column(column));
+  static AggregateProjection max(dynamic object) {
+    if (object is Projection) {
+      return new AggregateProjection(object, Type.MAX);
+    } else {
+      return new AggregateProjection(
+          Projection.column(object.toString()), Type.MAX);
+    }
   }
 
-  static AggregateProjection sum(String column) {
-    return sumProjection(Projection.column(column));
+  static AggregateProjection sum(dynamic object) {
+    if (object is Projection) {
+      return new AggregateProjection(object, Type.SUM);
+    } else {
+      return new AggregateProjection(
+          Projection.column(object.toString()), Type.SUM);
+    }
   }
 
-  static AggregateProjection avg(String column) {
-    return avgProjection(Projection.column(column));
+  static AggregateProjection avg(dynamic object) {
+    if (object is Projection) {
+      return new AggregateProjection(object, Type.AVG);
+    } else {
+      return new AggregateProjection(
+          Projection.column(object.toString()), Type.AVG);
+    }
   }
 
-  static AggregateProjection count(String column) {
-    return countProjection(Projection.column(column));
+  static AggregateProjection count(dynamic object) {
+    if (object is Projection) {
+      return new AggregateProjection(object, Type.COUNT);
+    } else {
+      return new AggregateProjection(
+          Projection.column(object.toString()), Type.COUNT);
+    }
   }
 
   static AggregateProjection countRows() {
-    return countProjection(Projection.column("*"));
-  }
-
-  static AggregateProjection minProjection(Projection projection) {
-    return new AggregateProjection(projection, Type.MIN);
-  }
-
-  static AggregateProjection maxProjection(Projection projection) {
-    return new AggregateProjection(projection, Type.MAX);
-  }
-
-  static AggregateProjection sumProjection(Projection projection) {
-    return new AggregateProjection(projection, Type.SUM);
-  }
-
-  static AggregateProjection avgProjection(Projection projection) {
-    return new AggregateProjection(projection, Type.AVG);
-  }
-
-  static AggregateProjection countProjection(Projection projection) {
-    return new AggregateProjection(projection, Type.COUNT);
+    return count(Projection.column("*"));
   }
 
   String build();
