@@ -41,6 +41,10 @@ class Log {
         Io.File(_path).writeAsStringSync(
             DateFormat("dd.MM.yyyy HH:mm:ss").format(DateTime.now()) + " " + sender + object + "\n",
             mode: Io.FileMode.append);
+      } else {
+        Io.File(_path).writeAsStringSync(
+            DateFormat("dd.MM.yyyy HH:mm:ss").format(DateTime.now()) + " " + sender + object.toString() + "\n",
+            mode: Io.FileMode.append);
       }
     } catch (e) {}
   }
