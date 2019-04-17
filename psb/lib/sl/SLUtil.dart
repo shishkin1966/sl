@@ -6,6 +6,8 @@ import 'package:psb/sl/message/Message.dart';
 import 'package:psb/sl/observe/ObjectObservable.dart';
 import 'package:psb/sl/specialist/cache/CacheSpecialist.dart';
 import 'package:psb/sl/specialist/cache/CacheSpecialistImpl.dart';
+import 'package:psb/sl/specialist/connectivity/ConnectivitySpecialist.dart';
+import 'package:psb/sl/specialist/connectivity/ConnectivitySpecialistImpl.dart';
 import 'package:psb/sl/specialist/desktop/DesktopSpecialist.dart';
 import 'package:psb/sl/specialist/desktop/DesktopSpecialistImpl.dart';
 import 'package:psb/sl/specialist/error/ErrorSpecialist.dart';
@@ -82,6 +84,10 @@ class SLUtil {
 
   static CacheSpecialist get cacheSpecialist {
     return SL.instance.get(CacheSpecialistImpl.NAME);
+  }
+
+  static ConnectivitySpecialist get connectivitySpecialist {
+    return SL.instance.get(ConnectivitySpecialistImpl.NAME);
   }
 
   static void onChange(String object) {

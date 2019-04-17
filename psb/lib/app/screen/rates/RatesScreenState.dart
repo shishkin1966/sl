@@ -81,7 +81,8 @@ class RatesScreenState extends WidgetState<RatesScreenWidget> {
     return null;
   }
 
-  Widget _showHorizontalProgress(BuildContext context, BoxConstraints constraints) {
+  Widget _showHorizontalProgress(
+      BuildContext context, BoxConstraints constraints) {
     return new Positioned(
       top: 0,
       left: 0,
@@ -99,12 +100,14 @@ class RatesScreenState extends WidgetState<RatesScreenWidget> {
       switch (actionName) {
         case Actions.ShowHorizontalProgress:
           action.setStateNonChanged();
-          (_progressKey.currentState as HorizontalProgressWidgetState)?.onChange(true);
+          (_progressKey.currentState as HorizontalProgressWidgetState)
+              ?.onChange(true);
           break;
 
         case Actions.HideHorizontalProgress:
           action.setStateNonChanged();
-          (_progressKey.currentState as HorizontalProgressWidgetState)?.onChange(false);
+          (_progressKey.currentState as HorizontalProgressWidgetState)
+              ?.onChange(false);
           break;
       }
     }
@@ -112,9 +115,11 @@ class RatesScreenState extends WidgetState<RatesScreenWidget> {
     if (action is DataAction) {
       String actionName = action.getName();
       switch (actionName) {
+        case Repository.GetRatesDb:
         case Repository.GetRates:
           action.setStateNonChanged();
-          (_ratesKey.currentState as RatesWidgetState)?.onChange(action.getData());
+          (_ratesKey.currentState as RatesWidgetState)
+              ?.onChange(action.getData());
           break;
       }
     }
@@ -162,7 +167,8 @@ class RatesWidgetState extends DataWidgetState<List<Ticker>> {
                                     padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
                                     child: new Text(
                                       getData()[position].name,
-                                      style: TextStyle(color: Colors.black, fontSize: 20),
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 20),
                                     ),
                                   ),
                                 ),
@@ -192,7 +198,8 @@ class HorizontalProgressWidget extends DataWidget {
   HorizontalProgressWidget({Key key}) : super(key: key);
 
   @override
-  HorizontalProgressWidgetState createState() => new HorizontalProgressWidgetState(false);
+  HorizontalProgressWidgetState createState() =>
+      new HorizontalProgressWidgetState(false);
 }
 
 class HorizontalProgressWidgetState extends DataWidgetState<bool> {

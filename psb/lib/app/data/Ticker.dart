@@ -18,21 +18,23 @@ class Ticker {
 
   Ticker();
 
-  Ticker.from(Map map) {
-    id = map["id"];
-    name = map["name"];
-    symbol = map["symbol"];
-    rank = map["rank"];
-    priceUsd = map["price_usd"];
-    priceBtc = map["price_btc"];
-    volumeUsd = map["24h_volume_usd"];
-    marketCapUsd = map["market_cap_usd"];
-    availableSupply = map["available_supply"];
-    totalSupply = map["total_supply"];
-    maxSupply = map["max_supply"];
-    percentChange1h = map["percent_change_1h"];
-    percentChange24h = map["percent_change_24h"];
-    percentChange7d = map["percent_change_7d"];
+  factory Ticker.from(Map<String, dynamic> map) {
+    Ticker ticker = new Ticker();
+    ticker.id = map["id"];
+    ticker.name = map["name"];
+    ticker.symbol = map["symbol"];
+    ticker.rank = map["rank"];
+    ticker.priceUsd = map["price_usd"];
+    ticker.priceBtc = map["price_btc"];
+    ticker.volumeUsd = map["24h_volume_usd"];
+    ticker.marketCapUsd = map["market_cap_usd"];
+    ticker.availableSupply = map["available_supply"];
+    ticker.totalSupply = map["total_supply"];
+    ticker.maxSupply = map["max_supply"];
+    ticker.percentChange1h = map["percent_change_1h"];
+    ticker.percentChange24h = map["percent_change_24h"];
+    ticker.percentChange7d = map["percent_change_7d"];
+    return ticker;
   }
 
   Map toMap() {
