@@ -18,11 +18,8 @@ class ErrorSpecialistImpl extends AbsSpecialist implements ErrorSpecialist {
 
   @override
   void onRegister() async {
-    Log.instance.init();
     PermissionStatus permission = await PermissionHandler().checkPermissionStatus(PermissionGroup.storage);
-    if (permission == PermissionStatus.granted) {
-      Log.instance.init();
-    } else {
+    if (permission != PermissionStatus.granted) {
       Map<PermissionGroup, PermissionStatus> map =
           await PermissionHandler().requestPermissions([PermissionGroup.storage]);
       if (map[PermissionGroup.storage] == PermissionStatus.granted) {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,15 +10,54 @@ import 'package:psb/app/screen/address/AddressScreenWidget.dart';
 import 'package:psb/app/screen/contacts/ContactsScreenWidget.dart';
 import 'package:psb/app/screen/home/HomeScreenWidget.dart';
 import 'package:psb/app/screen/settings/SettingsScreenWidget.dart';
+import 'package:psb/common/Log.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/specialist/router/Router.dart';
 import 'package:psb/ui/Application.dart';
 
-void main() {
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((_) {
-    runApp(EasyLocalization(child: MyApp()));
+bool get isInDebugMode {
+  bool inDebugMode = false;
+  assert(inDebugMode = true);
+  return inDebugMode;
+}
+
+Future<Null> main() async {
+  Log.instance.init();
+
+  // This captures errors reported by the Flutter framework.
+  FlutterError.onError = (FlutterErrorDetails details) async {
+    if (isInDebugMode) {
+      // In development mode simply print to console.
+      FlutterError.dumpErrorToConsole(details);
+    } else {
+      // In production mode report to the application zone to report to
+      // Sentry.
+      Zone.current.handleUncaughtError(details.exception, details.stack);
+    }
+  };
+
+  // This creates a [Zone] that contains the Flutter application and stablishes
+  // an error handler that captures errors and reports them.
+  //
+  // Using a zone makes sure that as many errors as possible are captured,
+  // including those thrown from [Timer]s, microtasks, I/O, and those forwarded
+  // from the `FlutterError` handler.
+  //
+  // More about zones:
+  //
+  // - https://api.dartlang.org/stable/1.24.2/dart-async/Zone-class.html
+  // - https://www.dartlang.org/articles/libraries/zones
+  runZoned<Future<Null>>(() async {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
+      runApp(EasyLocalization(child: MyApp()));
+    });
+  }, onError: (error, stackTrace) async {
+    await _onError(error, stackTrace);
   });
+}
+
+Future<Null> _onError(dynamic error, dynamic stackTrace) async {
+  Log.instance.w(stackTrace);
 }
 
 class MyApp extends Application {
@@ -43,8 +84,7 @@ class MyApp extends Application {
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           //app-specific localization
-          EasylocaLizationDelegate(
-              locale: data.locale ?? Locale('ru'), path: 'assets/langs'),
+          EasylocaLizationDelegate(locale: data.locale ?? Locale('ru'), path: 'assets/langs'),
         ],
         supportedLocales: [Locale('en'), Locale('ru')],
         locale: data.locale,
