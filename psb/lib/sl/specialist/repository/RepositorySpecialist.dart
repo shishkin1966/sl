@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:psb/app/data/Ticker.dart';
 import 'package:psb/sl/AbsSpecialist.dart';
 import 'package:sqflite/sqflite.dart';
@@ -14,9 +13,7 @@ abstract class RepositorySpecialist extends AbsSpecialist {
 
   Future getContacts(String subscriber, String filter, {String id});
 
-  Future connectDb(BuildContext context);
-
-  Database getDb();
+  Future<Database> connectDb();
 
   Future saveRates(String subscriber, List<Ticker> list);
 

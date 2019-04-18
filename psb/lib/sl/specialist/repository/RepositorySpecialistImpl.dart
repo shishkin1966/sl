@@ -1,6 +1,5 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:psb/app/data/Account.dart';
 import 'package:psb/app/data/Currency.dart';
 import 'package:psb/app/data/Operation.dart';
@@ -21,26 +20,26 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
 
   Synchronized.Lock _lock = new Synchronized.Lock();
   Map<String, String> _map = new Map();
-  Database _database;
+  String _path;
 
   @override
-  Database getDb() {
-    return _database;
-  }
-
-  @override
-  Future connectDb(BuildContext context) async {
-    String databasesPath = await getDatabasesPath();
-    String path = databasesPath + "/psb.db";
-    _database = await openDatabase(
-      path,
+  Future<Database> connectDb() async {
+    if (StringUtils.isNullOrEmpty(_path)) {
+      String databasesPath = await getDatabasesPath();
+      _path = databasesPath + "/psb.db";
+    }
+    Database db = await openDatabase(
+      _path,
       version: 1,
       onCreate: (Database db, int version) async {
-        String sql = await AppUtils.getSQL("create.sql");
+        String sql = await AppUtils.getSQL("createDb.sql");
         await db.execute(sql);
       },
       onUpgrade: (Database db, int oldVersion, int newVersion) async {},
+      singleInstance: false,
+      readOnly: false,
     );
+    return db;
   }
 
   @override
@@ -96,8 +95,8 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
       List<Ticker> list = new List();
       Response response = await Dio().get("https://api.coinmarketcap.com/v1/ticker/");
       List<dynamic> data = response.data;
-      for (Map<String, dynamic> rate in data) {
-        Ticker ticker = new Ticker.from(rate);
+      for (Map<String, dynamic> map in data) {
+        Ticker ticker = Ticker.fromMap(map);
         list.add(ticker);
       }
       bool found = await _check(Repository.GetRates, id);
@@ -107,10 +106,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
         SLUtil.addNotMandatoryMessage(message);
       }
     } catch (e) {
-      await _remove(Repository.GetRates, id);
-      Result result = new Result(null).addError(subscriber, e.toString()).setName(Repository.GetRates);
-      ResultMessage message = new ResultMessage.result(subscriber, result);
-      SLUtil.addNotMandatoryMessage(message);
+      _onError(subscriber, Repository.GetRates, e, id);
     }
   }
 
@@ -152,10 +148,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
         }
       }
     } catch (e) {
-      await _remove(Repository.GetContacts, id);
-      Result result = new Result(null).addError(subscriber, e.toString()).setName(Repository.GetContacts);
-      ResultMessage message = new ResultMessage.result(subscriber, result);
-      SLUtil.addNotMandatoryMessage(message);
+      _onError(subscriber, Repository.GetContacts, e, id);
     }
   }
 
@@ -209,69 +202,92 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   Future saveRates(String subscriber, List<Ticker> list) async {
     if (list == null) return;
 
+    Database db;
     try {
-      await _database.transaction((txn) async {
-        await txn.delete("Ticker");
-        String sql = await AppUtils.getSQL("insertTicker.sql");
+      db = await connectDb();
+      await db.transaction((txn) async {
+        await txn.delete(Ticker.Table);
         for (Ticker ticker in list) {
-          await txn.rawInsert(sql, ticker.toList());
+          txn.insert(Ticker.Table, ticker.toMap());
         }
       });
     } catch (e) {
-      Result result = new Result(null).addError(subscriber, e.toString()).setName(Repository.SaveRates);
-      ResultMessage message = new ResultMessage.result(subscriber, result);
-      SLUtil.addNotMandatoryMessage(message);
+      _onError(subscriber, Repository.SaveRates, e);
+    } finally {
+      if (db != null) {
+        await db.close();
+      }
     }
+  }
+
+  Future _onError(String subscriber, String idRequest, dynamic e, [String id]) async {
+    SLUtil.onError(NAME, e);
+    await _remove(idRequest, id);
+    Result result = new Result(null).addError(subscriber, e.toString()).setName(idRequest);
+    ResultMessage message = new ResultMessage.result(subscriber, result);
+    SLUtil.addNotMandatoryMessage(message);
   }
 
   @override
   Future<int> countRates(String subscriber) async {
     int cnt = 0;
+    Database db;
     try {
-      cnt = await _database.transaction((txn) async {
-        List<Map<String, dynamic>> records = await txn.query("Ticker", columns: ["count(*) as cnt"]);
+      db = await connectDb();
+      cnt = await db.transaction((txn) async {
+        List<Map<String, dynamic>> records = await txn.query(Ticker.Table, columns: ["count(*) as cnt"]);
         int count = records[0]["cnt"];
         return count;
       });
       return cnt;
     } catch (e) {
-      Result result = new Result(null).addError(subscriber, e.toString()).setName(Repository.CountRates);
-      ResultMessage message = new ResultMessage.result(subscriber, result);
-      SLUtil.addNotMandatoryMessage(message);
+      _onError(subscriber, Repository.CountRates, e);
       return cnt;
+    } finally {
+      if (db != null) {
+        db.close();
+      }
     }
   }
 
   @override
   Future cleanRates(String subscriber) async {
+    Database db;
     try {
-      await _database.transaction((txn) async {
-        await txn.delete("Ticker");
+      db = await connectDb();
+      await db.transaction((txn) async {
+        await txn.delete(Ticker.Table);
       });
     } catch (e) {
-      Result result = new Result(null).addError(subscriber, e.toString()).setName(Repository.CleanRates);
-      ResultMessage message = new ResultMessage.result(subscriber, result);
-      SLUtil.addNotMandatoryMessage(message);
+      _onError(subscriber, Repository.CleanRates, e);
+    } finally {
+      if (db != null) {
+        db.close();
+      }
     }
   }
 
   @override
   Future getRatesDb(String subscriber) async {
+    Database db;
     try {
-      await _database.transaction((txn) async {
-        List<Map<String, dynamic>> records = await txn.query("Ticker");
+      db = await connectDb();
+      await db.transaction((txn) async {
+        List<Map<String, dynamic>> records = await txn.query(Ticker.Table);
         List<Ticker> list = new List();
         for (Map<String, dynamic> map in records) {
-          list.add(Ticker.from(map));
+          list.add(Ticker.fromMap(map));
         }
         Result<List<Ticker>> result = new Result<List<Ticker>>(list).setName(Repository.GetRatesDb);
         ResultMessage message = new ResultMessage.result(subscriber, result);
         SLUtil.addNotMandatoryMessage(message);
       });
     } catch (e) {
-      Result result = new Result(null).addError(subscriber, e.toString()).setName(Repository.GetRatesDb);
-      ResultMessage message = new ResultMessage.result(subscriber, result);
-      SLUtil.addNotMandatoryMessage(message);
+      _onError(subscriber, Repository.GetRatesDb, e);
+    } finally {
+      if (db != null) {
+        db.close();
+      }
     }
   }
 }

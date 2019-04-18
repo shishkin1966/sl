@@ -2,7 +2,6 @@ import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:psb/common/Log.dart';
 import 'package:psb/sl/AbsSpecialist.dart';
-import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/specialist/error/ErrorSpecialist.dart';
 
 class ErrorSpecialistImpl extends AbsSpecialist implements ErrorSpecialist {
@@ -39,23 +38,20 @@ class ErrorSpecialistImpl extends AbsSpecialist implements ErrorSpecialist {
   }
 
   @override
-  void onError(String source, Exception e) {
+  void onError(String source, dynamic e) {
     _logger.severe(source, e, StackTrace.current);
-    SLUtil.uiSpecialist?.showErrorToast(e.toString());
     Log.instance.w(e, name: source);
   }
 
   @override
   void onErrorMessage(String source, String message) {
     _logger.severe(source, message, StackTrace.current);
-    SLUtil.uiSpecialist?.showErrorToast(message);
     Log.instance.w(message, name: source);
   }
 
   @override
-  void onErrorDisplay(String source, Exception e, String message) {
+  void onErrorDisplay(String source, dynamic e, String message) {
     _logger.severe(source, e, StackTrace.current);
-    SLUtil.uiSpecialist?.showErrorToast(message);
     Log.instance.w(e, name: source);
   }
 }
