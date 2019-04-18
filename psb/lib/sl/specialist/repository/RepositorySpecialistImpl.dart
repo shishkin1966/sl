@@ -13,12 +13,12 @@ import 'package:psb/sl/message/ResultMessage.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/sl/specialist/repository/RepositorySpecialist.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:synchronized/synchronized.dart' as Synchronized;
+import 'package:sync/sync.dart';
 
 class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecialist {
   static const String NAME = "RepositorySpecialistImpl";
 
-  Synchronized.Lock _lock = new Synchronized.Lock();
+  Mutex _mutex = new Mutex();
   Map<String, String> _map = new Map();
   String _path;
 
@@ -174,27 +174,34 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
 
   Future addLock(String key, String id) async {
     if (!StringUtils.isNullOrEmpty(id)) {
-      await _lock.synchronized(() async {
+      await _mutex.acquire();
+      try {
         if (_map.containsKey(key)) {
           _map.remove(key);
         }
         _map[key] = id;
-      });
+      } finally {
+        _mutex.release();
+      }
     }
   }
 
   Future removeLock(String key, String id) async {
     if (!StringUtils.isNullOrEmpty(id)) {
-      await _lock.synchronized(() async {
+      await _mutex.acquire();
+      try {
         if (_map.containsKey(key) && _map[key] == id) {
           _map.remove(key);
         }
-      });
+      } finally {
+        _mutex.release();
+      }
     }
   }
 
   Future<bool> checkLock(String key, String id) async {
-    return await _lock.synchronized(() async {
+    await _mutex.acquire();
+    try {
       if (!StringUtils.isNullOrEmpty(id)) {
         if (_map.containsKey(key) && _map[key] == id) {
           _map.remove(key);
@@ -205,7 +212,9 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
       } else {
         return true;
       }
-    });
+    } finally {
+      _mutex.release();
+    }
   }
 
   @override
