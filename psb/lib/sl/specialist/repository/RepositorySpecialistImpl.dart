@@ -23,7 +23,27 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   String _path;
 
   @override
-  Future<Database> connectDb() async {
+  Future<Database> getWriteDb() async {
+    if (StringUtils.isNullOrEmpty(_path)) {
+      String databasesPath = await getDatabasesPath();
+      _path = databasesPath + "/psb.db";
+    }
+    Database db = await openDatabase(
+      _path,
+      version: 1,
+      onCreate: (Database db, int version) async {
+        String sql = await AppUtils.getSQL("createDb.sql");
+        await db.execute(sql);
+      },
+      onUpgrade: (Database db, int oldVersion, int newVersion) async {},
+      singleInstance: false,
+      readOnly: false,
+    );
+    return db;
+  }
+
+  @override
+  Future<Database> getReadDb() async {
     if (StringUtils.isNullOrEmpty(_path)) {
       String databasesPath = await getDatabasesPath();
       _path = databasesPath + "/psb.db";
@@ -89,7 +109,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   Future getRates(String subscriber, {String id}) async {
     if (!SLUtil.connectivitySpecialist.isConnected()) return;
 
-    await _add(Repository.GetRates, id);
+    await addLock(Repository.GetRates, id);
 
     try {
       List<Ticker> list = new List();
@@ -99,7 +119,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
         Ticker ticker = Ticker.fromMap(map);
         list.add(ticker);
       }
-      bool found = await _check(Repository.GetRates, id);
+      bool found = await checkLock(Repository.GetRates, id);
       if (found) {
         Result<List<Ticker>> result = new Result<List<Ticker>>(list).setName(Repository.GetRates);
         ResultMessage message = new ResultMessage.result(subscriber, result);
@@ -112,7 +132,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
 
   @override
   Future getContacts(String subscriber, String filter, {String id}) async {
-    await _add(Repository.GetContacts, id);
+    await addLock(Repository.GetContacts, id);
 
     try {
       if (StringUtils.isNullOrEmpty(filter)) {
@@ -137,7 +157,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
           withThumbnails: true,
         );
       }
-      bool found = await _check(Repository.GetContacts, id);
+      bool found = await checkLock(Repository.GetContacts, id);
       if (found) {
         list.addAll(data);
         Result<List<Contact>> result = new Result<List<Contact>>(list).setName(Repository.GetContacts);
@@ -152,7 +172,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
     }
   }
 
-  Future _add(String key, String id) async {
+  Future addLock(String key, String id) async {
     if (!StringUtils.isNullOrEmpty(id)) {
       await _lock.synchronized(() async {
         if (_map.containsKey(key)) {
@@ -163,7 +183,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
     }
   }
 
-  Future _remove(String key, String id) async {
+  Future removeLock(String key, String id) async {
     if (!StringUtils.isNullOrEmpty(id)) {
       await _lock.synchronized(() async {
         if (_map.containsKey(key) && _map[key] == id) {
@@ -173,7 +193,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
     }
   }
 
-  Future<bool> _check(String key, String id) async {
+  Future<bool> checkLock(String key, String id) async {
     return await _lock.synchronized(() async {
       if (!StringUtils.isNullOrEmpty(id)) {
         if (_map.containsKey(key) && _map[key] == id) {
@@ -204,13 +224,15 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
 
     Database db;
     try {
-      db = await connectDb();
-      await db.transaction((txn) async {
-        await txn.delete(Ticker.Table);
-        for (Ticker ticker in list) {
-          txn.insert(Ticker.Table, ticker.toMap());
-        }
-      });
+      db = await getWriteDb();
+      await db.transaction(
+        (txn) async {
+          await txn.delete(Ticker.Table);
+          for (Ticker ticker in list) {
+            txn.insert(Ticker.Table, ticker.toMap());
+          }
+        },
+      );
     } catch (e) {
       _onError(subscriber, Repository.SaveRates, e);
     } finally {
@@ -222,7 +244,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
 
   Future _onError(String subscriber, String idRequest, dynamic e, [String id]) async {
     SLUtil.onError(NAME, e);
-    await _remove(idRequest, id);
+    await removeLock(idRequest, id);
     Result result = new Result(null).addError(subscriber, e.toString()).setName(idRequest);
     ResultMessage message = new ResultMessage.result(subscriber, result);
     SLUtil.addNotMandatoryMessage(message);
@@ -233,12 +255,14 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
     int cnt = 0;
     Database db;
     try {
-      db = await connectDb();
-      cnt = await db.transaction((txn) async {
-        List<Map<String, dynamic>> records = await txn.query(Ticker.Table, columns: ["count(*) as cnt"]);
-        int count = records[0]["cnt"];
-        return count;
-      });
+      db = await getReadDb();
+      cnt = await db.transaction(
+        (txn) async {
+          List<Map<String, dynamic>> records = await txn.query(Ticker.Table, columns: ["count(*) as cnt"]);
+          int count = records[0]["cnt"];
+          return count;
+        },
+      );
       return cnt;
     } catch (e) {
       _onError(subscriber, Repository.CountRates, e);
@@ -254,10 +278,12 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   Future cleanRates(String subscriber) async {
     Database db;
     try {
-      db = await connectDb();
-      await db.transaction((txn) async {
-        await txn.delete(Ticker.Table);
-      });
+      db = await getWriteDb();
+      await db.transaction(
+        (txn) async {
+          await txn.delete(Ticker.Table);
+        },
+      );
     } catch (e) {
       _onError(subscriber, Repository.CleanRates, e);
     } finally {
@@ -271,17 +297,19 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   Future getRatesDb(String subscriber) async {
     Database db;
     try {
-      db = await connectDb();
-      await db.transaction((txn) async {
-        List<Map<String, dynamic>> records = await txn.query(Ticker.Table);
-        List<Ticker> list = new List();
-        for (Map<String, dynamic> map in records) {
-          list.add(Ticker.fromMap(map));
-        }
-        Result<List<Ticker>> result = new Result<List<Ticker>>(list).setName(Repository.GetRatesDb);
-        ResultMessage message = new ResultMessage.result(subscriber, result);
-        SLUtil.addNotMandatoryMessage(message);
-      });
+      db = await getReadDb();
+      await db.transaction(
+        (txn) async {
+          List<Map<String, dynamic>> records = await txn.query(Ticker.Table);
+          List<Ticker> list = new List();
+          for (Map<String, dynamic> map in records) {
+            list.add(Ticker.fromMap(map));
+          }
+          Result<List<Ticker>> result = new Result<List<Ticker>>(list).setName(Repository.GetRatesDb);
+          ResultMessage message = new ResultMessage.result(subscriber, result);
+          SLUtil.addNotMandatoryMessage(message);
+        },
+      );
     } catch (e) {
       _onError(subscriber, Repository.GetRatesDb, e);
     } finally {
