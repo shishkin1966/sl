@@ -13,7 +13,9 @@ abstract class RepositorySpecialist extends AbsSpecialist {
 
   Future getContacts(String subscriber, String filter, {String id});
 
-  Future<Database> connectDb();
+  Future<Database> getWriteDb();
+
+  Future<Database> getReadDb();
 
   Future saveRates(String subscriber, List<Ticker> list);
 
