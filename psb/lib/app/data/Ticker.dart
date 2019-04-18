@@ -1,6 +1,8 @@
-const String Table = "Ticker";
+import 'package:psb/app/data/Column.dart';
 
-class Ticker {
+class Ticker extends Column {
+  static const String Table = "Ticker";
+
   String id;
   String name;
   String symbol;
@@ -18,7 +20,7 @@ class Ticker {
 
   Ticker();
 
-  factory Ticker.from(Map<String, dynamic> map) {
+  factory Ticker.fromMap(Map<String, dynamic> map) {
     Ticker ticker = new Ticker();
     ticker.id = map["id"];
     ticker.name = map["name"];
@@ -37,42 +39,24 @@ class Ticker {
     return ticker;
   }
 
-  Map toMap() {
-    Map map = new Map();
-    map["id"] = id;
-    map["name"] = name;
-    map["symbol"] = symbol;
-    map["rank"] = rank;
-    map["price_usd"] = priceUsd;
-    map["price_btc"] = priceBtc;
-    map["24h_volume_usd"] = volumeUsd;
-    map["market_cap_usd"] = marketCapUsd;
-    map["available_supply"] = availableSupply;
-    map["total_supply"] = totalSupply;
-    map["max_supply"] = maxSupply;
-    map["percent_change_1h"] = percentChange1h;
-    map["percent_change_24h"] = percentChange24h;
-    map["percent_change_7d"] = percentChange7d;
+  @override
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = new Map<String, dynamic>();
+    map[Columns.id] = id;
+    map[Columns.name] = name;
+    map[Columns.symbol] = symbol;
+    map[Columns.rank] = rank;
+    map[Columns.priceUsd] = priceUsd;
+    map[Columns.priceBtc] = priceBtc;
+    map[Columns.volumeUsd] = volumeUsd;
+    map[Columns.marketCapUsd] = marketCapUsd;
+    map[Columns.availableSupply] = availableSupply;
+    map[Columns.totalSupply] = totalSupply;
+    map[Columns.maxSupply] = maxSupply;
+    map[Columns.percentChange1h] = percentChange1h;
+    map[Columns.percentChange24h] = percentChange24h;
+    map[Columns.percentChange7d] = percentChange7d;
     return map;
-  }
-
-  List toList() {
-    List list = List();
-    list.add(id);
-    list.add(name);
-    list.add(symbol);
-    list.add(rank);
-    list.add(priceUsd);
-    list.add(priceBtc);
-    list.add(volumeUsd);
-    list.add(marketCapUsd);
-    list.add(availableSupply);
-    list.add(totalSupply);
-    list.add(maxSupply);
-    list.add(percentChange1h);
-    list.add(percentChange24h);
-    list.add(percentChange7d);
-    return list;
   }
 }
 

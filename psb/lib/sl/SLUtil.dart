@@ -94,7 +94,7 @@ class SLUtil {
     observableUnion.getObservable(ObjectObservable.NAME)?.onChange(object);
   }
 
-  static void onError(String sender, Exception e) {
+  static void onError(String sender, dynamic e) {
     ErrorSpecialistImpl.instance.onError(sender, e);
   }
 
