@@ -1,6 +1,6 @@
-class Ticker {
-  static const String Table = "Ticker";
+const String Table = "Ticker";
 
+class Ticker {
   String id;
   String name;
   String symbol;
