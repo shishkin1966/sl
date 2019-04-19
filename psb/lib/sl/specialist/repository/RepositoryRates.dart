@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
+import 'package:isolate/isolate.dart';
 import 'package:psb/app/data/Ticker.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/data/Result.dart';
@@ -7,6 +10,10 @@ import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:sqflite/sqlite_api.dart';
 
 class RepositoryRates {
+  static const String Subscriber = "Subscriber";
+  static const String Data = "Data";
+  static const String Id = "Id";
+
   static Future cleanRates(String subscriber) async {
     Database db;
     try {
@@ -26,6 +33,12 @@ class RepositoryRates {
   }
 
   static Future getRatesDb(String subscriber) async {
+    final runner = await IsolateRunner.spawn();
+    return runner.run(_getRatesDb, {Subscriber: subscriber}).whenComplete(() => runner.close());
+  }
+
+  static Future _getRatesDb(Map<String, dynamic> map) async {
+    String subscriber = map[Subscriber];
     Database db;
     try {
       db = await SLUtil.repositorySpecialist.getReadDb();
@@ -74,6 +87,14 @@ class RepositoryRates {
   }
 
   static Future saveRates(String subscriber, List<Ticker> list) async {
+    final runner = await IsolateRunner.spawn();
+    return runner.run(_saveRates, {Subscriber: subscriber, Data: list}).whenComplete(() => runner.close());
+  }
+
+  static Future _saveRates(Map<String, dynamic> map) async {
+    String subscriber = map[Subscriber];
+    List<Ticker> list = map[Data];
+
     if (list == null) return;
 
     Database db;
@@ -97,7 +118,24 @@ class RepositoryRates {
   }
 
   static Future getRates(String subscriber, {String id}) async {
-    if (!SLUtil.connectivitySpecialist.isConnected()) return;
+    SLUtil.uiSpecialist.showToast("getRates");
+    final runner = await IsolateRunner.spawn();
+    SLUtil.uiSpecialist.showToast("getRates 1");
+    return runner.run(_getRates, {Subscriber: subscriber, Id: id}).whenComplete(() => runner.close());
+  }
+
+  static FutureOr _getRates(Map<String, dynamic> map) async {
+    SLUtil.uiSpecialist.showToast("getRates 2");
+    String subscriber = map[Subscriber];
+    String id = map[Id];
+
+    if (!SLUtil.connectivitySpecialist.isConnected()) {
+      SLUtil.uiSpecialist.showToast("Сеть отключена");
+      Result<List<Ticker>> result = new Result<List<Ticker>>(new List()).setName(Repository.GetRates);
+      ResultMessage message = new ResultMessage.result(subscriber, result);
+      SLUtil.addNotMandatoryMessage(message);
+      return;
+    }
 
     await SLUtil.repositorySpecialist.addLock(Repository.GetRates, id);
 
