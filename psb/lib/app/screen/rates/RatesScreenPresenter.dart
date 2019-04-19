@@ -63,8 +63,10 @@ class RatesScreenPresenter<RatesScreenState extends WidgetState> extends AbsPres
           list.sort((a, b) {
             return a.name.toLowerCase().compareTo(b.name.toLowerCase());
           });
-          getWidget().addAction(new DataAction(result.getName()).setData(list));
-          SLUtil.repositorySpecialist.saveRates(NAME, list);
+          if (list.isNotEmpty) {
+            getWidget().addAction(new DataAction(result.getName()).setData(list));
+            SLUtil.repositorySpecialist.saveRates(NAME, list);
+          }
           break;
 
         case Repository.GetRatesDb:

@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:psb/app/data/Ticker.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/data/Result.dart';
-import 'package:psb/sl/message/ResultMessage.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:sqflite/sqlite_api.dart';
 
@@ -11,7 +10,7 @@ class RepositoryRates {
     Database db;
     try {
       db = await SLUtil.repositorySpecialist.getWriteDb();
-      await db.transaction(
+      await db?.transaction(
         (txn) async {
           await txn.delete(Ticker.Table);
         },
@@ -29,7 +28,7 @@ class RepositoryRates {
     Database db;
     try {
       db = await SLUtil.repositorySpecialist.getReadDb();
-      await db.transaction(
+      await db?.transaction(
         (txn) async {
           List<Map<String, dynamic>> records = await txn.query(Ticker.Table);
           List<Ticker> list = new List();
@@ -37,8 +36,7 @@ class RepositoryRates {
             list.add(Ticker.fromMap(map));
           }
           Result<List<Ticker>> result = new Result<List<Ticker>>(list).setName(Repository.GetRatesDb);
-          ResultMessage message = new ResultMessage.result(subscriber, result);
-          SLUtil.addNotMandatoryMessage(message);
+          SLUtil.repositorySpecialist.onResult(subscriber, result);
         },
       );
     } catch (e) {
@@ -55,7 +53,7 @@ class RepositoryRates {
     Database db;
     try {
       db = await SLUtil.repositorySpecialist.getReadDb();
-      cnt = await db.transaction(
+      cnt = await db?.transaction(
         (txn) async {
           List<Map<String, dynamic>> records = await txn.query(Ticker.Table, columns: ["count(*) as cnt"]);
           int count = records[0]["cnt"];
@@ -75,15 +73,16 @@ class RepositoryRates {
 
   static Future saveRates(String subscriber, List<Ticker> list) async {
     if (list == null) return;
+    if (list.isEmpty) return;
 
     Database db;
     try {
       db = await SLUtil.repositorySpecialist.getWriteDb();
-      await db.transaction(
+      await db?.transaction(
         (txn) async {
           await txn.delete(Ticker.Table);
           for (Ticker ticker in list) {
-            txn.insert(Ticker.Table, ticker.toMap());
+            await txn.insert(Ticker.Table, ticker.toMap());
           }
         },
       );
@@ -97,7 +96,11 @@ class RepositoryRates {
   }
 
   static Future getRates(String subscriber, {String id}) async {
-    if (!SLUtil.connectivitySpecialist.isConnected()) return;
+    if (!SLUtil.connectivitySpecialist.isConnected()) {
+      Result<List<Ticker>> result = new Result<List<Ticker>>(new List<Ticker>()).setName(Repository.GetRates);
+      SLUtil.repositorySpecialist.onResult(subscriber, result);
+      return;
+    }
 
     await SLUtil.repositorySpecialist.addLock(Repository.GetRates, id);
 
@@ -112,8 +115,7 @@ class RepositoryRates {
       bool found = await SLUtil.repositorySpecialist.checkLock(Repository.GetRates, id);
       if (found) {
         Result<List<Ticker>> result = new Result<List<Ticker>>(list).setName(Repository.GetRates);
-        ResultMessage message = new ResultMessage.result(subscriber, result);
-        SLUtil.addNotMandatoryMessage(message);
+        SLUtil.repositorySpecialist.onResult(subscriber, result);
       }
     } catch (e) {
       SLUtil.repositorySpecialist.onError(subscriber, Repository.GetRates, e, id);
