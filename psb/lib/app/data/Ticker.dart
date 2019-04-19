@@ -1,6 +1,6 @@
-import 'package:psb/app/data/Column.dart';
+import 'package:psb/app/data/Entity.dart';
 
-class Ticker extends Column {
+class Ticker extends Entity {
   static const String Table = "Ticker";
 
   String id;
