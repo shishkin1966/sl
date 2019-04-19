@@ -3,6 +3,12 @@ import 'package:psb/sl/AbsSpecialist.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class RepositorySpecialist extends AbsSpecialist {
+  Future addLock(String key, String id);
+
+  Future removeLock(String key, String id);
+
+  Future<bool> checkLock(String key, String id);
+
   void getAccounts(String subscriber);
 
   void getOperations(String subscriber);
@@ -22,4 +28,6 @@ abstract class RepositorySpecialist extends AbsSpecialist {
   Future<int> countRates(String subscriber);
 
   Future cleanRates(String subscriber);
+
+  Future onError(String subscriber, String idRequest, dynamic e, [String id]);
 }

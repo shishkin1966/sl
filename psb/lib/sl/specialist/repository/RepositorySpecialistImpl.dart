@@ -1,5 +1,4 @@
 import 'package:contacts_service/contacts_service.dart';
-import 'package:dio/dio.dart';
 import 'package:psb/app/data/Account.dart';
 import 'package:psb/app/data/Currency.dart';
 import 'package:psb/app/data/Operation.dart';
@@ -11,6 +10,7 @@ import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/data/Result.dart';
 import 'package:psb/sl/message/ResultMessage.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';
+import 'package:psb/sl/specialist/repository/RepositoryRates.dart';
 import 'package:psb/sl/specialist/repository/RepositorySpecialist.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sync/sync.dart';
@@ -106,31 +106,6 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   }
 
   @override
-  Future getRates(String subscriber, {String id}) async {
-    if (!SLUtil.connectivitySpecialist.isConnected()) return;
-
-    await addLock(Repository.GetRates, id);
-
-    try {
-      List<Ticker> list = new List();
-      Response response = await Dio().get("https://api.coinmarketcap.com/v1/ticker/");
-      List<dynamic> data = response.data;
-      for (Map<String, dynamic> map in data) {
-        Ticker ticker = Ticker.fromMap(map);
-        list.add(ticker);
-      }
-      bool found = await checkLock(Repository.GetRates, id);
-      if (found) {
-        Result<List<Ticker>> result = new Result<List<Ticker>>(list).setName(Repository.GetRates);
-        ResultMessage message = new ResultMessage.result(subscriber, result);
-        SLUtil.addNotMandatoryMessage(message);
-      }
-    } catch (e) {
-      _onError(subscriber, Repository.GetRates, e, id);
-    }
-  }
-
-  @override
   Future getContacts(String subscriber, String filter, {String id}) async {
     await addLock(Repository.GetContacts, id);
 
@@ -168,10 +143,11 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
         }
       }
     } catch (e) {
-      _onError(subscriber, Repository.GetContacts, e, id);
+      onError(subscriber, Repository.GetContacts, e, id);
     }
   }
 
+  @override
   Future addLock(String key, String id) async {
     if (!StringUtils.isNullOrEmpty(id)) {
       await _mutex.acquire();
@@ -186,6 +162,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
     }
   }
 
+  @override
   Future removeLock(String key, String id) async {
     if (!StringUtils.isNullOrEmpty(id)) {
       await _mutex.acquire();
@@ -199,6 +176,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
     }
   }
 
+  @override
   Future<bool> checkLock(String key, String id) async {
     await _mutex.acquire();
     try {
@@ -227,31 +205,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
     return NAME;
   }
 
-  @override
-  Future saveRates(String subscriber, List<Ticker> list) async {
-    if (list == null) return;
-
-    Database db;
-    try {
-      db = await getWriteDb();
-      await db.transaction(
-        (txn) async {
-          await txn.delete(Ticker.Table);
-          for (Ticker ticker in list) {
-            txn.insert(Ticker.Table, ticker.toMap());
-          }
-        },
-      );
-    } catch (e) {
-      _onError(subscriber, Repository.SaveRates, e);
-    } finally {
-      if (db != null) {
-        await db.close();
-      }
-    }
-  }
-
-  Future _onError(String subscriber, String idRequest, dynamic e, [String id]) async {
+  Future onError(String subscriber, String idRequest, dynamic e, [String id]) async {
     SLUtil.onError(NAME, e);
     await removeLock(idRequest, id);
     Result result = new Result(null).addError(subscriber, e.toString()).setName(idRequest);
@@ -260,71 +214,27 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   }
 
   @override
-  Future<int> countRates(String subscriber) async {
-    int cnt = 0;
-    Database db;
-    try {
-      db = await getReadDb();
-      cnt = await db.transaction(
-        (txn) async {
-          List<Map<String, dynamic>> records = await txn.query(Ticker.Table, columns: ["count(*) as cnt"]);
-          int count = records[0]["cnt"];
-          return count;
-        },
-      );
-      return cnt;
-    } catch (e) {
-      _onError(subscriber, Repository.CountRates, e);
-      return cnt;
-    } finally {
-      if (db != null) {
-        db.close();
-      }
-    }
+  Future<int> countRates(String subscriber) {
+    return RepositoryRates.countRates(subscriber);
   }
 
   @override
-  Future cleanRates(String subscriber) async {
-    Database db;
-    try {
-      db = await getWriteDb();
-      await db.transaction(
-        (txn) async {
-          await txn.delete(Ticker.Table);
-        },
-      );
-    } catch (e) {
-      _onError(subscriber, Repository.CleanRates, e);
-    } finally {
-      if (db != null) {
-        db.close();
-      }
-    }
+  Future cleanRates(String subscriber) {
+    return RepositoryRates.cleanRates(subscriber);
   }
 
   @override
-  Future getRatesDb(String subscriber) async {
-    Database db;
-    try {
-      db = await getReadDb();
-      await db.transaction(
-        (txn) async {
-          List<Map<String, dynamic>> records = await txn.query(Ticker.Table);
-          List<Ticker> list = new List();
-          for (Map<String, dynamic> map in records) {
-            list.add(Ticker.fromMap(map));
-          }
-          Result<List<Ticker>> result = new Result<List<Ticker>>(list).setName(Repository.GetRatesDb);
-          ResultMessage message = new ResultMessage.result(subscriber, result);
-          SLUtil.addNotMandatoryMessage(message);
-        },
-      );
-    } catch (e) {
-      _onError(subscriber, Repository.GetRatesDb, e);
-    } finally {
-      if (db != null) {
-        db.close();
-      }
-    }
+  Future getRatesDb(String subscriber) {
+    return RepositoryRates.getRatesDb(subscriber);
+  }
+
+  @override
+  Future saveRates(String subscriber, List<Ticker> list) {
+    return RepositoryRates.saveRates(subscriber, list);
+  }
+
+  @override
+  Future getRates(String subscriber, {String id}) {
+    return RepositoryRates.getRates(subscriber, id: id);
   }
 }
