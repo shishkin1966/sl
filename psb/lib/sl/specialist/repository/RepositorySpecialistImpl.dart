@@ -28,17 +28,23 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
       String databasesPath = await getDatabasesPath();
       _path = databasesPath + "/psb.db";
     }
-    Database db = await openDatabase(
-      _path,
-      version: 1,
-      onCreate: (Database db, int version) async {
-        String sql = await AppUtils.getSQL("createDb.sql");
-        await db.execute(sql);
-      },
-      onUpgrade: (Database db, int oldVersion, int newVersion) async {},
-      singleInstance: false,
-      readOnly: false,
-    );
+
+    Database db;
+    try {
+      db = await openDatabase(
+        _path,
+        version: 1,
+        onCreate: (Database db, int version) async {
+          String sql = await AppUtils.getSQL("createDb.sql");
+          await db.execute(sql);
+        },
+        onUpgrade: (Database db, int oldVersion, int newVersion) async {},
+        singleInstance: false,
+        readOnly: false,
+      );
+    } catch (e) {
+      onError(null, null, e);
+    }
     return db;
   }
 
@@ -48,17 +54,23 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
       String databasesPath = await getDatabasesPath();
       _path = databasesPath + "/psb.db";
     }
-    Database db = await openDatabase(
-      _path,
-      version: 1,
-      onCreate: (Database db, int version) async {
-        String sql = await AppUtils.getSQL("createDb.sql");
-        await db.execute(sql);
-      },
-      onUpgrade: (Database db, int oldVersion, int newVersion) async {},
-      singleInstance: false,
-      readOnly: false,
-    );
+
+    Database db;
+    try {
+      db = await openDatabase(
+        _path,
+        version: 1,
+        onCreate: (Database db, int version) async {
+          String sql = await AppUtils.getSQL("createDb.sql");
+          await db.execute(sql);
+        },
+        onUpgrade: (Database db, int oldVersion, int newVersion) async {},
+        singleInstance: false,
+        readOnly: false,
+      );
+    } catch (e) {
+      onError(null, null, e);
+    }
     return db;
   }
 
@@ -205,12 +217,21 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
     return NAME;
   }
 
-  Future onError(String subscriber, String idRequest, dynamic e, [String id]) async {
-    SLUtil.onError(NAME, e);
-    await removeLock(idRequest, id);
-    Result result = new Result(null).addError(subscriber, e.toString()).setName(idRequest);
+  @override
+  void onResult(String subscriber, Result result) {
     ResultMessage message = new ResultMessage.result(subscriber, result);
     SLUtil.addNotMandatoryMessage(message);
+  }
+
+  @override
+  Future onError(String subscriber, String idRequest, dynamic e, [String id]) async {
+    SLUtil.onError(NAME, e);
+    if (!StringUtils.isNullOrEmpty(subscriber)) {
+      await removeLock(idRequest, id);
+      Result result = new Result(null).addError(subscriber, e.toString()).setName(idRequest);
+      ResultMessage message = new ResultMessage.result(subscriber, result);
+      SLUtil.addNotMandatoryMessage(message);
+    }
   }
 
   @override

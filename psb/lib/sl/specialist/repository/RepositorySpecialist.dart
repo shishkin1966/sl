@@ -1,5 +1,6 @@
 import 'package:psb/app/data/Ticker.dart';
 import 'package:psb/sl/AbsSpecialist.dart';
+import 'package:psb/sl/data/Result.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class RepositorySpecialist extends AbsSpecialist {
@@ -30,4 +31,6 @@ abstract class RepositorySpecialist extends AbsSpecialist {
   Future cleanRates(String subscriber);
 
   Future onError(String subscriber, String idRequest, dynamic e, [String id]);
+
+  void onResult(String subscriber, Result result);
 }
