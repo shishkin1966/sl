@@ -3,6 +3,7 @@ import 'package:psb/app/data/Ticker.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/data/Result.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';
+import 'package:psb/sl/specialist/repository/RepositorySpecialistImpl.dart';
 import 'package:sqflite/sqlite_api.dart';
 
 class RepositoryRates {
@@ -71,7 +72,10 @@ class RepositoryRates {
     }
   }
 
-  static Future saveRates(String subscriber, List<Ticker> list) async {
+  static Future saveRates(Map<String, Object> map) async {
+    List<Ticker> list = map[RepositorySpecialistImpl.Data];
+    String subscriber = map[RepositorySpecialistImpl.Subscriber];
+
     if (list == null) return;
     if (list.isEmpty) return;
 
@@ -80,7 +84,7 @@ class RepositoryRates {
       db = await SLUtil.repositorySpecialist.getWriteDb();
       await db?.transaction(
         (txn) async {
-          await txn.delete(Ticker.Table);
+          int cnt = await txn.delete(Ticker.Table);
           for (Ticker ticker in list) {
             await txn.insert(Ticker.Table, ticker.toMap());
           }
@@ -95,7 +99,10 @@ class RepositoryRates {
     }
   }
 
-  static Future getRates(String subscriber, {String id}) async {
+  static Future getRates(Map<String, Object> map) async {
+    String subscriber = map[RepositorySpecialistImpl.Subscriber];
+    String id = map[RepositorySpecialistImpl.Id];
+
     if (!SLUtil.connectivitySpecialist.isConnected()) {
       Result<List<Ticker>> result = new Result<List<Ticker>>(new List<Ticker>()).setName(Repository.GetRates);
       SLUtil.repositorySpecialist.onResult(subscriber, result);
