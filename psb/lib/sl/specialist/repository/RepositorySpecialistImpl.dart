@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:isolate';
+
 import 'package:contacts_service/contacts_service.dart';
+import 'package:isolate/isolate.dart';
 import 'package:psb/app/data/Account.dart';
 import 'package:psb/app/data/Currency.dart';
 import 'package:psb/app/data/Operation.dart';
@@ -18,9 +22,14 @@ import 'package:sync/sync.dart';
 class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecialist {
   static const String NAME = "RepositorySpecialistImpl";
 
+  static const String Id = "Id";
+  static const String Data = "Data";
+  static const String Subscriber = "Subscriber";
+
   Mutex _mutex = new Mutex();
   Map<String, String> _map = new Map();
   String _path;
+  ReceivePort _port = new ReceivePort();
 
   @override
   Future<Database> getWriteDb() async {
@@ -245,17 +254,26 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   }
 
   @override
-  Future getRatesDb(String subscriber) {
-    return RepositoryRates.getRatesDb(subscriber);
+  Future getRatesDb(String subscriber) async {
+    var runner = await IsolateRunner.spawn();
+    Runner().run(RepositoryRates.getRatesDb, {Subscriber: subscriber}).whenComplete(() {
+      runner.close();
+    });
   }
 
   @override
-  Future saveRates(String subscriber, List<Ticker> list) {
-    return RepositoryRates.saveRates(subscriber, list);
+  Future saveRates(String subscriber, List<Ticker> list) async {
+    var runner = await IsolateRunner.spawn();
+    Runner().run(RepositoryRates.saveRates, {Data: list, Subscriber: subscriber}).whenComplete(() {
+      runner.close();
+    });
   }
 
   @override
-  Future getRates(String subscriber, {String id}) {
-    return RepositoryRates.getRates(subscriber, id: id);
+  Future getRates(String subscriber, {String id}) async {
+    var runner = await IsolateRunner.spawn();
+    Runner().run(RepositoryRates.getRates, {Subscriber: subscriber, Id: id}).whenComplete(() {
+      runner.close();
+    });
   }
 }
