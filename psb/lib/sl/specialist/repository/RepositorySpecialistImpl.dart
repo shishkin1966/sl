@@ -254,13 +254,16 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   }
 
   @override
-  Future getRatesDb(String subscriber) {
-    return RepositoryRates.getRatesDb(subscriber);
+  Future getRatesDb(String subscriber) async {
+    var runner = await IsolateRunner.spawn();
+    Runner().run(RepositoryRates.getRatesDb, {Subscriber: subscriber}).whenComplete(() {
+      runner.close();
+    });
   }
 
   @override
   Future saveRates(String subscriber, List<Ticker> list) async {
-    Runner runner = Runner();
+    var runner = await IsolateRunner.spawn();
     Runner().run(RepositoryRates.saveRates, {Data: list, Subscriber: subscriber}).whenComplete(() {
       runner.close();
     });

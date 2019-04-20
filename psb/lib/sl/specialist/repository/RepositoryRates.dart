@@ -25,7 +25,9 @@ class RepositoryRates {
     }
   }
 
-  static Future getRatesDb(String subscriber) async {
+  static Future getRatesDb(Map<String, Object> map) async {
+    String subscriber = map[RepositorySpecialistImpl.Subscriber];
+
     Database db;
     try {
       db = await SLUtil.repositorySpecialist.getReadDb();
