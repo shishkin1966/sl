@@ -3,60 +3,141 @@ import 'package:psb/app/data/Entity.dart';
 class Ticker extends Entity {
   static const String Table = "Ticker";
 
-  String id;
-  String name;
-  String symbol;
-  String rank;
-  String priceUsd;
-  String priceBtc;
-  String volumeUsd;
-  String marketCapUsd;
-  String availableSupply;
-  String totalSupply;
-  String maxSupply;
-  String percentChange1h;
-  String percentChange24h;
-  String percentChange7d;
+  String get id => get(Columns.id);
+  set id(String value) {
+    set(Columns.id, value);
+  }
+
+  String get name => get(Columns.name);
+  set name(String value) {
+    set(Columns.name, value);
+  }
+
+  String get symbol => get(Columns.symbol);
+  set symbol(String value) {
+    set(Columns.symbol, value);
+  }
+
+  String get rank => get(Columns.rank);
+  set rank(String value) {
+    set(Columns.rank, value);
+  }
+
+  String get priceUsd => get(Columns.priceUsd);
+  set priceUsd(String value) {
+    set(Columns.priceUsd, value);
+  }
+
+  String get priceBtc => get(Columns.priceBtc);
+  set priceBtc(String value) {
+    set(Columns.priceBtc, value);
+  }
+
+  String get volumeUsd => get(Columns.volumeUsd);
+  set volumeUsd(String value) {
+    set(Columns.volumeUsd, value);
+  }
+
+  String get marketCapUsd => get(Columns.marketCapUsd);
+  set marketCapUsd(String value) {
+    set(Columns.marketCapUsd, value);
+  }
+
+  String get availableSupply => get(Columns.availableSupply);
+  set availableSupply(String value) {
+    set(Columns.availableSupply, value);
+  }
+
+  String get totalSupply => get(Columns.totalSupply);
+  set totalSupply(String value) {
+    set(Columns.totalSupply, value);
+  }
+
+  String get maxSupply => get(Columns.maxSupply);
+  set maxSupply(String value) {
+    set(Columns.maxSupply, value);
+  }
+
+  String get percentChange1h => get(Columns.percentChange1h);
+  set percentChange1h(String value) {
+    set(Columns.percentChange1h, value);
+  }
+
+  String get percentChange24h => get(Columns.percentChange24h);
+  set percentChange24h(String value) {
+    set(Columns.percentChange24h, value);
+  }
+
+  String get percentChange7d => get(Columns.percentChange7d);
+  set percentChange7d(String value) {
+    set(Columns.percentChange7d, value);
+  }
 
   Ticker();
 
   factory Ticker.fromMap(Map<String, dynamic> map) {
     Ticker ticker = new Ticker();
-    ticker.id = map["id"];
-    ticker.name = map["name"];
-    ticker.symbol = map["symbol"];
-    ticker.rank = map["rank"];
-    ticker.priceUsd = map["price_usd"];
-    ticker.priceBtc = map["price_btc"];
-    ticker.volumeUsd = map["24h_volume_usd"];
-    ticker.marketCapUsd = map["market_cap_usd"];
-    ticker.availableSupply = map["available_supply"];
-    ticker.totalSupply = map["total_supply"];
-    ticker.maxSupply = map["max_supply"];
-    ticker.percentChange1h = map["percent_change_1h"];
-    ticker.percentChange24h = map["percent_change_24h"];
-    ticker.percentChange7d = map["percent_change_7d"];
-    return ticker;
-  }
+    for (String key in map.keys) {
+      switch (key) {
+        case Columns.id:
+        case Columns.name:
+        case Columns.symbol:
+        case Columns.rank:
+        case Columns.priceUsd:
+        case Columns.priceBtc:
+        case Columns.volumeUsd:
+        case Columns.marketCapUsd:
+        case Columns.availableSupply:
+        case Columns.totalSupply:
+        case Columns.maxSupply:
+        case Columns.percentChange1h:
+        case Columns.percentChange24h:
+        case Columns.percentChange7d:
+          ticker.set(key, map[key]);
+          break;
 
-  @override
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = new Map<String, dynamic>();
-    map[Columns.id] = id;
-    map[Columns.name] = name;
-    map[Columns.symbol] = symbol;
-    map[Columns.rank] = rank;
-    map[Columns.priceUsd] = priceUsd;
-    map[Columns.priceBtc] = priceBtc;
-    map[Columns.volumeUsd] = volumeUsd;
-    map[Columns.marketCapUsd] = marketCapUsd;
-    map[Columns.availableSupply] = availableSupply;
-    map[Columns.totalSupply] = totalSupply;
-    map[Columns.maxSupply] = maxSupply;
-    map[Columns.percentChange1h] = percentChange1h;
-    map[Columns.percentChange24h] = percentChange24h;
-    map[Columns.percentChange7d] = percentChange7d;
-    return map;
+        case "price_usd":
+          ticker.set(Columns.priceUsd, map[key]);
+          break;
+
+        case "price_btc":
+          ticker.set(Columns.priceBtc, map[key]);
+          break;
+
+        case "24h_volume_usd":
+          ticker.set(Columns.volumeUsd, map[key]);
+          break;
+
+        case "market_cap_usd":
+          ticker.set(Columns.marketCapUsd, map[key]);
+          break;
+
+        case "available_supply":
+          ticker.set(Columns.availableSupply, map[key]);
+          break;
+
+        case "total_supply":
+          ticker.set(Columns.totalSupply, map[key]);
+          break;
+
+        case "max_supply":
+          ticker.set(Columns.maxSupply, map[key]);
+          break;
+
+        case "percent_change_1h":
+          ticker.set(Columns.percentChange1h, map[key]);
+          break;
+
+        case "percent_change_24h":
+          ticker.set(Columns.percentChange24h, map[key]);
+          break;
+
+        case "percent_change_7d":
+          ticker.set(Columns.percentChange7d, map[key]);
+          break;
+      }
+    }
+    return ticker;
   }
 }
 
