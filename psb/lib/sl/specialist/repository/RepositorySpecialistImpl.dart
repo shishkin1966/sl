@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:isolate';
 
-import 'package:contacts_service/contacts_service.dart';
 import 'package:isolate/isolate.dart';
 import 'package:psb/app/data/Account.dart';
 import 'package:psb/app/data/Currency.dart';
@@ -14,6 +12,7 @@ import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/data/Result.dart';
 import 'package:psb/sl/message/ResultMessage.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';
+import 'package:psb/sl/specialist/repository/RepositoryContacts.dart';
 import 'package:psb/sl/specialist/repository/RepositoryRates.dart';
 import 'package:psb/sl/specialist/repository/RepositorySpecialist.dart';
 import 'package:sqflite/sqflite.dart';
@@ -25,11 +24,11 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   static const String Id = "Id";
   static const String Data = "Data";
   static const String Subscriber = "Subscriber";
+  static const String Filter = "Filter";
 
   Mutex _mutex = new Mutex();
   Map<String, String> _map = new Map();
   String _path;
-  ReceivePort _port = new ReceivePort();
 
   @override
   Future<Database> getWriteDb() async {
@@ -124,48 +123,6 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
           new ResultMessage.result(subscriber, new Result<List<Operation>>(list).setName(Repository.GetOperations));
       SLUtil.addNotMandatoryMessage(message);
     });
-  }
-
-  @override
-  Future getContacts(String subscriber, String filter, {String id}) async {
-    await addLock(Repository.GetContacts, id);
-
-    try {
-      if (StringUtils.isNullOrEmpty(filter)) {
-        var cache = await SLUtil.cacheSpecialist.get(Repository.GetContacts);
-        if (cache != null) {
-          Result<List<Contact>> result =
-              new Result<List<Contact>>(cache as List<Contact>).setName(Repository.GetContacts);
-          ResultMessage message = new ResultMessage.result(subscriber, result);
-          SLUtil.addNotMandatoryMessage(message);
-          return;
-        }
-      }
-      List<Contact> list = new List();
-      Iterable<Contact> data;
-      if (StringUtils.isNullOrEmpty(filter)) {
-        data = await ContactsService.getContacts(
-          withThumbnails: true,
-        );
-      } else {
-        data = await ContactsService.getContacts(
-          query: filter,
-          withThumbnails: true,
-        );
-      }
-      bool found = await checkLock(Repository.GetContacts, id);
-      if (found) {
-        list.addAll(data);
-        Result<List<Contact>> result = new Result<List<Contact>>(list).setName(Repository.GetContacts);
-        ResultMessage message = new ResultMessage.result(subscriber, result);
-        SLUtil.addNotMandatoryMessage(message);
-        if (StringUtils.isNullOrEmpty(filter)) {
-          SLUtil.cacheSpecialist.put(Repository.GetContacts, list);
-        }
-      }
-    } catch (e) {
-      onError(subscriber, Repository.GetContacts, e, id);
-    }
   }
 
   @override
@@ -273,6 +230,14 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   Future getRates(String subscriber, {String id}) async {
     var runner = await IsolateRunner.spawn();
     Runner().run(RepositoryRates.getRates, {Subscriber: subscriber, Id: id}).whenComplete(() {
+      runner.close();
+    });
+  }
+
+  @override
+  Future getContacts(String subscriber, String filter, {String id}) async {
+    var runner = await IsolateRunner.spawn();
+    Runner().run(RepositoryContacts.getContacts, {Subscriber: subscriber, Id: id, Filter: filter}).whenComplete(() {
       runner.close();
     });
   }
