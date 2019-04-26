@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:isolate/isolate.dart';
+import 'package:psb/Constant.dart';
 import 'package:psb/app/data/Account.dart';
 import 'package:psb/app/data/Currency.dart';
 import 'package:psb/app/data/Operation.dart';
@@ -20,11 +21,6 @@ import 'package:sync/sync.dart';
 
 class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecialist {
   static const String NAME = "RepositorySpecialistImpl";
-
-  static const String Id = "Id";
-  static const String Data = "Data";
-  static const String Subscriber = "Subscriber";
-  static const String Filter = "Filter";
 
   Mutex _mutex = new Mutex();
   Map<String, String> _map = new Map();
@@ -213,7 +209,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   @override
   Future getRatesDb(String subscriber) async {
     var runner = await IsolateRunner.spawn();
-    Runner().run(RepositoryRates.getRatesDb, {Subscriber: subscriber}).whenComplete(() {
+    Runner().run(RepositoryRates.getRatesDb, {Constant.Subscriber: subscriber}).whenComplete(() {
       runner.close();
     });
   }
@@ -221,7 +217,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   @override
   Future saveRates(String subscriber, List<Ticker> list) async {
     var runner = await IsolateRunner.spawn();
-    Runner().run(RepositoryRates.saveRates, {Data: list, Subscriber: subscriber}).whenComplete(() {
+    Runner().run(RepositoryRates.saveRates, {Constant.Data: list, Constant.Subscriber: subscriber}).whenComplete(() {
       runner.close();
     });
   }
@@ -229,7 +225,7 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   @override
   Future getRates(String subscriber, {String id}) async {
     var runner = await IsolateRunner.spawn();
-    Runner().run(RepositoryRates.getRates, {Subscriber: subscriber, Id: id}).whenComplete(() {
+    Runner().run(RepositoryRates.getRates, {Constant.Subscriber: subscriber, Constant.Id: id}).whenComplete(() {
       runner.close();
     });
   }
@@ -237,7 +233,8 @@ class RepositorySpecialistImpl extends AbsSpecialist implements RepositorySpecia
   @override
   Future getContacts(String subscriber, String filter, {String id}) async {
     var runner = await IsolateRunner.spawn();
-    Runner().run(RepositoryContacts.getContacts, {Subscriber: subscriber, Id: id, Filter: filter}).whenComplete(() {
+    Runner().run(RepositoryContacts.getContacts,
+        {Constant.Subscriber: subscriber, Constant.Id: id, Constant.Filter: filter}).whenComplete(() {
       runner.close();
     });
   }

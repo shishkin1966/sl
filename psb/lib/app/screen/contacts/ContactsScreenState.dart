@@ -4,6 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:psb/app/screen/contacts/ContactsScreenPresenter.dart';
 import 'package:psb/app/screen/contacts/ContactsScreenWidget.dart';
 import 'package:psb/common/StringUtils.dart';
+import 'package:psb/res/AppColor.dart';
+import 'package:psb/res/Dimen.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/Actions.dart';
@@ -11,9 +13,7 @@ import 'package:psb/sl/action/ApplicationAction.dart';
 import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';
-import 'package:psb/ui/AppColor.dart';
 import 'package:psb/ui/DataWidget.dart';
-import 'package:psb/ui/Dimen.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class ContactsScreenState extends WidgetState<ContactsScreenWidget> {

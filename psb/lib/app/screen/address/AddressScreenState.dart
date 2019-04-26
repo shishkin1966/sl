@@ -9,13 +9,13 @@ import 'package:psb/app/screen/address/AddressScreenPresenter.dart';
 import 'package:psb/app/screen/address/AddressScreenWidget.dart';
 import 'package:psb/common/AppUtils.dart';
 import 'package:psb/common/StringUtils.dart';
+import 'package:psb/res/AppColor.dart';
+import 'package:psb/res/Dimen.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/DataAction.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
-import 'package:psb/ui/AppColor.dart';
 import 'package:psb/ui/DataWidget.dart';
-import 'package:psb/ui/Dimen.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class AddressScreenState extends WidgetState<AddressScreenWidget> with SingleTickerProviderStateMixin {

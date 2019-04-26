@@ -1,15 +1,15 @@
 import 'package:contacts_service/contacts_service.dart';
+import 'package:psb/Constant.dart';
 import 'package:psb/common/StringUtils.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/data/Result.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';
-import 'package:psb/sl/specialist/repository/RepositorySpecialistImpl.dart';
 
 class RepositoryContacts {
   static Future getContacts(Map<String, Object> map) async {
-    String subscriber = map[RepositorySpecialistImpl.Subscriber];
-    String id = map[RepositorySpecialistImpl.Id];
-    String filter = map[RepositorySpecialistImpl.Filter];
+    String subscriber = map[Constant.Subscriber];
+    String id = map[Constant.Id];
+    String filter = map[Constant.Filter];
 
     await SLUtil.repositorySpecialist.addLock(Repository.GetContacts, id);
 
