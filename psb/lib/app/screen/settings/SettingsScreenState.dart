@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:psb/app/screen/settings/SettingsScreenPresenter.dart';
 import 'package:psb/app/screen/settings/SettingsScreenWidget.dart';
+import 'package:psb/res/AppColor.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
-import 'package:psb/ui/AppColor.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class SettingsScreenState extends WidgetState<SettingsScreenWidget> {

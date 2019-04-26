@@ -4,13 +4,13 @@ import 'package:psb/app/ApplicationData.dart';
 import 'package:psb/app/data/Account.dart';
 import 'package:psb/app/screen/drawer/ExtDrawerPresenter.dart';
 import 'package:psb/app/screen/drawer/ExtDrawerWidget.dart';
+import 'package:psb/res/AppColor.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/Actions.dart';
 import 'package:psb/sl/action/ApplicationAction.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
 import 'package:psb/sl/specialist/router/Router.dart';
-import 'package:psb/ui/AppColor.dart';
 import 'package:psb/ui/DataWidget.dart';
 import 'package:psb/ui/WidgetState.dart';
 

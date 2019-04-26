@@ -10,6 +10,8 @@ import 'package:psb/app/screen/home/HomeScreenPresenter.dart';
 import 'package:psb/app/screen/home/HomeScreenWidget.dart';
 import 'package:psb/common/StringUtils.dart';
 import 'package:psb/common/WithoutGlowBehavior.dart';
+import 'package:psb/res/AppColor.dart';
+import 'package:psb/res/Dimen.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/action/Action.dart';
 import 'package:psb/sl/action/Actions.dart';
@@ -19,10 +21,8 @@ import 'package:psb/sl/message/ActionMessage.dart';
 import 'package:psb/sl/presenter/Presenter.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';
 import 'package:psb/sl/state/States.dart';
-import 'package:psb/ui/AppColor.dart';
 import 'package:psb/ui/Application.dart';
 import 'package:psb/ui/DataWidget.dart';
-import 'package:psb/ui/Dimen.dart';
 import 'package:psb/ui/WidgetState.dart';
 
 class HomeScreenState extends WidgetState<HomeScreenWidget> {
