@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:psb/Constant.dart';
 import 'package:psb/app/data/Ticker.dart';
+import 'package:psb/res/Constant.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/data/Result.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';
