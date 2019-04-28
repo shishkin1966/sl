@@ -1,6 +1,6 @@
 import 'package:contacts_service/contacts_service.dart';
-import 'package:psb/Constant.dart';
 import 'package:psb/common/StringUtils.dart';
+import 'package:psb/res/Constant.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/data/Result.dart';
 import 'package:psb/sl/specialist/repository/Repository.dart';

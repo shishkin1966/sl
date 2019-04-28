@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:isolate/isolate.dart';
-import 'package:psb/Constant.dart';
 import 'package:psb/app/data/Account.dart';
 import 'package:psb/app/data/Currency.dart';
 import 'package:psb/app/data/Operation.dart';
 import 'package:psb/app/data/Ticker.dart';
 import 'package:psb/common/AppUtils.dart';
 import 'package:psb/common/StringUtils.dart';
+import 'package:psb/res/Constant.dart';
 import 'package:psb/sl/AbsSpecialist.dart';
 import 'package:psb/sl/SLUtil.dart';
 import 'package:psb/sl/data/Result.dart';
