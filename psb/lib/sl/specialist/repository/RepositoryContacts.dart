@@ -38,6 +38,11 @@ class RepositoryContacts {
       bool found = await SLUtil.repositorySpecialist.checkLock(Repository.GetContacts, id);
       if (found) {
         list.addAll(data);
+        for (int i = list.length - 1; i >= 0; i--) {
+          if (list[i].displayName == null) {
+            list.removeAt(i);
+          }
+        }
         Result<List<Contact>> result = new Result<List<Contact>>(list).setName(Repository.GetContacts);
         SLUtil.repositorySpecialist.onResult(subscriber, result);
         if (StringUtils.isNullOrEmpty(filter)) {
